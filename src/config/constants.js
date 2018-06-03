@@ -1,4 +1,4 @@
-const SCALE = 1;
+const SCALE = 0.5;
 
 export default {
   WIDTH: 736 * SCALE,

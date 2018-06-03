@@ -14,6 +14,8 @@ const center = {
   height: HEIGHT * 0.5
 };
 
+const assetScale = SCALE * 2;
+
 export default class Start extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' });
@@ -27,10 +29,16 @@ export default class Start extends Phaser.Scene {
     this.load.image('ground', ground);
   }
   create() {
-    this.add.image(center.width, center.height, 'back-gradient').setScale(2);
-    this.add.image(center.width, center.height, 'sea').setScale(2);
+    this.add
+      .image(center.width, center.height, 'back-gradient')
+      .setScale(assetScale);
+    this.add.image(center.width, center.height, 'sea').setScale(assetScale);
 
-    this.add.image(center.width, center.height, 'ground').setScale(2);
+    this.add
+      .image(center.width * 1.6, center.height * 0.4, 'moon')
+      .setScale(assetScale);
+
+    this.add.image(center.width, center.height, 'ground').setScale(assetScale);
   }
   update() {}
   render() {}
