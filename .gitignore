@@ -16,6 +16,9 @@ dump/
 *.old*
 higherVolume/
 
+#editors
+.pyxel
+
 #reporting
 /report
 
