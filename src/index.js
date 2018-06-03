@@ -1,6 +1,9 @@
+import './index.css';
+
 import CustomPipeline from './rendering-pipelines/CustomPipeline';
 import GameScene from './scenes/game';
 import Phaser from 'phaser';
+import StartScene from './scenes/start';
 import constants from './config/constants';
 
 window.Phaser = Phaser;
@@ -16,7 +19,7 @@ const config = {
       debug: false
     }
   },
-  scene: [GameScene],
+  scene: [StartScene],
   pixelArt: true,
   antialias: false,
   callbacks: {
@@ -28,11 +31,3 @@ const config = {
 
 const game = new Phaser.Game(config);
 window.game = game;
-
-if (module.hot) {
-  module.hot.accept(() => {});
-
-  module.hot.dispose(() => {
-    window.location.reload();
-  });
-}
