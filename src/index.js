@@ -1,4 +1,5 @@
 import './index.css';
+import './font-loader';
 
 import CustomPipeline from './rendering-pipelines/CustomPipeline';
 import GameScene from './scenes/game';

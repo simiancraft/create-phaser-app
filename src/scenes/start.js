@@ -4,6 +4,7 @@ import cloud1 from '../assets/backgrounds/start/cloud-1.png';
 import cloud2 from '../assets/backgrounds/start/cloud-2.png';
 import constants from '../config/constants';
 import ground from '../assets/backgrounds/start/ground.png';
+import { linearScale } from '../utils';
 import moon from '../assets/backgrounds/start/moon.png';
 import sea from '../assets/backgrounds/start/sea.png';
 
@@ -28,25 +29,48 @@ export default class Start extends Phaser.Scene {
     this.load.image('cloud-1', cloud1);
     this.load.image('cloud-2', cloud2);
     this.load.image('ground', ground);
+    this.load.image(
+      'knighthawks',
+      'http://labs.phaser.io/assets/fonts/retro/knight3.png'
+    );
   }
   create() {
     this.add
       .image(center.width, center.height, 'back-gradient')
       .setScale(assetScale);
     this.add.image(center.width, center.height, 'sea').setScale(assetScale);
-
     this.add
       .image(center.width * 1.6, center.height * 0.4, 'moon')
       .setScale(assetScale);
-
     this.addClouds();
-
     this.add.image(center.width, center.height, 'ground').setScale(assetScale);
+    this.makeText();
   }
   update() {
     this.moveClouds();
   }
   render() {}
+
+  makeText() {
+    this.titleText = this.add
+      .text(center.width, center.height * 0.25, 'Create Phaser App', {
+        fill: '#ffffff',
+        font: '30px Rajdhani'
+      })
+      .setOrigin(0.5, 0.5)
+      .setAlpha(0);
+
+    this.textTween = this.tweens.add({
+      targets: this.titleText,
+      alpha: {
+        value: 1,
+        delay: 1000,
+        duration: 4000
+      }
+    });
+
+    console.log(this.titleText);
+  }
 
   addClouds() {
     this.clouds = [];
@@ -114,6 +138,8 @@ export default class Start extends Phaser.Scene {
         .setScale(assetScale / distance),
       distance: distance
     });
+
+    this.scaleSpeed = linearScale([1, 2.2], [0.2, 0.05]);
   }
 
   moveClouds() {
@@ -124,7 +150,7 @@ export default class Start extends Phaser.Scene {
       if (cloud.x > rightBound) {
         cloud.x = leftBound;
       } else {
-        cloud.x += (2.3 - distance) * 0.2;
+        cloud.x += this.scaleSpeed(distance);
       }
     });
   }
