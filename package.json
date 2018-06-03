@@ -1,7 +1,8 @@
 {
     "name": "create-phaser-app",
-    "version": "1.0.0",
-    "description": "",
+    "version": "0.0.1",
+    "description":
+        "A boiler plate to start your phaser app with webpack4, babel7+ and Phaser 3",
     "author": "Jesse Harlin",
     "homepage": "https://the-simian.github.io/create-phaser-app",
     "scripts": {
@@ -13,6 +14,17 @@
         "complexity-report": "./node_modules/.bin/es6-plato -r -d ./report src",
         "gh-pages": "gh-pages -d gh-pages"
     },
+    "keywords": [
+        "Phaser",
+        "Phaser 3",
+        "webpack",
+        "webpack 4",
+        "game development",
+        "boilerplate",
+        "scaffold",
+        "prettier",
+        "game jam"
+    ],
     "license": "MIT",
     "dependencies": {
         "@babel/core": "7.0.0-beta.49",
