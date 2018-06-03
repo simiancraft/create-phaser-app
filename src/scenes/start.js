@@ -20,6 +20,7 @@ export default class Start extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' });
   }
+
   preload() {
     this.load.image('back-gradient', backgroundGradient);
     this.load.image('moon', moon);
@@ -38,8 +39,93 @@ export default class Start extends Phaser.Scene {
       .image(center.width * 1.6, center.height * 0.4, 'moon')
       .setScale(assetScale);
 
+    this.addClouds();
+
     this.add.image(center.width, center.height, 'ground').setScale(assetScale);
   }
-  update() {}
+  update() {
+    this.moveClouds();
+  }
   render() {}
+
+  addClouds() {
+    this.clouds = [];
+
+    let distance = 2.2;
+
+    this.clouds.push({
+      cloud: this.add
+        .image(
+          center.width - distance * 60,
+          center.height / distance,
+          'cloud-1'
+        )
+        .setScale(assetScale / distance),
+      distance: distance
+    });
+
+    distance = 2;
+
+    this.clouds.push({
+      cloud: this.add
+        .image(
+          center.width + distance * 60,
+          center.height / distance,
+          'cloud-2'
+        )
+        .setScale(assetScale / distance),
+      distance: distance
+    });
+
+    distance = 1.6;
+
+    this.clouds.push({
+      cloud: this.add
+        .image(
+          center.width - distance * 60,
+          center.height / distance,
+          'cloud-1'
+        )
+        .setScale(assetScale / distance),
+      distance: distance
+    });
+
+    distance = 1.2;
+    this.clouds.push({
+      cloud: this.add
+        .image(
+          center.width + distance * 60,
+          center.height / distance,
+          'cloud-2'
+        )
+        .setScale(assetScale / distance),
+      distance: distance
+    });
+
+    distance = 1;
+
+    this.clouds.push({
+      cloud: this.add
+        .image(
+          center.width - distance * 60,
+          center.height / distance,
+          'cloud-1'
+        )
+        .setScale(assetScale / distance),
+      distance: distance
+    });
+  }
+
+  moveClouds() {
+    const rightBound = WIDTH * 1.25;
+    const leftBound = -WIDTH * 0.25;
+
+    this.clouds.forEach(({ cloud, distance }) => {
+      if (cloud.x > rightBound) {
+        cloud.x = leftBound;
+      } else {
+        cloud.x += (2.3 - distance) * 0.2;
+      }
+    });
+  }
 }
