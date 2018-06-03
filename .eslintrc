@@ -1,0 +1,57 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "modules": true
+        }
+    },
+    "plugins": ["prettier", "import", "react"],
+    "rules": {
+        "prettier/prettier": [
+          "warn",
+          {
+            "singleQuote": true
+          }
+        ],
+        "no-unused-vars": [
+          "warn",
+          {
+            "args": "none",
+            "ignoreRestSiblings": true
+          }
+        ],
+        "react/jsx-no-duplicate-props": ["warn", { "ignoreCase": true }],
+        "react/jsx-no-target-blank": "warn",
+        "react/jsx-no-undef": "error",
+        "react/jsx-pascal-case": [
+          "warn",
+          {
+            "allowAllCaps": true,
+            "ignore": []
+          }
+        ],
+        "react/jsx-uses-react": "warn",
+        "react/jsx-uses-vars": "warn",
+        "react/no-danger-with-children": "warn",
+        "react/no-deprecated": "warn",
+        "react/no-direct-mutation-state": "warn",
+        "react/no-is-mounted": "warn",
+        "react/react-in-jsx-scope": "error",
+        "react/require-render-return": "error",
+        "react/style-prop-object": "warn"
+      },
+      "env": {
+        "es6": true,
+        "node": true,
+        "browser": true
+      },
+    "extends": [],
+    "globals": {
+        "Phaser": true
+    },
+    "settings": {
+        "import/core-modules": ["phaser"]
+    }
+}
