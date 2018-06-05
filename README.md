@@ -1,6 +1,6 @@
-#Create Phaser App
+# Create Phaser App
 
-Quickly prototype and build the Phaser game you want to make gfaster than ever before.
+Quickly prototype and build the Phaser game you want to make go faster than ever before.
 
 ## Important
 
@@ -21,7 +21,7 @@ This project is under development. The goal is to start witha b oilerplate, but 
 *   Browsersync
 *   Project Complexity analysis
 
-#quickly start
+# Quickly start
 
 1.  Clone the repo
 2.  `yarn install`
