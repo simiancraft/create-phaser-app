@@ -6,6 +6,7 @@ import constants from '../config/constants';
 import ground from '../assets/backgrounds/start/ground.png';
 import { linearScale } from '../utils';
 import moon from '../assets/backgrounds/start/moon.png';
+import playerStill from '../assets/player/player-image.png';
 import sea from '../assets/backgrounds/start/sea.png';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -29,6 +30,7 @@ export default class Start extends Phaser.Scene {
     this.load.image('cloud-1', cloud1);
     this.load.image('cloud-2', cloud2);
     this.load.image('ground', ground);
+    this.load.image('player-still', playerStill);
     this.load.image(
       'knighthawks',
       'http://labs.phaser.io/assets/fonts/retro/knight3.png'
@@ -44,6 +46,9 @@ export default class Start extends Phaser.Scene {
       .setScale(assetScale);
     this.addClouds();
     this.add.image(center.width, center.height, 'ground').setScale(assetScale);
+    this.add
+      .image(center.width, center.height + 33, 'player-still')
+      .setScale(assetScale);
     this.makeText();
   }
   update() {
