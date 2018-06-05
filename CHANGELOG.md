@@ -1,3 +1,7 @@
+0.0.2
+
+*   Merely adds a player image to the title screen to make it nicer
+
 0.0.1
 
 *   init project
