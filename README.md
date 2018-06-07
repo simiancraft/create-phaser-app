@@ -4,7 +4,7 @@ Quickly prototype and build the Phaser game you want to make go faster than ever
 
 ## Important
 
-This project is under development. The goal is to start witha b oilerplate, but transition into a scaffold witha various development tools. Many dev tools are here now, but many are yet to come. This project cna be used right now as a boilerplate.
+This project is under development. The goal is to start witha boilerplate, but transition into a scaffold witha various development tools. Many dev tools are here now, but many are yet to come. This project cna be used right now as a boilerplate.
 
 ![cpa-demo-mech](https://user-images.githubusercontent.com/954596/40955643-e0393dce-6850-11e8-8708-590dbf8f66cd.gif)
 
@@ -19,7 +19,7 @@ This project is under development. The goal is to start witha b oilerplate, but 
 *   Easy deployment to gh-pages
 *   Webpack bundle analyzer
 *   Browsersync
-*   Project Complexity analysis
+*   Project Complexity analysis `yarn complexity-report`
 
 # Quickly start
 
