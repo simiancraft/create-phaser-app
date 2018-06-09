@@ -1,0 +1,1365 @@
+{
+    "textures": [
+        {
+            "image": "walking-dragon.png",
+            "format": "RGBA8888",
+            "size": {
+                "w": 16080,
+                "h": 2140
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "Dragon_fall_2.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 712,
+                        "h": 819
+                    },
+                    "spriteSourceSize": {
+                        "x": 9,
+                        "y": 5,
+                        "w": 669,
+                        "h": 771
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 669,
+                        "h": 771
+                    }
+                },
+                {
+                    "filename": "Dragon_fall_3.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 712,
+                        "h": 819
+                    },
+                    "spriteSourceSize": {
+                        "x": 9,
+                        "y": 5,
+                        "w": 675,
+                        "h": 769
+                    },
+                    "frame": {
+                        "x": 774,
+                        "y": 1,
+                        "w": 675,
+                        "h": 769
+                    }
+                },
+                {
+                    "filename": "Dragon_fall_1.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 712,
+                        "h": 819
+                    },
+                    "spriteSourceSize": {
+                        "x": 9,
+                        "y": 5,
+                        "w": 678,
+                        "h": 769
+                    },
+                    "frame": {
+                        "x": 1545,
+                        "y": 1,
+                        "w": 678,
+                        "h": 769
+                    }
+                },
+                {
+                    "filename": "Dragon_fall_4.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 712,
+                        "h": 819
+                    },
+                    "spriteSourceSize": {
+                        "x": 9,
+                        "y": 5,
+                        "w": 681,
+                        "h": 768
+                    },
+                    "frame": {
+                        "x": 2316,
+                        "y": 1,
+                        "w": 681,
+                        "h": 768
+                    }
+                },
+                {
+                    "filename": "Dragon_fall_0.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 712,
+                        "h": 819
+                    },
+                    "spriteSourceSize": {
+                        "x": 9,
+                        "y": 5,
+                        "w": 687,
+                        "h": 766
+                    },
+                    "frame": {
+                        "x": 3086,
+                        "y": 1,
+                        "w": 687,
+                        "h": 766
+                    }
+                },
+                {
+                    "filename": "Dragon_fall_5.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 712,
+                        "h": 819
+                    },
+                    "spriteSourceSize": {
+                        "x": 9,
+                        "y": 5,
+                        "w": 687,
+                        "h": 766
+                    },
+                    "frame": {
+                        "x": 3086,
+                        "y": 1,
+                        "w": 687,
+                        "h": 766
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_15.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 701,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 3854,
+                        "y": 1,
+                        "w": 701,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_08.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 702,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 4621,
+                        "y": 1,
+                        "w": 702,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_12.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 702,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 5388,
+                        "y": 1,
+                        "w": 702,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_13.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 702,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 6155,
+                        "y": 1,
+                        "w": 702,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_14.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 702,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 6922,
+                        "y": 1,
+                        "w": 702,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_16.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 702,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 7689,
+                        "y": 1,
+                        "w": 702,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_17.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 702,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 8456,
+                        "y": 1,
+                        "w": 702,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_18.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 702,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 9223,
+                        "y": 1,
+                        "w": 702,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_09.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 703,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 9990,
+                        "y": 1,
+                        "w": 703,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_10.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 703,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 10757,
+                        "y": 1,
+                        "w": 703,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_11.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 703,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 11524,
+                        "y": 1,
+                        "w": 703,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_19.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 703,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 12291,
+                        "y": 1,
+                        "w": 703,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_20.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 703,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 13058,
+                        "y": 1,
+                        "w": 703,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_jump_0.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 762,
+                        "h": 839
+                    },
+                    "spriteSourceSize": {
+                        "x": 5,
+                        "y": 24,
+                        "w": 704,
+                        "h": 773
+                    },
+                    "frame": {
+                        "x": 13825,
+                        "y": 1,
+                        "w": 704,
+                        "h": 773
+                    }
+                },
+                {
+                    "filename": "Dragon_jump_5.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 762,
+                        "h": 839
+                    },
+                    "spriteSourceSize": {
+                        "x": 5,
+                        "y": 24,
+                        "w": 704,
+                        "h": 773
+                    },
+                    "frame": {
+                        "x": 14600,
+                        "y": 1,
+                        "w": 704,
+                        "h": 773
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_04.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 704,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 15375,
+                        "y": 1,
+                        "w": 704,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_05.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 704,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 672,
+                        "w": 704,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_06.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 704,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 768,
+                        "y": 678,
+                        "w": 704,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_07.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 704,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 1535,
+                        "y": 681,
+                        "w": 704,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_21.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 704,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 2302,
+                        "y": 684,
+                        "w": 704,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_22.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 704,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 3069,
+                        "y": 690,
+                        "w": 704,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_07.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 20,
+                        "y": 8,
+                        "w": 704,
+                        "h": 772
+                    },
+                    "frame": {
+                        "x": 3836,
+                        "y": 704,
+                        "w": 704,
+                        "h": 772
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_13.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 20,
+                        "y": 8,
+                        "w": 704,
+                        "h": 772
+                    },
+                    "frame": {
+                        "x": 4610,
+                        "y": 705,
+                        "w": 704,
+                        "h": 772
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_00.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 5384,
+                        "y": 705,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_30.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 5384,
+                        "y": 705,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_01.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 6151,
+                        "y": 705,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_02.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 6918,
+                        "y": 705,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_03.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 7685,
+                        "y": 705,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_23.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 8452,
+                        "y": 705,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_24.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 9219,
+                        "y": 705,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_25.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 9986,
+                        "y": 706,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_26.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 10753,
+                        "y": 706,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_27.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 11520,
+                        "y": 706,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_28.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 12287,
+                        "y": 706,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_stand_29.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 742,
+                        "h": 798
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 705,
+                        "h": 765
+                    },
+                    "frame": {
+                        "x": 13054,
+                        "y": 706,
+                        "w": 705,
+                        "h": 765
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_06.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 21,
+                        "y": 7,
+                        "w": 705,
+                        "h": 764
+                    },
+                    "frame": {
+                        "x": 13821,
+                        "y": 707,
+                        "w": 705,
+                        "h": 764
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_14.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 21,
+                        "y": 7,
+                        "w": 705,
+                        "h": 764
+                    },
+                    "frame": {
+                        "x": 14587,
+                        "y": 707,
+                        "w": 705,
+                        "h": 764
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_05.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 22,
+                        "y": 6,
+                        "w": 706,
+                        "h": 767
+                    },
+                    "frame": {
+                        "x": 15353,
+                        "y": 768,
+                        "w": 706,
+                        "h": 767
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_04.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 23,
+                        "y": 5,
+                        "w": 706,
+                        "h": 776
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 1384,
+                        "w": 706,
+                        "h": 776
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_15.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 22,
+                        "y": 6,
+                        "w": 706,
+                        "h": 767
+                    },
+                    "frame": {
+                        "x": 779,
+                        "y": 1387,
+                        "w": 706,
+                        "h": 767
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_16.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 23,
+                        "y": 5,
+                        "w": 706,
+                        "h": 776
+                    },
+                    "frame": {
+                        "x": 1548,
+                        "y": 1390,
+                        "w": 706,
+                        "h": 776
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_02.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 25,
+                        "y": 3,
+                        "w": 707,
+                        "h": 788
+                    },
+                    "frame": {
+                        "x": 2326,
+                        "y": 1396,
+                        "w": 707,
+                        "h": 788
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_03.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 24,
+                        "y": 4,
+                        "w": 707,
+                        "h": 783
+                    },
+                    "frame": {
+                        "x": 3116,
+                        "y": 1410,
+                        "w": 707,
+                        "h": 783
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_17.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 24,
+                        "y": 4,
+                        "w": 707,
+                        "h": 783
+                    },
+                    "frame": {
+                        "x": 3901,
+                        "y": 1411,
+                        "w": 707,
+                        "h": 783
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_18.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 25,
+                        "y": 3,
+                        "w": 707,
+                        "h": 788
+                    },
+                    "frame": {
+                        "x": 4686,
+                        "y": 1412,
+                        "w": 707,
+                        "h": 788
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_00.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 27,
+                        "y": 1,
+                        "w": 708,
+                        "h": 795
+                    },
+                    "frame": {
+                        "x": 5476,
+                        "y": 1412,
+                        "w": 708,
+                        "h": 795
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_20.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 27,
+                        "y": 1,
+                        "w": 708,
+                        "h": 795
+                    },
+                    "frame": {
+                        "x": 5476,
+                        "y": 1412,
+                        "w": 708,
+                        "h": 795
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_01.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 26,
+                        "y": 2,
+                        "w": 708,
+                        "h": 792
+                    },
+                    "frame": {
+                        "x": 6273,
+                        "y": 1412,
+                        "w": 708,
+                        "h": 792
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_19.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 26,
+                        "y": 2,
+                        "w": 708,
+                        "h": 792
+                    },
+                    "frame": {
+                        "x": 7067,
+                        "y": 1412,
+                        "w": 708,
+                        "h": 792
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_08.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 13,
+                        "y": 9,
+                        "w": 711,
+                        "h": 778
+                    },
+                    "frame": {
+                        "x": 7861,
+                        "y": 1412,
+                        "w": 711,
+                        "h": 778
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_12.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 13,
+                        "y": 9,
+                        "w": 711,
+                        "h": 778
+                    },
+                    "frame": {
+                        "x": 8641,
+                        "y": 1412,
+                        "w": 711,
+                        "h": 778
+                    }
+                },
+                {
+                    "filename": "Dragon_jump_4.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 762,
+                        "h": 839
+                    },
+                    "spriteSourceSize": {
+                        "x": 5,
+                        "y": 24,
+                        "w": 712,
+                        "h": 775
+                    },
+                    "frame": {
+                        "x": 9421,
+                        "y": 1413,
+                        "w": 712,
+                        "h": 775
+                    }
+                },
+                {
+                    "filename": "Dragon_jump_1.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 762,
+                        "h": 839
+                    },
+                    "spriteSourceSize": {
+                        "x": 5,
+                        "y": 24,
+                        "w": 715,
+                        "h": 775
+                    },
+                    "frame": {
+                        "x": 10198,
+                        "y": 1413,
+                        "w": 715,
+                        "h": 775
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_09.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 8,
+                        "y": 9,
+                        "w": 715,
+                        "h": 783
+                    },
+                    "frame": {
+                        "x": 10975,
+                        "y": 1413,
+                        "w": 715,
+                        "h": 783
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_10.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 8,
+                        "y": 10,
+                        "w": 715,
+                        "h": 784
+                    },
+                    "frame": {
+                        "x": 11760,
+                        "y": 1413,
+                        "w": 715,
+                        "h": 784
+                    }
+                },
+                {
+                    "filename": "Dragon_walk_11.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 772,
+                        "h": 831
+                    },
+                    "spriteSourceSize": {
+                        "x": 8,
+                        "y": 9,
+                        "w": 715,
+                        "h": 783
+                    },
+                    "frame": {
+                        "x": 12546,
+                        "y": 1413,
+                        "w": 715,
+                        "h": 783
+                    }
+                },
+                {
+                    "filename": "Dragon_jump_3.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 762,
+                        "h": 839
+                    },
+                    "spriteSourceSize": {
+                        "x": 5,
+                        "y": 24,
+                        "w": 718,
+                        "h": 776
+                    },
+                    "frame": {
+                        "x": 13331,
+                        "y": 1414,
+                        "w": 718,
+                        "h": 776
+                    }
+                },
+                {
+                    "filename": "Dragon_jump_2.png",
+                    "rotated": true,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 762,
+                        "h": 839
+                    },
+                    "spriteSourceSize": {
+                        "x": 5,
+                        "y": 24,
+                        "w": 725,
+                        "h": 778
+                    },
+                    "frame": {
+                        "x": 14109,
+                        "y": 1414,
+                        "w": 725,
+                        "h": 778
+                    }
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "3.0",
+        "smartupdate":
+            "$TexturePacker:SmartUpdate:ba2469ec542900fbe82f16e63794c9bf:69e2cbfc5bed54a8f31895af79c8c48e:5568a0997668716e778d4daafb7dc116$"
+    }
+}

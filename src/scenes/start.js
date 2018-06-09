@@ -6,6 +6,8 @@ import cloud2 from '../assets/backgrounds/start/cloud-2.png';
 import ground from '../assets/backgrounds/start/ground.png';
 import moon from '../assets/backgrounds/start/moon.png';
 import sea from '../assets/backgrounds/start/sea.png';
+import wallkingDragonAnimations from '../assets/creatures/walking-dragon/walking-dragon.json';
+import walkingDragonImage from '../assets/creatures/walking-dragon/walking-dragon.png';
 import playerStill from '../assets/player/player-image.png';
 import exampleSoundOgg from '../assets/sounds/example_sound.ogg';
 import constants from '../config/constants';
@@ -39,6 +41,14 @@ export default class Start extends Phaser.Scene {
     );
 
     this.load.audio('example_sound', [exampleSoundOgg]);
+
+    this.load.atlas({
+      key: 'walking-dragon',
+      textureURL: walkingDragonImage,
+      atlasURL: wallkingDragonAnimations
+    });
+
+    console.log(wallkingDragonAnimations);
   }
   create() {
     this.add
@@ -50,18 +60,31 @@ export default class Start extends Phaser.Scene {
       .setScale(assetScale);
     this.addClouds();
     this.add.image(center.width, center.height, 'ground').setScale(assetScale);
-    this.add
-      .image(center.width, center.height + 33, 'player-still')
-      .setScale(assetScale);
+    //this.add.image(center.width, center.height + 33, 'player-still');
+    // .setScale(assetScale);
     this.makeText();
 
     this.exampleSound = this.sound.add('example_sound');
     this.time.delayedCall(2000, () => {
       this.exampleSound.play();
     });
+
+    this.makeAnimations();
+
+    this.player = this.add
+      .sprite(center.width, center.height, 'walking-dragon')
+      .setScale(0.2);
   }
   update() {
     this.moveClouds();
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    if (this.cursors.left.isDown) {
+      //this.player.x = -0.1;
+      //console.log(this.player.anims);
+      this.player.anims.play('walk-left', true);
+      this.player.direction = 'left';
+    }
   }
   render() {}
 
@@ -84,6 +107,42 @@ export default class Start extends Phaser.Scene {
     });
 
     console.log(this.titleText);
+  }
+
+  makeAnimations() {
+    const FRAMERATE = 24;
+    const ONESHOT = 0;
+
+    this.anims.create({
+      key: 'falling',
+      frames: this.anims.generateFrameNames('walking-dragon', {
+        start: 0,
+        end: 5,
+        prefix: 'Dragon_fall_',
+        suffix: '.png'
+      }),
+      frameRate: FRAMERATE,
+      repeat: -1
+    });
+
+    const walkFrames = this.anims.generateFrameNames('walking-dragon', {
+      start: 0,
+      end: 20,
+      zeroPad: 2,
+      prefix: 'Dragon_walk_',
+      suffix: '.png'
+    });
+
+    console.log(walkFrames);
+
+    this.anims.create({
+      key: 'walk-left',
+      frames: walkFrames,
+      frameRate: FRAMERATE,
+      repeat: -1
+    });
+
+    console.log(this.anims);
   }
 
   addClouds() {
