@@ -1,14 +1,15 @@
 import Phaser from 'phaser/src/phaser.js';
+
 import backgroundGradient from '../assets/backgrounds/start/back-gradient.png';
 import cloud1 from '../assets/backgrounds/start/cloud-1.png';
 import cloud2 from '../assets/backgrounds/start/cloud-2.png';
-import constants from '../config/constants';
 import ground from '../assets/backgrounds/start/ground.png';
-import { linearScale } from '../utils';
 import moon from '../assets/backgrounds/start/moon.png';
-import playerStill from '../assets/player/player-image.png';
 import sea from '../assets/backgrounds/start/sea.png';
+import playerStill from '../assets/player/player-image.png';
 import exampleSoundOgg from '../assets/sounds/example_sound.ogg';
+import constants from '../config/constants';
+import { linearScale } from '../utils';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -37,9 +38,7 @@ export default class Start extends Phaser.Scene {
       'http://labs.phaser.io/assets/fonts/retro/knight3.png'
     );
 
-    this.load.audio('example_sound', [
-      exampleSoundOgg,
-    ]);
+    this.load.audio('example_sound', [exampleSoundOgg]);
   }
   create() {
     this.add

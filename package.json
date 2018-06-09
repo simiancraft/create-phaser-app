@@ -50,6 +50,7 @@
         "file-loader": "^1.1.11",
         "gh-pages": "^1.2.0",
         "html-webpack-plugin": "^3.2.0",
+        "import-sort-style-module": "4.2.0",
         "json-loader": "^0.5.7",
         "phaser": "3.9.0",
         "phaser-animated-tiles": "^1.0.0",
@@ -63,5 +64,30 @@
         "webpack-cli": "^2.1.4",
         "webpack-dev-server": "^3.1.4",
         "yarn": "^1.7.0"
+    },
+    "babel": {
+        "presets": [
+            "@babel/preset-env",
+            "@babel/preset-react"
+        ],
+        "plugins": [
+            [
+                "@babel/plugin-proposal-decorators",
+                {
+                    "legacy": true
+                }
+            ],
+            "@babel/plugin-proposal-class-properties"
+        ]
+    },
+    "importSort": {
+        ".js, .jsx, .es6, .es": {
+            "parser": "babylon",
+            "style": "module"
+        },
+        ".ts, .tsx": {
+            "parser": "typescript",
+            "style": "module"
+        }
     }
 }
