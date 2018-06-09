@@ -1,0 +1,36 @@
+{
+    "width": 512,
+    "imagePath": "Ubbie_tex.png",
+    "height": 512,
+    "name": "Ubbie",
+    "SubTexture": [
+        { "width": 130, "y": 294, "height": 30, "name": "shade", "x": 114 },
+        { "width": 174, "y": 186, "height": 106, "name": "pifeng", "x": 233 },
+        { "width": 40, "y": 83, "height": 89, "name": "hand_r1", "x": 460 },
+        { "width": 68, "y": 214, "height": 39, "name": "hand_r2", "x": 114 },
+        { "width": 40, "y": 174, "height": 62, "name": "hand_l11", "x": 469 },
+        { "width": 38, "y": 294, "height": 61, "name": "hand_l22", "x": 246 },
+        { "width": 57, "y": 1, "height": 80, "name": "leg_r", "x": 452 },
+        { "width": 58, "y": 186, "height": 77, "name": "leg_l", "x": 409 },
+        { "width": 111, "y": 214, "height": 97, "name": "body", "x": 1 },
+        { "width": 40, "y": 313, "height": 62, "name": "hand_l1", "x": 1 },
+        { "width": 230, "y": 1, "height": 211, "name": "head_2", "x": 1 },
+        { "width": 38, "y": 313, "height": 61, "name": "hand_l2", "x": 43 },
+        { "width": 225, "y": 101, "height": 83, "name": "eye_hmj", "x": 233 },
+        { "width": 100, "y": 255, "height": 25, "name": "eye", "x": 114 },
+        { "width": 104, "y": 326, "height": 19, "name": "eye2", "x": 286 },
+        { "width": 29, "y": 238, "height": 17, "name": "mouth", "x": 469 },
+        { "width": 72, "y": 265, "height": 60, "name": "apple_", "x": 409 },
+        {
+            "y": 1,
+            "frameX": -3,
+            "frameHeight": 107,
+            "frameY": -5,
+            "width": 217,
+            "frameWidth": 224,
+            "height": 98,
+            "name": "logo24",
+            "x": 233
+        }
+    ]
+}

@@ -1,15 +1,13 @@
 {
     "name": "create-phaser-app",
     "version": "0.0.2",
-    "description":
-        "A boiler plate to start your phaser app with webpack4, babel7+ and Phaser 3",
+    "description": "A boiler plate to start your phaser app with webpack4, babel7+ and Phaser 3",
     "author": "Jesse Harlin",
     "homepage": "https://the-simian.github.io/create-phaser-app",
     "scripts": {
         "start": "webpack-dev-server --mode development --env.development",
         "build": "webpack --mode production --env.production",
-        "deploy":
-            "yarn build --env.ghpages && yarn gh-pages && rm -rf ./gh-pages",
+        "deploy": "yarn build --env.ghpages && yarn gh-pages && rm -rf ./gh-pages",
         "test": "eslint ./src/**/**.js",
         "complexity-report": "./node_modules/.bin/es6-plato -r -d ./report src",
         "gh-pages": "gh-pages -d gh-pages"

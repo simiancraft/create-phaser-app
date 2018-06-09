@@ -2,6 +2,7 @@ import './index.css';
 import './font-loader';
 
 import CustomPipeline from './rendering-pipelines/CustomPipeline';
+import DragonBonesPlugin from '../src/plugins/dragonbones';
 import GameScene from './scenes/game';
 import Phaser from 'phaser';
 import StartScene from './scenes/start';
@@ -13,6 +14,15 @@ const config = {
   type: Phaser.AUTO,
   width: constants.WIDTH,
   height: constants.HEIGHT,
+  plugins: {
+    scene: [
+      {
+        key: 'DragonBonesPlugin',
+        plugin: DragonBonesPlugin,
+        mapping: 'dragonBones'
+      }
+    ]
+  },
   physics: {
     default: 'arcade',
     arcade: {
