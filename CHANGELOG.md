@@ -1,3 +1,8 @@
+0.0.5
+
+-   update the readme, show versions in the running app
+    0.0.4
+
 0.0.4
 
 -   update Phaser to 3.10.1
@@ -25,4 +30,4 @@
 -   Create boilerplate
 -   include fontloader
 -   make some start screen adn level assets to demonstrate the project
--   m ake start screen
+-   make start screen
