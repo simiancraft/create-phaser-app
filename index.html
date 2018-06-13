@@ -6,16 +6,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Phaser v3</title>
+  <style>
+    .version-info {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 0;
+      height: 0;
+    }
+
+    .version-info table {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 225px;
+    }
+  </style>
 </head>
 
 <body>
-  <span id="version" />Version 0.0.1
-  <span>
-    <script>
-      var WEBGL_RENDERER = true
-      var CANVAS_RENDERER = true
 
-    </script>
+
+
+  <script>
+    var WEBGL_RENDERER = true
+    var CANVAS_RENDERER = true
+  </script>
+
+  <div class="version-info">
+    <table>
+      <tr>
+        <td>Create-Phaser-App</td>
+        <td>0.0.5</td>
+      </tr>
+      <tr>
+        <td>Phaser</td>
+        <td>3.10.1</td>
+      </tr>
+    </table>
+  </div>
+
 <script type="text/javascript" src="/create-phaser-app/vendors~main.bundle.js"></script><script type="text/javascript" src="/create-phaser-app/main.bundle.js"></script></body>
 
 </html>
