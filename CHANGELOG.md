@@ -1,7 +1,7 @@
 0.0.4
 
 -   update Phaser to 3.10.1
--   update other dependencies, like babel.
+-   update other dependencies, like babel, webpack, etc.
 
 0.0.3
 
