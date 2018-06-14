@@ -1,7 +1,12 @@
+# Change Log
+
+0.0.6
+
+-   This resolves an issue related to using Browsersync with anything in a VM
+
 0.0.5
 
 -   update the readme, show versions in the running app
-    0.0.4
 
 0.0.4
 
