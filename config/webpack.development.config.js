@@ -32,6 +32,9 @@ const analyzerPlugin = new BundleAnalyzerPlugin();
 
 module.exports = (env, options) => {
   return {
+    devServer: {
+      host: '0.0.0.0'
+    },
     mode: 'development',
     output: {
       path: dist,
