@@ -25,10 +25,28 @@ export default class Start extends Phaser.Scene {
     super({ key: 'Game' });
   }
 
-  preload() {
+  preloadBackground() {
     this.load.image('back-gradient', backgroundGradient);
     this.load.image('moon', moon);
     this.load.image('sea', sea);
+  }
+
+  createBackground(scale) {
+    const center = {
+      width: WIDTH * 0.5,
+      height: HEIGHT * 0.5
+    };
+    this.add
+      .image(center.width, center.height, 'back-gradient')
+      .setScale(scale);
+    this.add.image(center.width, center.height, 'sea').setScale(scale);
+    this.add
+      .image(center.width * 1.6, center.height * 0.4, 'moon')
+      .setScale(scale);
+  }
+
+  preload() {
+    this.preloadBackground();
     this.load.image('cloud-1', cloud1);
     this.load.image('cloud-2', cloud2);
     this.load.image('ground', ground);
@@ -41,13 +59,7 @@ export default class Start extends Phaser.Scene {
     this.load.audio('example_sound', [exampleSoundOgg]);
   }
   create() {
-    this.add
-      .image(center.width, center.height, 'back-gradient')
-      .setScale(assetScale);
-    this.add.image(center.width, center.height, 'sea').setScale(assetScale);
-    this.add
-      .image(center.width * 1.6, center.height * 0.4, 'moon')
-      .setScale(assetScale);
+    this.createBackground(assetScale);
     this.addClouds();
     this.add.image(center.width, center.height, 'ground').setScale(assetScale);
     this.add

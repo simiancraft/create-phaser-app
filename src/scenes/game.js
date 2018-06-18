@@ -1,5 +1,11 @@
 import Phaser from 'phaser/src/phaser.js';
 
+import backgroundGradient from '../assets/backgrounds/game/back-gradient.png';
+import cloud1 from '../assets/backgrounds/game/cloud-1.png';
+import cloud2 from '../assets/backgrounds/game/cloud-2.png';
+import ground from '../assets/backgrounds/game/ground.png';
+import moon from '../assets/backgrounds/game/moon.png';
+import sea from '../assets/backgrounds/game/sea.png';
 import rockTilemap from '../assets/levels/rock-tilemap.png';
 import level from '../assets/levels/test-level.json';
 import playerAnimationList from '../assets/player/player-animation-list';
@@ -13,7 +19,9 @@ export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' });
   }
+
   preload() {
+    this.preloadBackground();
     //map
     this.load.image('tilemap-rock-grass', rockTilemap);
     this.load.tilemapTiledJSON('map', level);
@@ -26,6 +34,7 @@ export default class Game extends Phaser.Scene {
     });
   }
   create() {
+    this.createBackground(SCALE);
     //create Level
     this.map = this.make.tilemap({ key: 'map' });
     const tiles = this.map.addTilesetImage(
@@ -87,6 +96,32 @@ export default class Game extends Phaser.Scene {
 
     if (animation === 'left-crouchjump') {
     }
+  }
+
+  preloadBackground() {
+    this.load.image('back-gradient', backgroundGradient);
+    this.load.image('moon', moon);
+    this.load.image('sea', sea);
+  }
+
+  createBackground(scale) {
+    const center = {
+      width: WIDTH * 0.5,
+      height: HEIGHT * 0.5
+    };
+    this.backGradient = this.add
+      .image(center.width, center.height, 'back-gradient')
+      .setScale(scale)
+      .setScrollFactor(0, 0);
+
+    this.add
+      .image(center.width, center.height * 1.1, 'sea')
+      .setScale(scale)
+      .setScrollFactor(0, 0.05);
+
+    this.add
+      .image(center.width * 1.6, center.height * 0.4, 'moon')
+      .setScale(scale);
   }
 
   makeAnimation({ name, frames, repeat }) {
