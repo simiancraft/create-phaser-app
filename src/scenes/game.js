@@ -72,7 +72,9 @@ export default class Game extends Phaser.Scene {
 
   speeds = {
     walking: 110,
-    flying: 160
+    flying: 160,
+    highjump: 600,
+    jump: 250
   };
 
   update() {
@@ -139,10 +141,10 @@ export default class Game extends Phaser.Scene {
     } else if (this.cursors.space.isDown && onFloor) {
       if (this.player.movementState.indexOf('crouch') > -1) {
         this.player.movementState = 'crouchjump';
-        this.player.setVelocityY(-450);
+        this.player.setVelocityY(-this.speeds.highjump);
       } else {
         this.player.movementState = 'aerial';
-        this.player.setVelocityY(-250);
+        this.player.setVelocityY(-this.speeds.jump);
       }
     } else if (onFloor) {
       this.player.setVelocityX(0);
