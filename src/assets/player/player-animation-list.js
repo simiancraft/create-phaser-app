@@ -1,7 +1,7 @@
 export default [
   { name: 'left-crouch-dwnup', frames: 5 },
   { name: 'left-crouch-updwn', frames: 5 },
-  { name: 'left-crouchjump', frames: 7 },
+  { name: 'left-crouchjump', frames: 7, repeat: false },
   { name: 'left-damage', frames: 5 },
   { name: 'left-die', frames: 58 },
   { name: 'left-firecannon-dwn', frames: 6 },

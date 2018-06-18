@@ -33,20 +33,26 @@ export default class Game extends Phaser.Scene {
       'tilemap-rock-grass'
     );
     this.mapLayerGrass = this.map.createStaticLayer('grass', tiles, 0, 0);
-    this.mapLayerGround = this.map.createStaticLayer('ground', tiles, 0, 0);
-    this.mapLayerGround.setCollisionBetween(1, 36);
+    this.mapLayerGround = this.map.createDynamicLayer('ground', tiles, 0, 0);
+    this.mapLayerGround.setCollisionBetween(1, 50);
 
     //create player
-    this.player = this.physics.add.sprite(100, 100, 'player');
+    this.player = this.physics.add.sprite(200, 200, 'player');
     this.player.body.setGravityY(300);
+    this.player.setBounce(0.2);
+
     this.physics.add.collider(this.player, this.mapLayerGround);
     this.cameras.main.startFollow(this.player);
     this.makeAnimations();
     this.player.on('animationcomplete', this.animcomplete, this);
+
+    this.debugGraphics = this.add.graphics();
+    this.drawDebug();
   }
 
   update() {
     this.cursors = this.input.keyboard.createCursorKeys();
+
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
       this.player.anims.play('left-walk', true);
@@ -58,13 +64,17 @@ export default class Game extends Phaser.Scene {
       this.player.anims.play('left-idle', true);
     }
 
-    if (this.cursors.up.isDown && this.player.body.onFloor()) {
+    if (this.cursors.space.isDown && this.player.body.onFloor()) {
       this.player.setVelocityY(-300);
+      this.player.anims.play('left-crouchjump', true);
     }
   }
 
   animcomplete(animation, frame) {
     //console.log(animation, frame);
+
+    if (animation === 'left-crouchjump') {
+    }
   }
 
   makeAnimation({ name, frames, repeat }) {
@@ -94,5 +104,22 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  render() {}
+  drawDebug() {
+    let showDebug = true;
+    this.debugGraphics.clear();
+
+    if (showDebug) {
+      // Pass in null for any of the style options to disable drawing that component
+      this.map.renderDebug(this.debugGraphics, {
+        tileColor: null, // Non-colliding tiles
+        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 128), // Colliding tiles
+        faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
+      });
+    }
+  }
+
+  render() {
+    this.debug.cameraInfo(this.camera, 32, 32);
+    this.debug.spriteCoords(this.player, 32, 500);
+  }
 }
