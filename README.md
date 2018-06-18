@@ -33,3 +33,5 @@ This project can be used right now as a boilerplate, even without the eventual s
 1.  Clone the repo
 2.  `yarn install`
 3.  `yarn start`
+
+![image](https://user-images.githubusercontent.com/954596/41559851-fb552aa4-730a-11e8-8491-4f4c05ed9dce.png)
