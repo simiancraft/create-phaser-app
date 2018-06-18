@@ -37,7 +37,10 @@ export default class Game extends Phaser.Scene {
     this.mapLayerGround.setCollisionBetween(1, 50);
 
     //create player
-    this.player = this.physics.add.sprite(200, 200, 'player');
+    this.player = this.physics.add.sprite(200, 500, 'player');
+
+    this.player.body.setSize(this.player.width, 128);
+
     this.player.body.setGravityY(300);
     this.player.setBounce(0.2);
 
@@ -49,11 +52,12 @@ export default class Game extends Phaser.Scene {
       this.map.widthInPixels,
       this.map.heightInPixels
     );
+    this.cameras.main.setBackgroundColor('#333399');
     this.makeAnimations();
     this.player.on('animationcomplete', this.animcomplete, this);
-
+    this.player.direction = 'left';
     this.debugGraphics = this.add.graphics();
-    this.drawDebug();
+    //this.drawDebug();
   }
 
   update() {
@@ -62,17 +66,19 @@ export default class Game extends Phaser.Scene {
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
       this.player.anims.play('left-walk', true);
+      this.player.direction = 'left';
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(160);
       this.player.anims.play('right-walk', true);
+      this.player.direction = 'right';
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play('left-idle', true);
+      this.player.anims.play(`${this.player.direction}-idle`, true);
     }
 
     if (this.cursors.space.isDown && this.player.body.onFloor()) {
-      this.player.setVelocityY(-300);
-      this.player.anims.play('left-crouchjump', true);
+      this.player.setVelocityY(-350);
+      this.player.anims.play(`${this.player.direction}-crouchjump`, true);
     }
   }
 
