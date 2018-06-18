@@ -126,7 +126,6 @@ export default class Game extends Phaser.Scene {
       onFloor &&
       !this.cursors.space.isDown
     ) {
-      console.log(movementState, movementState.indexOf('crouch'));
       if (movementState.indexOf('crouch') === -1) {
         this.player.movementState = 'crouch-up2dwn';
         this.player.setVelocityX(0);
