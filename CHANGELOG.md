@@ -1,5 +1,9 @@
 # Change Log
 
+0.0.7
+
+-   Initial load of a second scene, as well as a basic level and player. Doesnt do all things a player cna do yet
+
 0.0.6
 
 -   This resolves an issue related to using Browsersync with anything in a VM

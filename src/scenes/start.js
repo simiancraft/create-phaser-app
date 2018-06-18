@@ -1,11 +1,11 @@
 import Phaser from 'phaser/src/phaser.js';
 
-import backgroundGradient from '../assets/backgrounds/start/back-gradient.png';
+import backgroundGradientTitle from '../assets/backgrounds/start/back-gradient.png';
 import cloud1 from '../assets/backgrounds/start/cloud-1.png';
 import cloud2 from '../assets/backgrounds/start/cloud-2.png';
 import ground from '../assets/backgrounds/start/ground.png';
-import moon from '../assets/backgrounds/start/moon.png';
-import sea from '../assets/backgrounds/start/sea.png';
+import moonTitle from '../assets/backgrounds/start/moon.png';
+import seaTitle from '../assets/backgrounds/start/sea.png';
 import playerStill from '../assets/player/player-image.png';
 import exampleSoundOgg from '../assets/sounds/example_sound.ogg';
 import constants from '../config/constants';
@@ -22,13 +22,31 @@ const assetScale = SCALE * 2;
 
 export default class Start extends Phaser.Scene {
   constructor() {
-    super({ key: 'Game' });
+    super({ key: 'Start' });
+  }
+
+  preloadBackground() {
+    this.load.image('back-gradient-title', backgroundGradientTitle);
+    this.load.image('moon-title', moonTitle);
+    this.load.image('sea-title', seaTitle);
+  }
+
+  createBackground(scale) {
+    const center = {
+      width: WIDTH * 0.5,
+      height: HEIGHT * 0.5
+    };
+    this.add
+      .image(center.width, center.height, 'back-gradient-title')
+      .setScale(scale);
+    this.add.image(center.width, center.height, 'sea-title').setScale(scale);
+    this.add
+      .image(center.width * 1.6, center.height * 0.4, 'moon-title')
+      .setScale(scale);
   }
 
   preload() {
-    this.load.image('back-gradient', backgroundGradient);
-    this.load.image('moon', moon);
-    this.load.image('sea', sea);
+    this.preloadBackground();
     this.load.image('cloud-1', cloud1);
     this.load.image('cloud-2', cloud2);
     this.load.image('ground', ground);
@@ -41,17 +59,11 @@ export default class Start extends Phaser.Scene {
     this.load.audio('example_sound', [exampleSoundOgg]);
   }
   create() {
-    this.add
-      .image(center.width, center.height, 'back-gradient')
-      .setScale(assetScale);
-    this.add.image(center.width, center.height, 'sea').setScale(assetScale);
-    this.add
-      .image(center.width * 1.6, center.height * 0.4, 'moon')
-      .setScale(assetScale);
+    this.createBackground(assetScale);
     this.addClouds();
     this.add.image(center.width, center.height, 'ground').setScale(assetScale);
     this.add
-      .image(center.width, center.height + 33, 'player-still')
+      .image(center.width, center.height * 1.3, 'player-still')
       .setScale(assetScale);
     this.makeText();
 
@@ -59,17 +71,24 @@ export default class Start extends Phaser.Scene {
     this.time.delayedCall(2000, () => {
       this.exampleSound.play();
     });
+
+    this.input.on('pointerdown', this.startGame, this);
   }
   update() {
     this.moveClouds();
   }
   render() {}
 
+  startGame() {
+    this.scene.stop('Game');
+    this.scene.start('Game');
+  }
+
   makeText() {
     this.titleText = this.add
       .text(center.width, center.height * 0.25, 'Create Phaser App', {
         fill: '#ffffff',
-        font: '30px Rajdhani'
+        font: `${46 * SCALE}px Rajdhani`
       })
       .setOrigin(0.5, 0.5)
       .setAlpha(0);
@@ -82,8 +101,6 @@ export default class Start extends Phaser.Scene {
         duration: 4000
       }
     });
-
-    console.log(this.titleText);
   }
 
   addClouds() {

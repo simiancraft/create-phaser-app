@@ -1,11 +1,12 @@
 import './index.css';
 import './font-loader';
 
+import Phaser from 'phaser';
+
+import constants from './config/constants';
 import CustomPipeline from './rendering-pipelines/CustomPipeline';
 import GameScene from './scenes/game';
-import Phaser from 'phaser';
 import StartScene from './scenes/start';
-import constants from './config/constants';
 
 window.Phaser = Phaser;
 
@@ -20,7 +21,7 @@ const config = {
       debug: false
     }
   },
-  scene: [StartScene],
+  scene: [StartScene, GameScene],
   pixelArt: true,
   antialias: false,
   callbacks: {
