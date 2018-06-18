@@ -115,13 +115,14 @@ export default class Game extends Phaser.Scene {
       .setScrollFactor(0, 0);
 
     this.add
-      .image(center.width, center.height * 1.1, 'sea')
+      .image(center.width, center.height * 1.4, 'sea')
       .setScale(scale)
-      .setScrollFactor(0, 0.05);
+      .setScrollFactor(0, 0.1);
 
     this.add
       .image(center.width * 1.6, center.height * 0.4, 'moon')
-      .setScale(scale);
+      .setScale(scale)
+      .setScrollFactor(0, 0);
   }
 
   makeAnimation({ name, frames, repeat }) {
