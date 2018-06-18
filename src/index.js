@@ -21,7 +21,7 @@ const config = {
       debug: false
     }
   },
-  scene: [GameScene],
+  scene: [StartScene, GameScene],
   pixelArt: true,
   antialias: false,
   callbacks: {

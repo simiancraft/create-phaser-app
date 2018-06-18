@@ -1,11 +1,11 @@
 import Phaser from 'phaser/src/phaser.js';
 
-import backgroundGradient from '../assets/backgrounds/start/back-gradient.png';
+import backgroundGradientTitle from '../assets/backgrounds/start/back-gradient.png';
 import cloud1 from '../assets/backgrounds/start/cloud-1.png';
 import cloud2 from '../assets/backgrounds/start/cloud-2.png';
 import ground from '../assets/backgrounds/start/ground.png';
-import moon from '../assets/backgrounds/start/moon.png';
-import sea from '../assets/backgrounds/start/sea.png';
+import moonTitle from '../assets/backgrounds/start/moon.png';
+import seaTitle from '../assets/backgrounds/start/sea.png';
 import playerStill from '../assets/player/player-image.png';
 import exampleSoundOgg from '../assets/sounds/example_sound.ogg';
 import constants from '../config/constants';
@@ -22,13 +22,13 @@ const assetScale = SCALE * 2;
 
 export default class Start extends Phaser.Scene {
   constructor() {
-    super({ key: 'Game' });
+    super({ key: 'Start' });
   }
 
   preloadBackground() {
-    this.load.image('back-gradient', backgroundGradient);
-    this.load.image('moon', moon);
-    this.load.image('sea', sea);
+    this.load.image('back-gradient-title', backgroundGradientTitle);
+    this.load.image('moon-title', moonTitle);
+    this.load.image('sea-title', seaTitle);
   }
 
   createBackground(scale) {
@@ -37,11 +37,11 @@ export default class Start extends Phaser.Scene {
       height: HEIGHT * 0.5
     };
     this.add
-      .image(center.width, center.height, 'back-gradient')
+      .image(center.width, center.height, 'back-gradient-title')
       .setScale(scale);
-    this.add.image(center.width, center.height, 'sea').setScale(scale);
+    this.add.image(center.width, center.height, 'sea-title').setScale(scale);
     this.add
-      .image(center.width * 1.6, center.height * 0.4, 'moon')
+      .image(center.width * 1.6, center.height * 0.4, 'moon-title')
       .setScale(scale);
   }
 
@@ -71,11 +71,18 @@ export default class Start extends Phaser.Scene {
     this.time.delayedCall(2000, () => {
       this.exampleSound.play();
     });
+
+    this.input.on('pointerdown', this.startGame, this);
   }
   update() {
     this.moveClouds();
   }
   render() {}
+
+  startGame() {
+    this.scene.stop('Game');
+    this.scene.start('Game');
+  }
 
   makeText() {
     this.titleText = this.add
@@ -94,8 +101,6 @@ export default class Start extends Phaser.Scene {
         duration: 4000
       }
     });
-
-    console.log(this.titleText);
   }
 
   addClouds() {
