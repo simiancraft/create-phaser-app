@@ -81,7 +81,7 @@ export default class Game extends Phaser.Scene {
 
     const onFloor = this.player.body.onFloor();
 
-    if (this.cursors.left.isDown && onFloor) {
+    if (this.cursors.left.isDown && onFloor && !this.cursors.space.isDown) {
       if (direction === 'left') {
         this.player.direction = 'left';
         this.player.movementState = 'walk';
@@ -92,7 +92,11 @@ export default class Game extends Phaser.Scene {
         this.player.movementState = `walkturn-${way}`;
         this.player.setVelocityX(0);
       }
-    } else if (this.cursors.right.isDown && onFloor) {
+    } else if (
+      this.cursors.right.isDown &&
+      onFloor &&
+      !this.cursors.space.isDown
+    ) {
       if (direction === 'right') {
         this.player.direction = 'right';
         this.player.movementState = 'walk';
@@ -137,10 +141,15 @@ export default class Game extends Phaser.Scene {
       if (this.player.movementState.indexOf('crouch') > -1) {
         this.player.movementState = 'crouchjump';
         this.player.setVelocityY(-450);
+      } else {
+        this.player.movementState = 'aerial';
+        this.player.setVelocityY(-250);
       }
     } else if (onFloor) {
       this.player.setVelocityX(0);
       this.player.movementState = 'idle';
+    } else {
+      this.player.movementState = 'aerial';
     }
 
     this.setaAnimation();
