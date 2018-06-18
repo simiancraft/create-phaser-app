@@ -42,7 +42,7 @@ export default class Game extends Phaser.Scene {
       'tilemap-rock-grass'
     );
     this.mapLayerGrass = this.map.createStaticLayer('grass', tiles, 0, 0);
-    this.mapLayerGround = this.map.createDynamicLayer('ground', tiles, 0, 0);
+    this.mapLayerGround = this.map.createStaticLayer('ground', tiles, 0, 0);
     this.mapLayerGround.setCollisionBetween(1, 50);
 
     //create player
