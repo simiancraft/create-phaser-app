@@ -71,14 +71,17 @@ export default class Game extends Phaser.Scene {
   }
 
   speeds = {
-    walking: 110
+    walking: 110,
+    flying: 160
   };
 
   update() {
     const { direction, movementState } = this.player;
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    if (this.cursors.left.isDown) {
+    const onFloor = this.player.body.onFloor();
+
+    if (this.cursors.left.isDown && onFloor) {
       if (direction === 'left') {
         this.player.direction = 'left';
         this.player.movementState = 'walk';
@@ -89,7 +92,7 @@ export default class Game extends Phaser.Scene {
         this.player.movementState = `walkturn-${way}`;
         this.player.setVelocityX(0);
       }
-    } else if (this.cursors.right.isDown) {
+    } else if (this.cursors.right.isDown && onFloor) {
       if (direction === 'right') {
         this.player.direction = 'right';
         this.player.movementState = 'walk';
@@ -100,22 +103,44 @@ export default class Game extends Phaser.Scene {
         this.player.movementState = `walkturn-${way}`;
         this.player.setVelocityX(0);
       }
-    } else {
+    } else if (this.cursors.left.isDown && !onFloor) {
+      if (direction === 'left') {
+      } else if (direction === 'right') {
+        this.player.direction = `right2left`;
+      }
+
+      this.player.setVelocityX(-this.speeds.flying);
+    } else if (this.cursors.right.isDown && !onFloor) {
+      if (direction === 'right') {
+      } else if (direction === 'left') {
+        this.player.direction = `left2right`;
+      }
+
+      this.player.setVelocityX(this.speeds.flying);
+    } else if (
+      this.cursors.down.isDown &&
+      onFloor &&
+      !this.cursors.space.isDown
+    ) {
+      console.log(movementState, movementState.indexOf('crouch'));
+      if (movementState.indexOf('crouch') === -1) {
+        this.player.movementState = 'crouch-up2dwn';
+        this.player.setVelocityX(0);
+      }
+    } else if (
+      !this.cursors.down.isDown &&
+      onFloor &&
+      this.player.movementState.indexOf('crouch') > -1
+    ) {
+      this.player.movementState = 'crouch-dwn2up';
+    } else if (this.cursors.space.isDown && onFloor) {
+      if (this.player.movementState.indexOf('crouch') > -1) {
+        this.player.movementState = 'crouchjump';
+        this.player.setVelocityY(-450);
+      }
+    } else if (onFloor) {
       this.player.setVelocityX(0);
       this.player.movementState = 'idle';
-    }
-
-    if (this.cursors.down.isDown && this.player.body.onFloor()) {
-      if (this.player.movementState.indexOf('crouch' === -1)) {
-        this.player.movementState = 'crouch-updwn';
-      }
-    }
-
-    if (this.cursors.space.isDown && this.player.body.onFloor()) {
-      if (this.player.movementState.indexOf('crouch' > -1)) {
-        this.player.movementState = 'crouchjump';
-        this.player.setVelocityY(-350);
-      }
     }
 
     this.setaAnimation();
@@ -124,14 +149,38 @@ export default class Game extends Phaser.Scene {
   animcomplete(animation, frame) {
     const { key } = animation;
 
-    if (key.indexOf('right2left-walkturn') > -1) {
+    function was(name) {
+      return key.indexOf(name) > -1;
+    }
+
+    if (was('right2left-aerial')) {
+      this.player.direction = 'left';
+    }
+
+    if (was('left2right-aerial')) {
+      this.player.direction = 'right';
+    }
+
+    if (was('right2left-walkturn')) {
       this.player.direction = 'left';
       this.player.movementState = 'walk';
     }
 
-    if (key.indexOf('left2right-walkturn') > -1) {
+    if (was('left2right-walkturn')) {
       this.player.direction = 'right';
       this.player.movementState = 'walk';
+    }
+
+    if (was('crouch-up2dwn')) {
+      this.player.movementState = 'crouch';
+    }
+
+    if (was('crouch-dwn2up')) {
+      this.player.movementState = 'idle';
+    }
+
+    if (was('crouchjump')) {
+      this.player.movementState = 'aerial';
     }
   }
 
