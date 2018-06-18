@@ -48,7 +48,7 @@ export default class Game extends Phaser.Scene {
     //create player
     this.player = this.physics.add.sprite(200, 500, 'player');
 
-    this.player.body.setSize(this.player.width, 128);
+    this.player.body.setSize(this.player.width, 126);
 
     this.player.body.setGravityY(300);
     this.player.setBounce(0.2);
