@@ -51,7 +51,7 @@ export default class Start extends Phaser.Scene {
     this.addClouds();
     this.add.image(center.width, center.height, 'ground').setScale(assetScale);
     this.add
-      .image(center.width, center.height + 33, 'player-still')
+      .image(center.width, center.height * 1.3, 'player-still')
       .setScale(assetScale);
     this.makeText();
 
@@ -69,7 +69,7 @@ export default class Start extends Phaser.Scene {
     this.titleText = this.add
       .text(center.width, center.height * 0.25, 'Create Phaser App', {
         fill: '#ffffff',
-        font: '30px Rajdhani'
+        font: `${46 * SCALE}px Rajdhani`
       })
       .setOrigin(0.5, 0.5)
       .setAlpha(0);
