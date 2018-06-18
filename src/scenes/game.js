@@ -46,7 +46,7 @@ export default class Game extends Phaser.Scene {
     this.mapLayerGround.setCollisionBetween(1, 50);
 
     //create player
-    this.player = this.physics.add.sprite(200, 500, 'player');
+    this.player = this.physics.add.sprite(200, 400, 'player');
 
     this.player.body.setSize(this.player.width, 126);
 
@@ -65,37 +65,79 @@ export default class Game extends Phaser.Scene {
     this.makeAnimations();
     this.player.on('animationcomplete', this.animcomplete, this);
     this.player.direction = 'left';
+    this.player.movementState = 'idle';
     this.debugGraphics = this.add.graphics();
     //this.drawDebug();
   }
 
+  speeds = {
+    walking: 110
+  };
+
   update() {
+    const { direction, movementState } = this.player;
     this.cursors = this.input.keyboard.createCursorKeys();
 
     if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-160);
-      this.player.anims.play('left-walk', true);
-      this.player.direction = 'left';
+      if (direction === 'left') {
+        this.player.direction = 'left';
+        this.player.movementState = 'walk';
+        this.player.setVelocityX(-this.speeds.walking);
+      } else if (direction === 'right') {
+        this.player.direction = 'right2left';
+        const way = Math.round(Math.random()) ? 'front' : 'back';
+        this.player.movementState = `walkturn-${way}`;
+        this.player.setVelocityX(0);
+      }
     } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(160);
-      this.player.anims.play('right-walk', true);
-      this.player.direction = 'right';
+      if (direction === 'right') {
+        this.player.direction = 'right';
+        this.player.movementState = 'walk';
+        this.player.setVelocityX(this.speeds.walking);
+      } else if (direction === 'left') {
+        this.player.direction = 'left2right';
+        const way = Math.round(Math.random()) ? 'front' : 'back';
+        this.player.movementState = `walkturn-${way}`;
+        this.player.setVelocityX(0);
+      }
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play(`${this.player.direction}-idle`, true);
+      this.player.movementState = 'idle';
+    }
+
+    if (this.cursors.down.isDown && this.player.body.onFloor()) {
+      if (this.player.movementState.indexOf('crouch' === -1)) {
+        this.player.movementState = 'crouch-updwn';
+      }
     }
 
     if (this.cursors.space.isDown && this.player.body.onFloor()) {
-      this.player.setVelocityY(-350);
-      this.player.anims.play(`${this.player.direction}-crouchjump`, true);
+      if (this.player.movementState.indexOf('crouch' > -1)) {
+        this.player.movementState = 'crouchjump';
+        this.player.setVelocityY(-350);
+      }
     }
+
+    this.setaAnimation();
   }
 
   animcomplete(animation, frame) {
-    //console.log(animation, frame);
+    const { key } = animation;
 
-    if (animation === 'left-crouchjump') {
+    if (key.indexOf('right2left-walkturn') > -1) {
+      this.player.direction = 'left';
+      this.player.movementState = 'walk';
     }
+
+    if (key.indexOf('left2right-walkturn') > -1) {
+      this.player.direction = 'right';
+      this.player.movementState = 'walk';
+    }
+  }
+
+  setaAnimation() {
+    const { direction, movementState } = this.player;
+    this.player.anims.play(`${direction}-${movementState}`, true);
   }
 
   preloadBackground() {
