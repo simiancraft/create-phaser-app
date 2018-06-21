@@ -8,9 +8,12 @@
         "start": "webpack-dev-server --mode development --env.development",
         "build": "webpack --mode production --env.production",
         "deploy": "yarn build --env.ghpages && yarn gh-pages && rm -rf ./gh-pages",
-        "test": "eslint ./src/**/**.js",
+        "lint": "eslint ./src/**/**.js",
         "complexity-report": "./node_modules/.bin/es6-plato -r -d ./report src",
-        "gh-pages": "gh-pages -d gh-pages"
+        "gh-pages": "gh-pages -d gh-pages",
+        "test_base": "jest src/",
+        "test": "yarn test_base",
+        "coverage": "yarn test_base --coverage"
     },
     "keywords": [
         "Phaser",
@@ -25,7 +28,7 @@
     ],
     "license": "MIT",
     "dependencies": {
-        "@babel/core": "7.0.0-beta.51",
+        "@babel/core": "^7.0.0-beta.51",
         "@babel/plugin-proposal-class-properties": "7.0.0-beta.51",
         "@babel/plugin-proposal-decorators": "7.0.0-beta.51",
         "@babel/preset-env": "7.0.0-beta.51",
@@ -51,6 +54,7 @@
         "gh-pages": "1.2.0",
         "html-webpack-plugin": "3.2.0",
         "import-sort-style-module": "4.2.0",
+        "jest": "^23.1.0",
         "json-loader": "0.5.7",
         "phaser": "3.10.1",
         "phaser-animated-tiles": "2.0.2",
@@ -89,5 +93,10 @@
             "parser": "typescript",
             "style": "module"
         }
+    },
+    "devDependencies": {
+        "babel-core": "^7.0.0-0",
+        "babel-jest": "^23.0.1",
+        "regenerator-runtime": "^0.11.1"
     }
 }

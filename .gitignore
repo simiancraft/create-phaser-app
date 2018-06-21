@@ -28,3 +28,4 @@ higherVolume/
 #output
 dist/
 build/
+coverage/
