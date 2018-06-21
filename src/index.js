@@ -18,8 +18,8 @@ const config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 300 },
-      debug: false
-    }
+      debug: false,
+    },
   },
   scene: [StartScene, GameScene],
   pixelArt: true,
@@ -27,8 +27,8 @@ const config = {
   callbacks: {
     postBoot: game => {
       game.renderer.addPipeline('Custom', new CustomPipeline(game));
-    }
-  }
+    },
+  },
 };
 
 const game = new Phaser.Game(config);

@@ -1,9 +1,6 @@
 import Phaser from 'phaser/src/phaser.js';
 
 import backgroundGradient from '../assets/backgrounds/game/back-gradient.png';
-import cloud1 from '../assets/backgrounds/game/cloud-1.png';
-import cloud2 from '../assets/backgrounds/game/cloud-2.png';
-import ground from '../assets/backgrounds/game/ground.png';
 import moon from '../assets/backgrounds/game/moon.png';
 import sea from '../assets/backgrounds/game/sea.png';
 import rockTilemap from '../assets/levels/rock-tilemap.png';
@@ -30,7 +27,7 @@ export default class Game extends Phaser.Scene {
     this.load.atlas({
       key: 'player-atlas',
       textureURL: playerPNG,
-      atlasURL: playerJSON
+      atlasURL: playerJSON,
     });
   }
   create() {
@@ -74,7 +71,7 @@ export default class Game extends Phaser.Scene {
     walking: 110,
     flying: 160,
     highjump: 600,
-    jump: 250
+    jump: 250,
   };
 
   update() {
@@ -208,7 +205,7 @@ export default class Game extends Phaser.Scene {
   createBackground(scale) {
     const center = {
       width: WIDTH * 0.5,
-      height: HEIGHT * 0.5
+      height: HEIGHT * 0.5,
     };
     this.backGradient = this.add
       .image(center.width, center.height, 'back-gradient')
@@ -235,10 +232,10 @@ export default class Game extends Phaser.Scene {
         end: frames,
         zeroPad: 3,
         suffix: '.png',
-        prefix: `${name}-`
+        prefix: `${name}-`,
       }),
       frameRate: FRAMERATE,
-      repeat: repeat ? -1 : 0
+      repeat: repeat ? -1 : 0,
     });
   }
 
@@ -248,7 +245,7 @@ export default class Game extends Phaser.Scene {
       this.makeAnimation({
         name: name,
         frames: frames,
-        repeat: !!repeat
+        repeat: !!repeat,
       });
     });
   }
@@ -262,7 +259,7 @@ export default class Game extends Phaser.Scene {
       this.map.renderDebug(this.debugGraphics, {
         tileColor: null, // Non-colliding tiles
         collidingTileColor: new Phaser.Display.Color(243, 134, 48, 128), // Colliding tiles
-        faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
+        faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
       });
     }
   }

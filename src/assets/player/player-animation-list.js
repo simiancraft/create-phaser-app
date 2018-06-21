@@ -48,5 +48,5 @@ export default [
   { name: 'right-walk', frames: 22 },
   { name: 'right2left-aerial', frames: 5 },
   { name: 'right2left-walkturn-back', frames: 11 },
-  { name: 'right2left-walkturn-front', frames: 11 }
+  { name: 'right2left-walkturn-front', frames: 11 },
 ];
