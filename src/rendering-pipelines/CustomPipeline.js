@@ -11,9 +11,9 @@ const CustomPipeline = new Phaser.Class({
       renderer: game.renderer,
       fragShader: TextureTintFrag,
       vertshader: TextureTintVert,
-      topology: game.renderer.gl.TRIANGLES
+      topology: game.renderer.gl.TRIANGLES,
     });
-  }
+  },
 });
 
 export default CustomPipeline;

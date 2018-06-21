@@ -1,5 +1,5 @@
 window.WebFontConfig = {
-  google: { families: ['Press Start 2P', 'Rajdhani'] }
+  google: { families: ['Press Start 2P', 'Rajdhani'] },
 };
 
 (function() {

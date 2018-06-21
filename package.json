@@ -10,7 +10,9 @@
         "deploy": "yarn build --env.ghpages && yarn gh-pages && rm -rf ./gh-pages",
         "test": "eslint ./src/**/**.js",
         "complexity-report": "./node_modules/.bin/es6-plato -r -d ./report src",
-        "gh-pages": "gh-pages -d gh-pages"
+        "gh-pages": "gh-pages -d gh-pages",
+        "format": "prettier --write \"src/**/*.js\"",
+        "precommit": "lint-staged && yarn test"
     },
     "keywords": [
         "Phaser",
@@ -50,11 +52,13 @@
         "file-loader": "1.1.11",
         "gh-pages": "1.2.0",
         "html-webpack-plugin": "3.2.0",
+        "husky": "^0.14.3",
         "import-sort-style-module": "4.2.0",
         "json-loader": "0.5.7",
+        "lint-staged": "^7.2.0",
         "phaser": "3.10.1",
         "phaser-animated-tiles": "2.0.2",
-        "prettier": "1.13.5",
+        "prettier": "^1.13.5",
         "prettier-eslint": "8.8.1",
         "raw-loader": "0.5.1",
         "style-loader": "0.21.0",
@@ -89,5 +93,11 @@
             "parser": "typescript",
             "style": "module"
         }
+    },
+    "lint-staged": {
+        "*.js": [
+            "yarn format",
+            "git add"
+        ]
     }
 }

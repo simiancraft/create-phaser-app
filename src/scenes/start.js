@@ -15,7 +15,7 @@ const { WIDTH, HEIGHT, SCALE } = constants;
 
 const center = {
   width: WIDTH * 0.5,
-  height: HEIGHT * 0.5
+  height: HEIGHT * 0.5,
 };
 
 const assetScale = SCALE * 2;
@@ -34,7 +34,7 @@ export default class Start extends Phaser.Scene {
   createBackground(scale) {
     const center = {
       width: WIDTH * 0.5,
-      height: HEIGHT * 0.5
+      height: HEIGHT * 0.5,
     };
     this.add
       .image(center.width, center.height, 'back-gradient-title')
@@ -88,7 +88,7 @@ export default class Start extends Phaser.Scene {
     this.titleText = this.add
       .text(center.width, center.height * 0.25, 'Create Phaser App', {
         fill: '#ffffff',
-        font: `${46 * SCALE}px Rajdhani`
+        font: `${46 * SCALE}px Rajdhani`,
       })
       .setOrigin(0.5, 0.5)
       .setAlpha(0);
@@ -98,8 +98,8 @@ export default class Start extends Phaser.Scene {
       alpha: {
         value: 1,
         delay: 1000,
-        duration: 4000
-      }
+        duration: 4000,
+      },
     });
   }
 
@@ -116,7 +116,7 @@ export default class Start extends Phaser.Scene {
           'cloud-1'
         )
         .setScale(assetScale / distance),
-      distance: distance
+      distance: distance,
     });
 
     distance = 2;
@@ -129,7 +129,7 @@ export default class Start extends Phaser.Scene {
           'cloud-2'
         )
         .setScale(assetScale / distance),
-      distance: distance
+      distance: distance,
     });
 
     distance = 1.6;
@@ -142,7 +142,7 @@ export default class Start extends Phaser.Scene {
           'cloud-1'
         )
         .setScale(assetScale / distance),
-      distance: distance
+      distance: distance,
     });
 
     distance = 1.2;
@@ -154,7 +154,7 @@ export default class Start extends Phaser.Scene {
           'cloud-2'
         )
         .setScale(assetScale / distance),
-      distance: distance
+      distance: distance,
     });
 
     distance = 1;
@@ -167,7 +167,7 @@ export default class Start extends Phaser.Scene {
           'cloud-1'
         )
         .setScale(assetScale / distance),
-      distance: distance
+      distance: distance,
     });
 
     this.scaleSpeed = linearScale([1, 2.2], [0.2, 0.05]);
