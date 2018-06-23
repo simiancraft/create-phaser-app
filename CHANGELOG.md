@@ -1,5 +1,9 @@
 # Change Log
 
+0.0.9
+
+-   Fix colliders (minor tweak)
+
 0.0.8
 
 -   Fix test level (minor tweak)
