@@ -1,6 +1,7 @@
 # Create-Phaser-App
 
-#About Create Phaser App
+## About Create Phaser App
+
 Quickly prototype and build the Phaser game you want to make! Develop in Phaser faster than before.
 
 -   🕹️[Working Example Of Create Phaser App](https://simiancraft.github.io/create-phaser-app/)
@@ -9,7 +10,7 @@ Quickly prototype and build the Phaser game you want to make! Develop in Phaser 
 
 ![cpa-demo-mech](https://user-images.githubusercontent.com/954596/40955643-e0393dce-6850-11e8-8708-590dbf8f66cd.gif)
 
-## ⚠️Important
+### ⚠️Important
 
 This project is under development. The goal is to start with a boilerplate, but transition into a scaffold with various development tools. Many dev tools are here now, but many are yet to come. Examples are the bundle analysis and complexity analysis.
 
@@ -27,6 +28,7 @@ This project can be used right now as a boilerplate, even without the eventual s
 -   Webpack bundle analyzer
 -   Browsersync
 -   Project Complexity analysis `yarn complexity-report`
+-   Tilemap processing (extrusion and minification)
 
 # Quickly start
 
