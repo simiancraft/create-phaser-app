@@ -17,11 +17,11 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 300 },
-      debug: false
+      gravity: { y: 400 },
+      debug: true
     }
   },
-  scene: [StartScene, GameScene],
+  scene: [GameScene],
   pixelArt: true,
   antialias: false,
   callbacks: {

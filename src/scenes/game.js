@@ -1,9 +1,6 @@
-import Phaser from 'phaser/src/phaser.js';
+import Phaser from 'phaser';
 
 import backgroundGradient from '../assets/backgrounds/game/back-gradient.png';
-import cloud1 from '../assets/backgrounds/game/cloud-1.png';
-import cloud2 from '../assets/backgrounds/game/cloud-2.png';
-import ground from '../assets/backgrounds/game/ground.png';
 import moon from '../assets/backgrounds/game/moon.png';
 import sea from '../assets/backgrounds/game/sea.png';
 import rockTilemap from '../assets/levels/rock-tilemap.png';
@@ -34,7 +31,7 @@ export default class Game extends Phaser.Scene {
     });
   }
   create() {
-    this.createBackground(SCALE);
+    // this.createBackground(SCALE);
     //create Level
     this.map = this.make.tilemap({ key: 'map' });
     const tiles = this.map.addTilesetImage(
@@ -67,7 +64,7 @@ export default class Game extends Phaser.Scene {
     this.player.direction = 'left';
     this.player.movementState = 'idle';
     this.debugGraphics = this.add.graphics();
-    //this.drawDebug();
+    this.drawDebug();
   }
 
   speeds = {
@@ -254,17 +251,11 @@ export default class Game extends Phaser.Scene {
   }
 
   drawDebug() {
-    let showDebug = true;
-    this.debugGraphics.clear();
-
-    if (showDebug) {
-      // Pass in null for any of the style options to disable drawing that component
-      this.map.renderDebug(this.debugGraphics, {
-        tileColor: null, // Non-colliding tiles
-        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 128), // Colliding tiles
-        faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
-      });
-    }
+    this.map.renderDebug(this.debugGraphics, {
+      tileColor: null,
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 128),
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+    });
   }
 
   render() {
