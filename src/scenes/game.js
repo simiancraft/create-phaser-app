@@ -45,10 +45,11 @@ export default class Game extends Phaser.Scene {
     //create player
     this.player = this.physics.add.sprite(200, 400, 'player');
 
-    this.player.body.setSize(this.player.width, 126);
+    this.player.body.setSize(75, 100);
+    this.player.setOrigin(0.5, 0.6);
 
     this.player.body.setGravityY(300);
-    this.player.setBounce(0.2);
+    this.player.setBounce(0);
 
     this.physics.add.collider(this.player, this.mapLayerGround);
     this.cameras.main.startFollow(this.player);
@@ -65,6 +66,7 @@ export default class Game extends Phaser.Scene {
     this.player.movementState = 'idle';
     this.debugGraphics = this.add.graphics();
     this.drawDebug();
+    window.player = this.player;
   }
 
   speeds = {
@@ -87,6 +89,7 @@ export default class Game extends Phaser.Scene {
         this.player.setVelocityX(-this.speeds.walking);
       } else if (direction === 'right') {
         this.player.direction = 'right2left';
+        this.player.setOrigin(0.55, 0.6);
         const way = Math.round(Math.random()) ? 'front' : 'back';
         this.player.movementState = `walkturn-${way}`;
         this.player.setVelocityX(0);
@@ -192,8 +195,11 @@ export default class Game extends Phaser.Scene {
   }
 
   setaAnimation() {
-    const { direction, movementState } = this.player;
+    const { direction, movementState, frame } = this.player;
     this.player.anims.play(`${direction}-${movementState}`, true);
+    //console.log(this.player.frame);
+
+    //this.player.body.setSize(frame.width, frame.height);
   }
 
   preloadBackground() {
