@@ -31,7 +31,7 @@ export default class Game extends Phaser.Scene {
     });
   }
   create() {
-    // this.createBackground(SCALE);
+    this.createBackground(SCALE);
     //create Level
     this.map = this.make.tilemap({ key: 'map' });
     const tiles = this.map.addTilesetImage(
@@ -45,7 +45,7 @@ export default class Game extends Phaser.Scene {
     //create player
     this.player = this.physics.add.sprite(200, 400, 'player');
 
-    this.player.body.setSize(75, 100);
+    this.player.body.setSize(75, 95);
     this.player.setOrigin(0.5, 0.6);
 
     this.player.body.setGravityY(300);
