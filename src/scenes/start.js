@@ -1,4 +1,4 @@
-import Phaser from 'phaser/src/phaser.js';
+import Phaser from 'phaser';
 
 import backgroundGradientTitle from '../assets/backgrounds/start/back-gradient.png';
 import cloud1 from '../assets/backgrounds/start/cloud-1.png';

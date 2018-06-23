@@ -1,9 +1,6 @@
-import Phaser from 'phaser/src/phaser.js';
+import Phaser from 'phaser';
 
 import backgroundGradient from '../assets/backgrounds/game/back-gradient.png';
-import cloud1 from '../assets/backgrounds/game/cloud-1.png';
-import cloud2 from '../assets/backgrounds/game/cloud-2.png';
-import ground from '../assets/backgrounds/game/ground.png';
 import moon from '../assets/backgrounds/game/moon.png';
 import sea from '../assets/backgrounds/game/sea.png';
 import rockTilemap from '../assets/levels/rock-tilemap.png';
@@ -34,7 +31,7 @@ export default class Game extends Phaser.Scene {
     });
   }
   create() {
-    this.createBackground(SCALE);
+    // this.createBackground(SCALE);
     //create Level
     this.map = this.make.tilemap({ key: 'map' });
     const tiles = this.map.addTilesetImage(
@@ -48,10 +45,11 @@ export default class Game extends Phaser.Scene {
     //create player
     this.player = this.physics.add.sprite(200, 400, 'player');
 
-    this.player.body.setSize(this.player.width, 126);
+    this.player.body.setSize(75, 100);
+    this.player.setOrigin(0.5, 0.6);
 
     this.player.body.setGravityY(300);
-    this.player.setBounce(0.2);
+    this.player.setBounce(0);
 
     this.physics.add.collider(this.player, this.mapLayerGround);
     this.cameras.main.startFollow(this.player);
@@ -68,6 +66,7 @@ export default class Game extends Phaser.Scene {
     this.player.movementState = 'idle';
     this.debugGraphics = this.add.graphics();
     //this.drawDebug();
+    //window.player = this.player;
   }
 
   speeds = {
@@ -90,6 +89,7 @@ export default class Game extends Phaser.Scene {
         this.player.setVelocityX(-this.speeds.walking);
       } else if (direction === 'right') {
         this.player.direction = 'right2left';
+        this.player.setOrigin(0.55, 0.6);
         const way = Math.round(Math.random()) ? 'front' : 'back';
         this.player.movementState = `walkturn-${way}`;
         this.player.setVelocityX(0);
@@ -195,8 +195,11 @@ export default class Game extends Phaser.Scene {
   }
 
   setaAnimation() {
-    const { direction, movementState } = this.player;
+    const { direction, movementState, frame } = this.player;
     this.player.anims.play(`${direction}-${movementState}`, true);
+    //console.log(this.player.frame);
+
+    //this.player.body.setSize(frame.width, frame.height);
   }
 
   preloadBackground() {
@@ -254,17 +257,11 @@ export default class Game extends Phaser.Scene {
   }
 
   drawDebug() {
-    let showDebug = true;
-    this.debugGraphics.clear();
-
-    if (showDebug) {
-      // Pass in null for any of the style options to disable drawing that component
-      this.map.renderDebug(this.debugGraphics, {
-        tileColor: null, // Non-colliding tiles
-        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 128), // Colliding tiles
-        faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
-      });
-    }
+    this.map.renderDebug(this.debugGraphics, {
+      tileColor: null,
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 128),
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+    });
   }
 
   render() {
