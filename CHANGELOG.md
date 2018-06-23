@@ -1,5 +1,13 @@
 # Change Log
 
+0.0.11
+
+-   Create the tilemap processing pipeline
+
+0.0.10
+
+-   Minor fixes after fixing debugging
+
 0.0.9
 
 -   Fix colliders (minor tweak)

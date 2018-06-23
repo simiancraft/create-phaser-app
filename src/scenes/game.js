@@ -3,8 +3,8 @@ import Phaser from 'phaser';
 import backgroundGradient from '../assets/backgrounds/game/back-gradient.png';
 import moon from '../assets/backgrounds/game/moon.png';
 import sea from '../assets/backgrounds/game/sea.png';
-import rockTilemap from '../assets/levels/rock-tilemap.png';
-import level from '../assets/levels/test-level.json';
+import rockTilemap from '../assets/levels/raw/rock-tilemap.png';
+import level from '../assets/levels/raw/test-level.json';
 import playerAnimationList from '../assets/player/player-animation-list';
 import playerJSON from '../assets/player/player.json';
 import playerPNG from '../assets/player/player.png';
@@ -65,7 +65,7 @@ export default class Game extends Phaser.Scene {
     this.player.direction = 'left';
     this.player.movementState = 'idle';
     this.debugGraphics = this.add.graphics();
-    //this.drawDebug();
+    this.drawDebug();
     //window.player = this.player;
   }
 
