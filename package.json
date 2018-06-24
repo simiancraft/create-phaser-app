@@ -1,6 +1,6 @@
 {
     "name": "create-phaser-app",
-    "version": "0.0.9",
+    "version": "0.0.11",
     "description": "A boiler plate to start your phaser app with webpack4, babel7+ and Phaser 3",
     "author": "Jesse Harlin",
     "homepage": "https://github.com/simiancraft/create-phaser-app",
@@ -15,7 +15,8 @@
         "test": "yarn test_base",
         "coverage": "yarn test_base --coverage",
         "pretty": "npx eslint --fix \"src/**/*.js\"",
-        "precommit": "yarn pretty"
+        "precommit": "yarn pretty",
+        "process-levels": "node ./config/level-processor.js"
     },
     "keywords": [
         "Phaser",
@@ -42,7 +43,7 @@
         "browser-sync": "2.24.4",
         "browser-sync-webpack-plugin": "2.2.2",
         "bs-eslint-message": "0.0.3",
-        "chalk": "2.4.1",
+        "chalk": "^2.4.1",
         "clean-webpack-plugin": "0.1.19",
         "copy-webpack-plugin": "4.5.1",
         "css-loader": "0.28.11",
@@ -54,6 +55,7 @@
         "expose-loader": "0.7.5",
         "file-loader": "1.1.11",
         "gh-pages": "1.2.0",
+        "globby": "^8.0.1",
         "html-webpack-plugin": "3.2.0",
         "husky": "^0.14.3",
         "import-sort-style-module": "4.2.0",
@@ -65,6 +67,7 @@
         "prettier-eslint": "8.8.1",
         "raw-loader": "0.5.1",
         "style-loader": "0.21.0",
+        "tile-extruder": "^1.1.0",
         "url-loader": "1.0.1",
         "webpack": "4.12.0",
         "webpack-bundle-analyzer": "2.13.1",
