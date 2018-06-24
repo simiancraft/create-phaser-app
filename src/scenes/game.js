@@ -65,7 +65,11 @@ export default class Game extends Phaser.Scene {
     this.player.direction = 'left';
     this.player.movementState = 'idle';
     this.debugGraphics = this.add.graphics();
-    this.drawDebug();
+    console.log(this);
+    if (this.physics.config.debug) {
+      this.drawDebug();
+    }
+
     //window.player = this.player;
   }
 
