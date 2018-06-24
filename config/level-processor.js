@@ -17,11 +17,11 @@ const globby = require('globby');
 
 const IMAGES_INPUT_PATH = path.resolve(
   __dirname,
-  '../src/assets/levels/raw/**/*.png'
+  `../src/assets/levels/${RAW_FOLDER}/**/*.png`
 );
 const LEVELS_INPUT_PATH = path.resolve(
   __dirname,
-  '../src/assets/levels/raw/**/*.json'
+  `../src/assets/levels/${RAW_FOLDER}/**/*.json`
 );
 
 async function getImagesPaths() {
@@ -32,14 +32,14 @@ async function getLevelsPaths() {
   return await globby([LEVELS_INPUT_PATH]);
 }
 
-function extrudeTileset(input, output) {
+function extrudeTileset({ input, output, width, height, spacing, margin }) {
   logProcess(input, output);
   try {
     tileExtruder(
-      BASE_WIDTH,
-      BASE_HEIGHT,
-      MARGIN,
-      SPACING,
+      width || BASE_WIDTH,
+      height || BASE_HEIGHT,
+      margin || MARGIN,
+      spacing || SPACING,
       COLOR,
       input,
       output
@@ -50,12 +50,52 @@ function extrudeTileset(input, output) {
 }
 
 function getOutputPath(inputPath) {
-  return inputPath.replace(`/${RAW_FOLDER}/`, `/${PROCESSED_FOLDER}/`);
+  return path.resolve(
+    inputPath.replace(`${RAW_FOLDER}`, `${PROCESSED_FOLDER}`)
+  );
 }
 
-function rewriteLevel(inputPath, index) {
+async function rewriteLevel(inputPath, index) {
+  inputPath = path.resolve(inputPath);
   const outputPath = getOutputPath(inputPath);
   logProcess(inputPath, outputPath);
+
+  const level = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
+
+  const { tilesets } = level;
+
+  const thisDir = path.dirname(inputPath);
+
+  const updateTilesets = tilesets.map((tileset, index) => {
+    const { image, tileheight, tilewidth, spacing, margin } = tileset;
+    const levelImageInputPath = path.resolve(__dirname, thisDir, image);
+    const levelImageOutputPath = getOutputPath(levelImageInputPath);
+    extrudeTileset({
+      input: levelImageInputPath,
+      output: levelImageOutputPath,
+      width: tilewidth,
+      height: tileheight,
+      spacing: spacing,
+      margin: margin
+    });
+
+    return {
+      ...tileset,
+      ...{
+        margin: margin + 1,
+        spacing: spacing + 2
+      }
+    };
+  });
+
+  const newLevel = JSON.stringify({
+    ...level,
+    ...{
+      tilesets: updateTilesets
+    }
+  });
+
+  return fs.writeFileSync(outputPath, newLevel);
 }
 
 function logProcess(input, output) {
@@ -64,25 +104,33 @@ function logProcess(input, output) {
   log('OUT', chalk.magenta(output));
 }
 
-async function processImages() {
-  var imagePaths = await getImagesPaths();
-  return imagePaths.map((inputPath, index) => {
-    const outputPath = getOutputPath(inputPath);
-    return extrudeTileset(inputPath, outputPath);
-  });
-}
-
 async function processLevels(data) {
   var levelPaths = await getLevelsPaths();
   return levelPaths.map(rewriteLevel);
 }
 
+function getDirectories(srcpath) {
+  return fs
+    .readdirSync(srcpath)
+    .map(file => path.join(srcpath, file))
+    .filter(path => fs.statSync(path).isDirectory());
+}
+
+function prepOutputDirectory() {
+  const rawDirectories = getDirectories(
+    path.resolve(__dirname, `../src/assets/levels/${RAW_FOLDER}`)
+  );
+
+  rawDirectories.forEach(dir => {
+    const outDir = getOutputPath(dir);
+    if (!fs.existsSync(outDir)) {
+      fs.mkdirSync(outDir);
+    }
+  });
+}
+
+prepOutputDirectory();
+
 processLevels().then(() => {
   log(chalk.green('All Levels Processed'));
 });
-
-// processImages()
-//   .then(processLevels)
-//   .then(() => {
-//     log(chalk.green('All Levels Processed'));
-//   });
