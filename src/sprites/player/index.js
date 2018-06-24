@@ -4,10 +4,9 @@ import playerAnimationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
 
-export default class Player extends Phaser.GameObjects.Sprite {
+export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor({ scene, x, y }) {
     super(scene, x, y, 'player');
-
     this.direction = 'left';
     this.movementState = 'idle';
     this.scene = scene;
