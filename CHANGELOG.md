@@ -1,5 +1,9 @@
 # Change Log
 
+0.0.12
+
+-   Move the player into its own file, that's an Arcade Sprite.
+
 0.0.11
 
 -   Create the tilemap processing pipeline

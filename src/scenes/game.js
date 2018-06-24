@@ -6,22 +6,12 @@ import sea from '../assets/backgrounds/game/sea.png';
 import rockTilemap from '../assets/levels/processed/level-1/rock-tilemap.png';
 import level from '../assets/levels/processed/level-1/test-level.json';
 import constants from '../config/constants';
+import linearScale from '../lib/linear-scale';
 import Player from '../sprites/player';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
 let xxx = document.getElementById('experimental-popup');
-
-function linearScale(domain, range) {
-  return function(value) {
-    if (domain[0] === domain[1] || range[0] === range[1]) {
-      return range[0];
-    }
-    var ratio = (range[1] - range[0]) / (domain[1] - domain[0]),
-      result = range[0] + ratio * (value - domain[0]);
-    return result;
-  };
-}
 
 const scaledX = linearScale([0, HEIGHT], [0, window.innerHeight]);
 const scaledY = linearScale([0, WIDTH], [0, window.innerWidth]);
