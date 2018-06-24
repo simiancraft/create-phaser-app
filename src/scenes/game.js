@@ -12,6 +12,22 @@ import constants from '../config/constants';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
+let xxx = document.getElementById('experimental-popup');
+
+function linearScale(domain, range) {
+  return function(value) {
+    if (domain[0] === domain[1] || range[0] === range[1]) {
+      return range[0];
+    }
+    var ratio = (range[1] - range[0]) / (domain[1] - domain[0]),
+      result = range[0] + ratio * (value - domain[0]);
+    return result;
+  };
+}
+
+const scaledX = linearScale([0, HEIGHT], [0, window.innerHeight]);
+const scaledY = linearScale([0, WIDTH], [0, window.innerWidth]);
+
 export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'Game' });
@@ -65,7 +81,11 @@ export default class Game extends Phaser.Scene {
     this.player.direction = 'left';
     this.player.movementState = 'idle';
     this.debugGraphics = this.add.graphics();
-    this.drawDebug();
+    console.log(this);
+    if (this.physics.config.debug) {
+      this.drawDebug();
+    }
+
     //window.player = this.player;
   }
 
@@ -153,7 +173,20 @@ export default class Game extends Phaser.Scene {
       this.player.movementState = 'aerial';
     }
 
+    console.log(this.player);
+
+    //this.experimentalPopup();
+
     this.setaAnimation();
+  }
+
+  experimentalPopup() {
+    var left = scaledX(this.player.x - this.cameras.main.scrollX);
+    var top = scaledY(this.player.y - this.cameras.main.scrollY);
+
+    xxx.style.left = `${left}px`;
+    xxx.style.top = `${top}px`;
+    xxx.innerHTML = `<span>${top}, ${left}</span>`;
   }
 
   animcomplete(animation, frame) {
