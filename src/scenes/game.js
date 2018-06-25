@@ -31,7 +31,7 @@ export default class Game extends Phaser.Scene {
     this.player = new Player({
       scene: this,
       x: 200,
-      y: 300
+      y: 496
     });
 
     this.player.preload();

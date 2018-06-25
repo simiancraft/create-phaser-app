@@ -1,8 +1,11 @@
 import Phaser from 'phaser';
 
+import behaviors from './behaviors';
 import playerAnimationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
+
+window.behaviors = behaviors;
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor({ scene, x, y }) {
@@ -41,7 +44,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   update() {
-    console.log('Player');
     const { scene } = this;
     const { direction, movementState } = this;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -53,6 +55,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.direction = 'left';
         this.movementState = 'walk';
         this.setVelocityX(-this.speeds.walking);
+        console.log(behaviors.state);
       } else if (direction === 'right') {
         this.direction = 'right2left';
         this.setOrigin(0.55, 0.6);
@@ -119,7 +122,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.movementState = 'aerial';
     }
 
-    console.log(this);
+    //console.log(this);
 
     //this.experimentalPopup();
     this.setaAnimation();
