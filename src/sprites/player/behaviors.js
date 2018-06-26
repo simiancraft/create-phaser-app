@@ -1,3 +1,5 @@
+import machina from 'machina';
+
 import animationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
@@ -6,7 +8,9 @@ import playerPNG from './player.png';
 function sequencer({ scene, entity, animationList }) {
   makeAnimations({ scene, entity, animationList });
   return () => {
-    return new Promise();
+    return new Promise((resolve, reject) => {
+      resolve('data');
+    });
   };
 }
 
@@ -21,29 +25,62 @@ export default ({ scene, entity }) => {
 
   const sequence = sequencer({ scene, entity, animationList });
 
-  function animcomplete(animation, frame) {
-    console.log(animation, frame);
-    //auto fire the right 'done' handler here, do the plugging.
-  }
+  // function animcomplete(animation, frame) {
+  //   console.log(animation, frame);
+  //   //auto fire the right 'done' handler here, do the plugging.
+  // }
+  // entity.on('animationcomplete', animcomplete, entity);
 
-  // var behaviors = new StateMachine({
-  //   initial: 'left_idle',
-  //   transitions: [
-  //     `walkLeft :
-  //       left_idle > left_walk |
-  //       right_idle > right2left_walkturn > left_walk`,
+  let __store = {
+    direction: 'left',
+    onFloor: true
+  };
 
-  //     `walkRight :
-  //       right_idle > right_walk |
-  //       left_idle > left2right_walkturn > right_walk`
-  //   ]
-  // });
+  const store = newValues => {
+    newValues = newValues || {};
+    __store = { ...__store, ...newValues };
+    return __store;
+  };
 
-  // behaviors.on('change', (event, fsm) => {
-  //   console.log(event, fsm);
-  // });
-
-  entity.on('animationcomplete', animcomplete, entity);
+  const behaviors = new machina.Fsm({
+    namespace: 'player-behaviors',
+    initialState: 'uninitialized',
+    states: {
+      uninitialized: {
+        '*': function(client) {
+          this.deferUntilTransition();
+          this.transition('idling');
+        }
+      },
+      idling: {
+        _onEnter: function(data) {
+          console.log(data);
+          console.log('entered Idling');
+        }
+      },
+      walking: {
+        _onEnter: function(data) {
+          console.log(data);
+          console.log('entered walking');
+        },
+        idle: function() {
+          console.log('idle in walk now');
+        }
+      }
+    },
+    __store: {
+      direction: 'left',
+      onFloor: true
+    },
+    store: function() {},
+    walk: function(data) {
+      this.transition('walking');
+    },
+    idle: function() {
+      this.transition('idling');
+    },
+    jump: function() {}
+  });
 
   return behaviors;
 };

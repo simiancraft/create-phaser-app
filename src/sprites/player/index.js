@@ -37,18 +37,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const { scene } = this;
     const { direction, movementState } = this;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-
-    const { left, right } = this.cursors;
+    window.cursors = this.cursors;
+    const { down, left, right, up, shift, space } = this.cursors;
 
     const onFloor = this.body.onFloor();
 
     if (onFloor) {
       if (left.isDown) {
-        //walkLeft
+        behaviors.walk({ direction: 'left', onFloor });
       } else if (right.isDown) {
-        //walk right
+        behaviors.walk({ direction: 'right', onFloor });
+      } else if (space.isDown) {
+        behaviors.jump();
       } else {
-        //idle
+        behaviors.idle({ onFloor });
       }
     }
   }
