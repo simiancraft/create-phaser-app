@@ -1,6 +1,6 @@
-import StateMachine from 'fsm-as-promised';
+import StateMachine from 'state-machine';
 
-import playerAnimationList from './player-animation-list';
+import animationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
 
@@ -11,42 +11,27 @@ export default ({ scene, entity }) => {
     atlasURL: playerJSON
   });
 
-  makeAnimations({ scene, entity, animationList: playerAnimationList });
+  makeAnimations({ scene, entity, animationList });
 
-  var behaviors = StateMachine({
-    initial: 'here',
-    events: [
-      { name: 'wait', from: 'here' },
-      { name: 'jump', from: 'here', to: 'there' },
-      { name: 'walk', from: ['there', 'somewhere'], to: 'here' }
-    ],
-    callbacks: {
-      onwait: function(options) {
-        console.log(options);
-        // do something when executing the transition
-      },
-      onleavehere: function() {
-        // do something when leaving state here
-      },
-      onleave: function() {
-        // do something when leaving any state
-      },
-      onentersomewhere: function() {
-        // do something when entering state somewhere
-      },
-      onenter: function() {
-        // do something when entering any state
-      },
-      onenteredsomewhere: function() {
-        // do something after entering state somewhere
-        // transition is complete and events can be triggered safely
-      },
-      onentered: function() {
-        // do something after entering any state
-        // transition is complete and events can be triggered safely
-      }
-    }
+  function animcomplete(animation, frame) {
+    console.log(animation, frame);
+    //auto fire the right 'done' handler here, do the plugging.
+  }
+
+  var behaviors = new StateMachine({
+    initial: 'left_idle',
+    transitions: [
+      `walkLeft : 
+        left_idle > left_walk | 
+        right_idle > right2left_walkturn > left_walk`,
+
+      `walkRight : 
+        right_idle > right_walk | 
+        left_idle > left2right_walkturn > right_walk`
+    ]
   });
+
+  entity.on('animationcomplete', animcomplete, entity);
 
   return behaviors;
 };

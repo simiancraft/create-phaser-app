@@ -10,6 +10,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene = scene;
 
     this.behaviors = makeBehaviors({ scene, entity: this });
+    window.behaviors = this.behaviors;
   }
 
   speeds = {
