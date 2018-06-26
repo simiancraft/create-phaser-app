@@ -1,8 +1,14 @@
-import StateMachine from 'state-machine';
-
 import animationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
+
+//prototype this
+function sequencer({ scene, entity, animationList }) {
+  makeAnimations({ scene, entity, animationList });
+  return () => {
+    return new Promise();
+  };
+}
 
 export default ({ scene, entity }) => {
   scene.load.atlas({
@@ -11,25 +17,31 @@ export default ({ scene, entity }) => {
     atlasURL: playerJSON
   });
 
-  makeAnimations({ scene, entity, animationList });
+  //possibly add to the seuqncer?
+
+  const sequence = sequencer({ scene, entity, animationList });
 
   function animcomplete(animation, frame) {
     console.log(animation, frame);
     //auto fire the right 'done' handler here, do the plugging.
   }
 
-  var behaviors = new StateMachine({
-    initial: 'left_idle',
-    transitions: [
-      `walkLeft : 
-        left_idle > left_walk | 
-        right_idle > right2left_walkturn > left_walk`,
+  // var behaviors = new StateMachine({
+  //   initial: 'left_idle',
+  //   transitions: [
+  //     `walkLeft :
+  //       left_idle > left_walk |
+  //       right_idle > right2left_walkturn > left_walk`,
 
-      `walkRight : 
-        right_idle > right_walk | 
-        left_idle > left2right_walkturn > right_walk`
-    ]
-  });
+  //     `walkRight :
+  //       right_idle > right_walk |
+  //       left_idle > left2right_walkturn > right_walk`
+  //   ]
+  // });
+
+  // behaviors.on('change', (event, fsm) => {
+  //   console.log(event, fsm);
+  // });
 
   entity.on('animationcomplete', animcomplete, entity);
 
