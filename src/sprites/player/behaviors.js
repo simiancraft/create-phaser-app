@@ -1,6 +1,18 @@
 import StateMachine from 'fsm-as-promised';
 
-export default (scene, entity) => {
+import playerAnimationList from './player-animation-list';
+import playerJSON from './player.json';
+import playerPNG from './player.png';
+
+export default ({ scene, entity }) => {
+  scene.load.atlas({
+    key: 'player-atlas',
+    textureURL: playerPNG,
+    atlasURL: playerJSON
+  });
+
+  makeAnimations({ scene, entity, animationList: playerAnimationList });
+
   var behaviors = StateMachine({
     initial: 'here',
     events: [
@@ -38,3 +50,32 @@ export default (scene, entity) => {
 
   return behaviors;
 };
+
+function makeAnimation({ name, frames, repeat, scene, entity }) {
+  const FRAMERATE = 24;
+  return scene.anims.create({
+    key: `${name}`,
+    frames: scene.anims.generateFrameNames('player-atlas', {
+      start: 0,
+      end: frames,
+      zeroPad: 3,
+      suffix: '.png',
+      prefix: `${name}-`
+    }),
+    frameRate: FRAMERATE,
+    repeat: repeat ? -1 : 0
+  });
+}
+
+function makeAnimations({ scene, entity, animationList }) {
+  animationList.forEach(animation => {
+    const { name, frames, repeat } = animation;
+    makeAnimation({
+      name: name,
+      entity: entity,
+      frames: frames,
+      repeat: !!repeat,
+      scene: scene
+    });
+  });
+}

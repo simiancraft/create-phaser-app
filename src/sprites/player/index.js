@@ -1,9 +1,6 @@
 import Phaser from 'phaser';
 
 import makeBehaviors from './behaviors';
-import playerAnimationList from './player-animation-list';
-import playerJSON from './player.json';
-import playerPNG from './player.png';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor({ scene, x, y }) {
@@ -12,7 +9,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.movementState = 'idle';
     this.scene = scene;
 
-    this.behaviors = makeBehaviors(scene, this);
+    this.behaviors = makeBehaviors({ scene, entity: this });
   }
 
   speeds = {
@@ -22,14 +19,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     jump: 250
   };
 
-  preload() {
-    //player
-    this.scene.load.atlas({
-      key: 'player-atlas',
-      textureURL: playerPNG,
-      atlasURL: playerJSON
-    });
-  }
+  preload() {}
 
   create() {
     this.scene.physics.world.enable(this);
@@ -39,7 +29,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.body.setGravityY(300);
 
-    this.makeAnimations();
     //this.on('animationcomplete', this.animcomplete, this);
   }
 
@@ -49,34 +38,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
 
     const onFloor = this.body.onFloor();
-  }
-
-  makeAnimation({ name, frames, repeat }) {
-    const { scene } = this;
-    const FRAMERATE = 24;
-    return scene.anims.create({
-      key: `${name}`,
-      frames: scene.anims.generateFrameNames('player-atlas', {
-        start: 0,
-        end: frames,
-        zeroPad: 3,
-        suffix: '.png',
-        prefix: `${name}-`
-      }),
-      frameRate: FRAMERATE,
-      repeat: repeat ? -1 : 0
-    });
-  }
-
-  makeAnimations() {
-    playerAnimationList.forEach(animation => {
-      const { name, frames, repeat } = animation;
-      this.makeAnimation({
-        name: name,
-        frames: frames,
-        repeat: !!repeat
-      });
-    });
   }
 
   setaAnimation() {
