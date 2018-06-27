@@ -100,19 +100,14 @@ export default ({ scene, entity }) => {
       turning: {
         _child: directions,
         _onEnter: function() {
-          if (directions.state === 'right') {
-            directions.transition('left2right');
-          } else {
-            directions.transition('right2left');
-          }
-          let ctx = this;
-          sequence(`${directions.state}-walkturn-back`).then(function() {
-            if (directions.state === 'left2right') {
-              directions.transition('right');
-            } else {
-              directions.transition('left');
-            }
-            ctx.transition('walking');
+          const { state } = directions;
+          const turnDirection = state === 'right' ? 'left2right' : 'right2left';
+          directions.transition(turnDirection);
+          const animation = `${directions.state}-walkturn-back`;
+          sequence(animation).then(() => {
+            const dir = turnDirection === 'left2right' ? 'right' : 'left';
+            directions.transition(dir);
+            this.transition('walking');
           });
         }
       }
