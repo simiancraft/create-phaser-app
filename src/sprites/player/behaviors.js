@@ -60,6 +60,9 @@ export default class Behaviors extends machina.Fsm {
           },
           walk: function(data) {
             this.transition('walking');
+          },
+          crouch: function() {
+            this.transition('crouchingDown');
           }
         },
         walking: {
@@ -78,6 +81,10 @@ export default class Behaviors extends machina.Fsm {
           },
           turn: function(data) {
             this.transition('turning');
+          },
+          crouch: function() {
+            entity.setVelocityX(0);
+            this.transition('crouchingDown');
           }
         },
         turning: {
@@ -98,6 +105,31 @@ export default class Behaviors extends machina.Fsm {
           },
           walk: function({ speed }) {
             entity.setVelocityX(speed * 0.25);
+          }
+        },
+        crouchingDown: {
+          _child: directions,
+          _onEnter: function() {
+            as.sequence(`${directions.state}-crouch-up2dwn`).then(() => {
+              this.transition('crouching');
+            });
+          }
+        },
+        crouchingUp: {
+          _child: directions,
+          _onEnter: function() {
+            as.sequence(`${directions.state}-crouch-dwn2up`).then(() => {
+              this.transition('idling');
+            });
+          }
+        },
+        crouching: {
+          _child: directions,
+          _onEnter: function() {
+            as.sequence(`${directions.state}-crouch`);
+          },
+          idle: function() {
+            this.transition('crouchingUp');
           }
         }
       }
