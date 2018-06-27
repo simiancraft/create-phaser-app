@@ -7,9 +7,15 @@ import playerPNG from './player.png';
 //prototype this
 function sequencer({ scene, entity, animationList }) {
   makeAnimations({ scene, entity, animationList });
-  return () => {
+  return data => {
+    const { repeat, animation } = data;
+
     return new Promise((resolve, reject) => {
-      resolve('data');
+      if (!repeat) {
+        entity.anims.play(animation, true);
+      }
+
+      resolve(data);
     });
   };
 }
@@ -31,49 +37,144 @@ export default ({ scene, entity }) => {
   // }
   // entity.on('animationcomplete', animcomplete, entity);
 
-  let __store = {
-    direction: 'left',
-    onFloor: true
-  };
+  const directions = new machina.Fsm({
+    namespace: 'player-directions',
+    initialState: 'left',
+    states: {
+      left: {
+        _onEnter: function() {
+          console.log('=> left');
+        }
+      },
+      right: {
+        _onEnter: function() {
+          console.log('=>  right');
+        }
+      },
+      right2left: {
+        _onEnter: function() {
+          console.log('=>  right2left');
+        }
+      },
+      left2right: {
+        _onEnter: function() {
+          console.log('=>  left2right');
+        }
+      },
+      walk: function(data) {
+        console.log('walking in the child', data);
+      }
+    }
+  });
 
-  const store = newValues => {
-    newValues = newValues || {};
-    __store = { ...__store, ...newValues };
-    return __store;
-  };
+  const aim = new machina.Fsm({
+    namespace: 'player-aim',
+    initialState: 'fwd',
+    states: {
+      up: {
+        _onEnter: function() {
+          console.log('↑↑↑');
+        }
+      },
+      upfwd: {
+        _onEnter: function() {
+          console.log('↗↗↗');
+        }
+      },
+      fwd: {
+        _onEnter: function() {
+          console.log('→→→');
+        }
+      },
+      dwnfwd: {
+        _onEnter: function() {
+          console.log('↘↘↘');
+        }
+      },
+      dwn: {
+        _onEnter: function() {
+          console.log('↓↓↓');
+        }
+      }
+    }
+  });
 
   const behaviors = new machina.Fsm({
     namespace: 'player-behaviors',
-    initialState: 'uninitialized',
+    initialState: 'idling',
     states: {
-      uninitialized: {
-        '*': function(client) {
-          this.deferUntilTransition();
-          this.transition('idling');
-        }
-      },
       idling: {
+        _child: directions,
         _onEnter: function(data) {
-          console.log(data);
-          console.log('entered Idling');
+          let _state = this.compositeState();
+          console.log('idling', _state);
+          if (_state === 'idling.left') {
+            sequence({
+              animation: 'left-idle'
+            });
+          } else if (_state === 'idling.right') {
+            sequence({
+              animation: 'right-idle'
+            });
+          }
         }
       },
       walking: {
+        _child: directions,
         _onEnter: function(data) {
-          console.log(data);
-          console.log('entered walking');
-        },
-        idle: function() {
-          console.log('idle in walk now');
+          let _state = this.compositeState();
+          console.log(_state);
+
+          if (_state === 'walking.left') {
+            sequence({
+              animation: 'left-walk'
+            });
+          } else if (_state === 'walking.right') {
+            sequence({
+              animation: 'right-walk'
+            });
+          }
+        }
+      },
+      flying: {
+        _child: directions,
+        _onEnter: function(data) {
+          console.log('flying');
+        }
+      },
+      jumping: {
+        _child: directions,
+        _onEnter: function(data) {
+          console.log('jumping');
+        }
+      },
+      landing: {
+        _child: directions,
+        _onEnter: function(data) {
+          console.log('jumping');
+        }
+      },
+      shooting: {
+        _child: aim,
+        _onEnter: function(data) {
+          console.log('jumping');
+        }
+      },
+      walkshooting: {
+        _child: aim,
+        _onEnter: function(data) {
+          console.log('jumping');
         }
       }
     },
-    __store: {
-      direction: 'left',
-      onFloor: true
-    },
     store: function() {},
     walk: function(data) {
+      const { direction, onFloor } = data;
+      if (direction === 'left') {
+        directions.transition('left');
+      } else {
+        directions.transition('right');
+      }
       this.transition('walking');
     },
     idle: function() {
@@ -81,6 +182,18 @@ export default ({ scene, entity }) => {
     },
     jump: function() {}
   });
+
+  // behaviors.on('*', function(eventName, data) {
+  //   console.log(`-root-${eventName}`);
+  //   console.table(data);
+  //   console.log(`-root-`);
+  // });
+
+  // directions.on('*', function(eventName, data) {
+  //   console.log(`-directions-${eventName}`);
+  //   console.table(data);
+  //   console.log(`-directions-`);
+  // });
 
   return behaviors;
 };
@@ -111,5 +224,13 @@ function makeAnimations({ scene, entity, animationList }) {
       repeat: !!repeat,
       scene: scene
     });
+  });
+}
+
+export function preloadBehaviors(scene) {
+  scene.load.atlas({
+    key: 'player-atlas',
+    textureURL: playerPNG,
+    atlasURL: playerJSON
   });
 }

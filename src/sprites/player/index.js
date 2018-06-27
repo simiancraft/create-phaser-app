@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import makeBehaviors from './behaviors';
+import makeBehaviors, { preloadBehaviors } from './behaviors';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor({ scene, x, y }) {
@@ -8,9 +8,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.direction = 'left';
     this.movementState = 'idle';
     this.scene = scene;
-
-    this.behaviors = makeBehaviors({ scene, entity: this });
-    window.behaviors = this.behaviors;
   }
 
   speeds = {
@@ -20,7 +17,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     jump: 250
   };
 
-  preload() {}
+  preload() {
+    //TODO: convert to class
+    preloadBehaviors(this.scene);
+  }
 
   create() {
     this.scene.physics.world.enable(this);
@@ -29,23 +29,28 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.setOrigin(0.5, 0.6);
 
     this.body.setGravityY(300);
-
-    //this.on('animationcomplete', this.animcomplete, this);
+    //todo make class
+    this.behaviors = makeBehaviors({ scene: this.scene, entity: this });
   }
 
   update() {
-    const { scene } = this;
-    const { direction, movementState } = this;
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
+    const { scene, behaviors } = this;
+
+    this.locomotion = scene.input.keyboard.createCursorKeys();
+    this.cockpit = scene.input.keyboard.addKeys('W,A,S,D,Q,E');
+
+    window.scene = this.scene;
+    window.cockpit = this.cockpit;
     window.cursors = this.cursors;
-    const { down, left, right, up, shift, space } = this.cursors;
+    const { down, left, right, up, shift, space } = this.locomotion;
+    const { W, A, S, D, Q, E } = this.cockpit;
 
     const onFloor = this.body.onFloor();
 
     if (onFloor) {
-      if (left.isDown) {
+      if (A.isDown) {
         behaviors.walk({ direction: 'left', onFloor });
-      } else if (right.isDown) {
+      } else if (D.isDown) {
         behaviors.walk({ direction: 'right', onFloor });
       } else if (space.isDown) {
         behaviors.jump();
