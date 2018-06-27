@@ -31,6 +31,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.body.setGravityY(300);
     //todo make class
     this.behaviors = makeBehaviors({ scene: this.scene, entity: this });
+    window.behaviors = this.behaviors;
   }
 
   update() {
@@ -49,13 +50,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     if (onFloor) {
       if (A.isDown) {
-        behaviors.walk({ direction: 'left', onFloor });
+        behaviors.handle('walk', { direction: 'left', onFloor });
       } else if (D.isDown) {
-        behaviors.walk({ direction: 'right', onFloor });
-      } else if (space.isDown) {
-        behaviors.jump();
+        behaviors.handle('walk', { direction: 'right', onFloor });
       } else {
-        behaviors.idle({ onFloor });
+        behaviors.handle('idle', { onFloor });
       }
     }
   }
