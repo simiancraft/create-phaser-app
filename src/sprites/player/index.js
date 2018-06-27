@@ -18,7 +18,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   };
 
   preload() {
-    //TODO: convert to class
     PlayerBehaviors.preload(this.scene);
   }
 
@@ -29,7 +28,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.setOrigin(0.5, 0.6);
 
     this.body.setGravityY(300);
-    //todo make class
 
     this.behaviors = new PlayerBehaviors({
       scene: this.scene,

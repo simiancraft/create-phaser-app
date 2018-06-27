@@ -7,7 +7,7 @@ import playerPNG from './player.png';
 
 class Directions extends machina.Fsm {
   constructor({ scene, entity }) {
-    super({
+    const directionalFsm = {
       namespace: 'player-directions1',
       initialState: 'left',
       states: {
@@ -32,7 +32,8 @@ class Directions extends machina.Fsm {
           }
         }
       }
-    });
+    };
+    super(directionalFsm);
     this.scene = scene;
     this.entity = entity;
   }
@@ -46,7 +47,8 @@ export default class PlayerBehaviors extends machina.Fsm {
       entity,
       animationList
     });
-    super({
+
+    const behaviorFsm = {
       namespace: 'player-behaviors1',
       initialState: 'idling',
       states: {
@@ -99,14 +101,14 @@ export default class PlayerBehaviors extends machina.Fsm {
           }
         }
       }
-    });
+    };
 
+    super(behaviorFsm);
     this.scene = scene;
     this.entity = entity;
   }
 
   static preload(scene) {
-    console.log('scene', scene);
     scene.load.atlas({
       key: 'player-atlas',
       textureURL: playerPNG,
