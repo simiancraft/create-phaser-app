@@ -130,6 +130,16 @@ export default class Behaviors extends machina.Fsm {
           },
           idle: function() {
             this.transition('crouchingUp');
+          },
+          walk: function(data) {
+            console.log('.');
+            if (data.direction !== directions.state) {
+              directions.transition(data.direction);
+              this.transition('turning');
+            }
+          },
+          uncrouch: function() {
+            this.transition('crouchingUp');
           }
         }
       }

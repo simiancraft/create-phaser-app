@@ -37,6 +37,24 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     window.behaviors = this.behaviors;
   }
 
+  hasNoInput() {
+    const { down, left, right, up, shift, space } = this.locomotion;
+    const { W, A, S, D, Q, E } = this.cockpit;
+
+    return (
+      !W.isDown &&
+      !A.isDown &&
+      !S.isDown &&
+      !D.isDown &&
+      !down.isDown &&
+      !left.isDown &&
+      !right.isDown &&
+      !up.isDown &&
+      !space.isDown &&
+      !shift.isDown
+    );
+  }
+
   update() {
     const { scene, behaviors } = this;
 
@@ -50,6 +68,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const { W, A, S, D, Q, E } = this.cockpit;
 
     const onFloor = this.body.onFloor();
+    const noInput = this.hasNoInput();
 
     if (onFloor) {
       if (A.isDown) {
@@ -64,9 +83,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           onFloor,
           speed: this.speeds.walking
         });
-      } else if (S.isDown) {
+      }
+
+      if (S.isDown) {
         behaviors.handle('crouch', { onFloor });
-      } else {
+      } else if (!S.isDown) {
+        behaviors.handle('uncrouch', { onFloor });
+      } else if (space.isDown) {
+        behaviors.handle('jump', { onFloor });
+      }
+
+      if (noInput) {
         behaviors.handle('idle', { onFloor });
       }
     }
