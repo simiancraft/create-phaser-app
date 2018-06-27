@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import makeBehaviors, { PlayerBehaviors, preloadBehaviors } from './behaviors';
+import PlayerBehaviors from './behaviors';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor({ scene, x, y }) {
@@ -19,7 +19,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   preload() {
     //TODO: convert to class
-    //preloadBehaviors(this.scene);
     PlayerBehaviors.preload(this.scene);
   }
 

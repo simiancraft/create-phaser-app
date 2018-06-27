@@ -1,54 +1,9 @@
 import machina from 'machina';
 
+import AnimationSequencer from './animation-sequencer';
 import animationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
-
-//prototype this
-function sequencer({ scene, entity, animationList }) {
-  makeAnimations({ scene, entity, animationList });
-  return name => {
-    return new Promise((resolve, reject) => {
-      entity.anims.play(name, true);
-      entity.on(
-        'animationcomplete',
-        (animation, frame) => {
-          resolve(name);
-        },
-        entity
-      );
-    });
-  };
-}
-
-function makeAnimation({ name, frames, repeat, scene, entity }) {
-  const FRAMERATE = 24;
-  return scene.anims.create({
-    key: `${name}`,
-    frames: scene.anims.generateFrameNames('player-atlas', {
-      start: 0,
-      end: frames,
-      zeroPad: 3,
-      suffix: '.png',
-      prefix: `${name}-`
-    }),
-    frameRate: FRAMERATE,
-    repeat: repeat ? -1 : 0
-  });
-}
-
-function makeAnimations({ scene, entity, animationList }) {
-  animationList.forEach(animation => {
-    const { name, frames, repeat } = animation;
-    makeAnimation({
-      name: name,
-      entity: entity,
-      frames: frames,
-      repeat: !!repeat,
-      scene: scene
-    });
-  });
-}
 
 class Directions extends machina.Fsm {
   constructor({ scene, entity }) {
@@ -83,10 +38,14 @@ class Directions extends machina.Fsm {
   }
 }
 
-export class PlayerBehaviors extends machina.Fsm {
+export default class PlayerBehaviors extends machina.Fsm {
   constructor({ scene, entity }) {
     const directions = new Directions({ scene, entity });
-    const sequence = sequencer({ scene, entity, animationList });
+    const as = new AnimationSequencer({
+      scene,
+      entity,
+      animationList
+    });
     super({
       namespace: 'player-behaviors1',
       initialState: 'idling',
@@ -95,7 +54,7 @@ export class PlayerBehaviors extends machina.Fsm {
           _child: directions,
           _onEnter: function() {
             entity.setVelocityX(0);
-            sequence(`${directions.state}-idle`);
+            as.sequence(`${directions.state}-idle`);
           },
           walk: function(data) {
             this.transition('walking');
@@ -104,7 +63,7 @@ export class PlayerBehaviors extends machina.Fsm {
         walking: {
           _child: directions,
           _onEnter: function() {
-            sequence(`${directions.state}-walk`);
+            as.sequence(`${directions.state}-walk`);
           },
           idle: function(data) {
             console.log('idle called in walking', data);
@@ -129,7 +88,7 @@ export class PlayerBehaviors extends machina.Fsm {
             const face = Math.round(Math.random()) ? 'front' : 'back';
             const animation = `${directions.state}-walkturn-${face}`;
 
-            sequence(animation).then(() => {
+            as.sequence(animation).then(() => {
               const dir = turnDirection === 'left2right' ? 'right' : 'left';
               directions.transition(dir);
               this.transition('walking');
