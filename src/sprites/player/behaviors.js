@@ -7,15 +7,13 @@ import playerPNG from './player.png';
 //prototype this
 function sequencer({ scene, entity, animationList }) {
   makeAnimations({ scene, entity, animationList });
-  return data => {
-    const { repeat, animation } = data;
-
+  return name => {
     return new Promise((resolve, reject) => {
-      entity.anims.play(animation, true);
+      entity.anims.play(name, true);
       entity.on(
         'animationcomplete',
         (animation, frame) => {
-          resolve(data);
+          resolve(name);
         },
         entity
       );
@@ -76,9 +74,7 @@ export default ({ scene, entity }) => {
       idling: {
         _child: directions,
         _onEnter: function() {
-          sequence({
-            animation: `${directions.state}-idle`
-          });
+          sequence(`${directions.state}-idle`);
         },
         walk: function(data) {
           this.transition('walking');
@@ -87,9 +83,7 @@ export default ({ scene, entity }) => {
       walking: {
         _child: directions,
         _onEnter: function() {
-          sequence({
-            animation: `${directions.state}-walk`
-          });
+          sequence(`${directions.state}-walk`);
         },
         idle: function(data) {
           console.log('idle called in walking', data);
@@ -112,9 +106,7 @@ export default ({ scene, entity }) => {
             directions.transition('right2left');
           }
           let ctx = this;
-          sequence({
-            animation: `${directions.state}-walkturn-back`
-          }).then(function() {
+          sequence(`${directions.state}-walkturn-back`).then(function() {
             if (directions.state === 'left2right') {
               directions.transition('right');
             } else {
