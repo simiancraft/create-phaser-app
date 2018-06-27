@@ -10,12 +10,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene = scene;
   }
 
-  speeds = {
+  velocities = {
     walking: 110,
     turning: 30,
     flying: 160,
     highjump: 600,
-    jump: 250
+    jump: 250,
+    landing: 40
   };
 
   preload() {
@@ -25,8 +26,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   create() {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
-    this.body.setSize(75, 95);
-    this.setOrigin(0.5, 0.61);
+    this.body.setSize(75, 90);
+    this.setOrigin(0.5, 0.63);
 
     this.body.setGravityY(300);
 
@@ -57,11 +58,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   update() {
-    const { scene, behaviors, speeds } = this;
+    const { scene, behaviors, velocities } = this;
 
     this.locomotion = scene.input.keyboard.createCursorKeys();
     this.cockpit = scene.input.keyboard.addKeys('W,A,S,D,Q,E');
 
+    window.entity = this;
     window.scene = this.scene;
     window.cockpit = this.cockpit;
     window.cursors = this.cursors;
@@ -76,26 +78,46 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         behaviors.handle('walk', {
           direction: 'left',
           onFloor,
-          speeds: speeds
+          velocities: velocities
         });
       } else if (D.isDown) {
         behaviors.handle('walk', {
           direction: 'right',
           onFloor,
-          speeds: speeds
+          velocities: velocities
         });
       }
 
       if (S.isDown) {
-        behaviors.handle('crouch', { onFloor });
+        behaviors.handle('crouch', { onFloor, velocities });
       } else if (!S.isDown) {
-        behaviors.handle('uncrouch', { onFloor });
-      } else if (space.isDown) {
-        behaviors.handle('jump', { onFloor, speeds });
+        behaviors.handle('uncrouch', { onFloor, velocities });
+      }
+
+      if (space.isDown) {
+        behaviors.handle('jump', { onFloor, velocities });
       }
 
       if (noInput) {
-        behaviors.handle('idle', { onFloor });
+        behaviors.handle('idle', { onFloor, velocities });
+      }
+
+      behaviors.handle('land', { onFloor, velocities });
+    }
+
+    if (!onFloor) {
+      if (A.isDown) {
+        behaviors.handle('veer', {
+          direction: 'left',
+          onFloor,
+          velocities: velocities
+        });
+      } else if (D.isDown) {
+        behaviors.handle('veer', {
+          direction: 'right',
+          onFloor,
+          velocities: velocities
+        });
       }
     }
   }
