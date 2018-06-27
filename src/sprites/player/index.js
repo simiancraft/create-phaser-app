@@ -12,6 +12,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   speeds = {
     walking: 110,
+    turning: 30,
     flying: 160,
     highjump: 600,
     jump: 250
@@ -25,7 +26,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
     this.body.setSize(75, 95);
-    this.setOrigin(0.5, 0.6);
+    this.setOrigin(0.5, 0.61);
 
     this.body.setGravityY(300);
 
@@ -56,7 +57,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   update() {
-    const { scene, behaviors } = this;
+    const { scene, behaviors, speeds } = this;
 
     this.locomotion = scene.input.keyboard.createCursorKeys();
     this.cockpit = scene.input.keyboard.addKeys('W,A,S,D,Q,E');
@@ -75,13 +76,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         behaviors.handle('walk', {
           direction: 'left',
           onFloor,
-          speed: -this.speeds.walking
+          speeds: speeds
         });
       } else if (D.isDown) {
         behaviors.handle('walk', {
           direction: 'right',
           onFloor,
-          speed: this.speeds.walking
+          speeds: speeds
         });
       }
 
@@ -90,7 +91,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       } else if (!S.isDown) {
         behaviors.handle('uncrouch', { onFloor });
       } else if (space.isDown) {
-        behaviors.handle('jump', { onFloor });
+        behaviors.handle('jump', { onFloor, speeds });
       }
 
       if (noInput) {

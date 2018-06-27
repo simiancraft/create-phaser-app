@@ -63,6 +63,9 @@ export default class Behaviors extends machina.Fsm {
           },
           crouch: function() {
             this.transition('crouchingDown');
+          },
+          jump: function(data) {
+            player.setVelocityY();
           }
         },
         walking: {
@@ -75,8 +78,13 @@ export default class Behaviors extends machina.Fsm {
             this.transition('idling');
           },
           walk: function(data) {
-            directions.transition(data.direction);
-            entity.setVelocityX(data.speed);
+            const { speeds, direction } = data;
+            let speed = speeds.walking;
+            if (direction === 'left') {
+              speed = -speed;
+            }
+            directions.transition(direction);
+            entity.setVelocityX(speed);
             console.log('walk called in walking', data);
           },
           turn: function(data) {
@@ -103,8 +111,13 @@ export default class Behaviors extends machina.Fsm {
               this.transition('walking');
             });
           },
-          walk: function({ speed }) {
-            entity.setVelocityX(speed * 0.25);
+          walk: function(data) {
+            const { speeds, direction } = data;
+            let speed = speeds.turning;
+            if (direction === 'left') {
+              speed = -speed;
+            }
+            entity.setVelocityX(speed);
           }
         },
         crouchingDown: {
@@ -141,7 +154,8 @@ export default class Behaviors extends machina.Fsm {
           uncrouch: function() {
             this.transition('crouchingUp');
           }
-        }
+        },
+        jumping: function() {}
       }
     };
 
