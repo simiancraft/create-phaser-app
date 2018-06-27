@@ -39,7 +39,7 @@ class Directions extends machina.Fsm {
   }
 }
 
-export default class PlayerBehaviors extends machina.Fsm {
+export default class Behaviors extends machina.Fsm {
   constructor({ scene, entity }) {
     const directions = new Directions({ scene, entity });
     const as = new AnimationSequencer({
