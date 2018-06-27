@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import makeBehaviors, { preloadBehaviors } from './behaviors';
+import makeBehaviors, { PlayerBehaviors, preloadBehaviors } from './behaviors';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor({ scene, x, y }) {
@@ -19,7 +19,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   preload() {
     //TODO: convert to class
-    preloadBehaviors(this.scene);
+    //preloadBehaviors(this.scene);
+    PlayerBehaviors.preload(this.scene);
   }
 
   create() {
@@ -30,7 +31,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.body.setGravityY(300);
     //todo make class
-    this.behaviors = makeBehaviors({ scene: this.scene, entity: this });
+
+    this.behaviors = new PlayerBehaviors({
+      scene: this.scene,
+      entity: this
+    });
+
     window.behaviors = this.behaviors;
   }
 
@@ -61,6 +67,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           onFloor,
           speed: this.speeds.walking
         });
+      } else if (S.isDown) {
+        behaviors.handle('crouch', { onFloor });
       } else {
         behaviors.handle('idle', { onFloor });
       }
