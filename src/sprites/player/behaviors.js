@@ -81,7 +81,6 @@ export default ({ scene, entity }) => {
           });
         },
         walk: function(data) {
-          directions.transition(data.direction);
           this.transition('walking');
         }
       },
@@ -113,7 +112,6 @@ export default ({ scene, entity }) => {
             directions.transition('right2left');
           }
           let ctx = this;
-          console.log(directions.state);
           sequence({
             animation: `${directions.state}-walkturn-back`
           }).then(function() {
@@ -122,12 +120,8 @@ export default ({ scene, entity }) => {
             } else {
               directions.transition('left');
             }
-
             ctx.transition('walking');
           });
-        },
-        walk: function(data) {
-          console.log('turning');
         }
       }
     }
