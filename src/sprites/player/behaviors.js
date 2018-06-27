@@ -103,7 +103,8 @@ export default ({ scene, entity }) => {
           const { state } = directions;
           const turnDirection = state === 'right' ? 'left2right' : 'right2left';
           directions.transition(turnDirection);
-          const animation = `${directions.state}-walkturn-back`;
+          const face = Math.round(Math.random()) ? 'front' : 'back';
+          const animation = `${directions.state}-walkturn-${face}`;
           sequence(animation).then(() => {
             const dir = turnDirection === 'left2right' ? 'right' : 'left';
             directions.transition(dir);
