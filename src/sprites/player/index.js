@@ -50,9 +50,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     if (onFloor) {
       if (A.isDown) {
-        behaviors.handle('walk', { direction: 'left', onFloor });
+        behaviors.handle('walk', {
+          direction: 'left',
+          onFloor,
+          speed: -this.speeds.walking
+        });
       } else if (D.isDown) {
-        behaviors.handle('walk', { direction: 'right', onFloor });
+        behaviors.handle('walk', {
+          direction: 'right',
+          onFloor,
+          speed: this.speeds.walking
+        });
       } else {
         behaviors.handle('idle', { onFloor });
       }

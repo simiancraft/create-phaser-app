@@ -22,21 +22,8 @@ function sequencer({ scene, entity, animationList }) {
 }
 
 export default ({ scene, entity }) => {
-  scene.load.atlas({
-    key: 'player-atlas',
-    textureURL: playerPNG,
-    atlasURL: playerJSON
-  });
-
   //possibly add to the seuqncer?
-
   const sequence = sequencer({ scene, entity, animationList });
-
-  // function animcomplete(animation, frame) {
-  //   console.log(animation, frame);
-  //   //auto fire the right 'done' handler here, do the plugging.
-  // }
-  // entity.on('animationcomplete', animcomplete, entity);
 
   const directions = new machina.Fsm({
     namespace: 'player-directions',
@@ -74,6 +61,7 @@ export default ({ scene, entity }) => {
       idling: {
         _child: directions,
         _onEnter: function() {
+          entity.setVelocityX(0);
           sequence(`${directions.state}-idle`);
         },
         walk: function(data) {
@@ -91,6 +79,7 @@ export default ({ scene, entity }) => {
         },
         walk: function(data) {
           directions.transition(data.direction);
+          entity.setVelocityX(data.speed);
           console.log('walk called in walking', data);
         },
         turn: function(data) {
@@ -105,11 +94,15 @@ export default ({ scene, entity }) => {
           directions.transition(turnDirection);
           const face = Math.round(Math.random()) ? 'front' : 'back';
           const animation = `${directions.state}-walkturn-${face}`;
+
           sequence(animation).then(() => {
             const dir = turnDirection === 'left2right' ? 'right' : 'left';
             directions.transition(dir);
             this.transition('walking');
           });
+        },
+        walk: function({ speed }) {
+          entity.setVelocityX(speed * 0.25);
         }
       }
     }
