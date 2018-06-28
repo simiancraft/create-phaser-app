@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+import flaresJSON from '../../assets/particles/flares.json';
+import flaresPNG from '../../assets/particles/flares.png';
 import Behaviors from './behaviors';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
@@ -23,12 +25,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   preload() {
     const PHASER_EXAMPLES = 'http://labs.phaser.io';
     Behaviors.preload(this.scene);
-    //replace with better thruster image
-    this.scene.load.atlas(
-      'flares',
-      `${PHASER_EXAMPLES}/assets/particles/flares.png`,
-      `${PHASER_EXAMPLES}/assets/particles/flares.json`
-    );
+    //TODO: replace with better thruster image
+    this.scene.load.atlas('flares', flaresPNG, flaresJSON);
   }
 
   create() {
