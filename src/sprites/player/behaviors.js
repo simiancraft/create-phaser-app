@@ -112,6 +112,9 @@ export default class Behaviors extends machina.Fsm {
           },
           jump: function(data) {
             this.transition('jumping');
+          },
+          unland: function() {
+            this.transition('flying');
           }
         },
         turning: {

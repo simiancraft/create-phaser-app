@@ -165,6 +165,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       } else if (!shift.isDown) {
         behaviors.handle('unboost', { onFloor, velocities });
       }
+
+      behaviors.handle('unland', { onFloor, velocities });
     }
   }
 }
