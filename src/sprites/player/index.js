@@ -60,10 +60,46 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
 
+    this.vulcanMuzzle = this.defineVulcanMuzzle();
+
     window.thruster = this.thruster;
     window.behaviors = this.behaviors;
     window.entity = this;
     window.scene = this.scene;
+  }
+
+  defineVulcanMuzzle() {
+    const { scene } = this;
+    const thrustParticles = scene.add.particles('flares');
+
+    const thruster = thrustParticles.createEmitter({
+      frame: 'yellow',
+      lifespan: { min: 10, max: 250 },
+      speed: { min: 1, max: 1400 },
+      scale: { start: 0.275, end: 0 },
+      quantity: 12,
+      blendMode: 'ADD',
+      on: false
+    });
+
+    this.behaviors.on('vulcanmuzzle', data => {
+      console.log('vulcanmuzzle', data);
+      if (typeof data.angle === 'number') {
+        thruster.setAngle(data.angle);
+      }
+
+      if (data.on !== undefined) {
+        thruster.on = data.on;
+      }
+
+      if (typeof data.x === 'number' && typeof data.y === 'number') {
+        thruster.setPosition(data.x, data.y);
+      }
+    });
+
+    thruster.startFollow(this.body);
+
+    return thruster;
   }
 
   defineFootThruster() {
@@ -71,7 +107,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const thrustParticles = scene.add.particles('flares');
 
     const thruster = thrustParticles.createEmitter({
-      frame: 'red',
+      frame: 'green',
       lifespan: { min: 5, max: 500 },
       speed: { min: 0, max: 4 },
       scale: { start: 0.15, end: 0 },
@@ -90,7 +126,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         thruster.on = data.on;
       }
 
-      if (data.x && data.y) {
+      if (typeof data.x === 'number' && typeof data.y === 'number') {
         thruster.setPosition(data.x, data.y);
       }
     });
@@ -123,7 +159,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         thruster.on = data.on;
       }
 
-      if (data.x && data.y) {
+      if (typeof data.x === 'number' && typeof data.y === 'number') {
         thruster.setPosition(data.x, data.y);
       }
     });

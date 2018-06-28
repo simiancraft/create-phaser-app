@@ -32,7 +32,7 @@ class Directions extends machina.Fsm {
         y: 80,
         angle: 180
       }
-    }
+    };
 
     const directionalFsm = {
       namespace: 'player-directions',
@@ -71,13 +71,7 @@ class Directions extends machina.Fsm {
 }
 
 class Aims extends machina.Fsm {
-
-
-
   constructor({ scene, entity }) {
-
-
-
     const aimFsm = {
       namespace: 'player-aims',
       initialState: 'fwd',
@@ -126,6 +120,30 @@ export default class Behaviors extends machina.Fsm {
       entity,
       animationList
     });
+
+    function getvulcanMuzzleSettings() {
+      const direction = directions.state;
+      const aim = aims.state;
+
+      const settings = {
+        left: {
+          up: { x: 48, y: -32, angle: -90 },
+          upfwd: { x: 2, y: -1, angle: -145 },
+          fwd: { x: -8, y: 27, angle: 180 },
+          dwnfwd: { x: 8, y: 62, angle: 140 },
+          dwn: { x: 55, y: 80, angle: 90 }
+        },
+        right: {
+          up: { x: 48, y: -32, angle: -90 },
+          upfwd: { x: 92, y: 4, angle: -35 },
+          fwd: { x: 95, y: 27, angle: 0 },
+          dwnfwd: { x: 85, y: 62, angle: 40 },
+          dwn: { x: 45, y: 80, angle: 90 }
+        }
+      };
+
+      return settings[direction][aim];
+    }
 
     const behaviorFsm = {
       namespace: 'player-behaviors',
@@ -192,7 +210,7 @@ export default class Behaviors extends machina.Fsm {
             this.transition('sliding');
           },
           shoot: function(data) {
-            this.transition('walkshooting')
+            this.transition('walkshooting');
           }
         },
         turning: {
@@ -413,7 +431,7 @@ export default class Behaviors extends machina.Fsm {
         },
         sliding: {
           _onEnter: function() {
-            this.emit('footbooster', {on:true});
+            this.emit('footbooster', { on: true });
             let direction = directions.state;
             let { sliding, slideBursting } = entity.velocities;
             if (direction === 'left') {
@@ -423,7 +441,7 @@ export default class Behaviors extends machina.Fsm {
             entity.setVelocityX(slideBursting);
             as.sequence(`${directions.state}-slide-stand2slide`).then(() => {
               entity.setVelocityX(sliding);
-              this.emit('footbooster', {on:false});
+              this.emit('footbooster', { on: false });
               this.timer = setTimeout(
                 function() {
                   this.handle('unboost');
@@ -453,13 +471,22 @@ export default class Behaviors extends machina.Fsm {
             this.transition('shootturning');
           },
           shoot: function() {
+            const muzzleSettings = getvulcanMuzzleSettings();
+            this.emit('vulcanmuzzle', {
+              on: true,
+              ...muzzleSettings
+            });
             this.transition('shooting');
           },
-          idle: 'idling'
+          idle: 'idling',
+          unshoot: function() {
+            this.emit('vulcanmuzzle', { on: false });
+          }
         },
         shootturning: {
           _child: directions,
           _onEnter: function() {
+            this.emit('vulcanmuzzle', { on: false });
             const { state } = directions;
             const turnDirection =
               state === 'right' ? 'left2right' : 'right2left';
@@ -477,7 +504,16 @@ export default class Behaviors extends machina.Fsm {
         shooting: {
           _child: aims,
           _onEnter: function() {
-            as.sequence(`${directions.state}-firecannon-${aims.state}`);
+            this.emit('vulcanmuzzle', {
+              on: true,
+              ...getvulcanMuzzleSettings()
+            });
+            as.sequence(`${directions.state}-firecannon-${aims.state}`).then(
+              () => {}
+            );
+          },
+          _onExit: function() {
+            this.emit('vulcanmuzzle', { on: false });
           },
           aim: function({ aim, direction }) {
             aims.transition(aim);
@@ -489,7 +525,10 @@ export default class Behaviors extends machina.Fsm {
             this.transition('aiming');
           },
           idle: 'idling',
-          jump: 'jumping'
+          jump: 'jumping',
+          unshoot: function() {
+            this.emit('vulcanmuzzle', { on: false });
+          }
         },
         walkaiming: {
           _child: directions,
@@ -497,6 +536,11 @@ export default class Behaviors extends machina.Fsm {
             this.transition('walkshootturning');
           },
           shoot: function() {
+            const muzzleSettings = getvulcanMuzzleSettings();
+            this.emit('vulcanmuzzle', {
+              on: true,
+              ...muzzleSettings
+            });
             this.transition('walkshooting');
           },
           idle: 'idling'
@@ -521,7 +565,11 @@ export default class Behaviors extends machina.Fsm {
         walkshooting: {
           _child: aims,
           _onEnter: function() {
+            this.emit('vulcanmuzzle', { on: true, ...getvulcanMuzzleSettings() });
             as.sequence(`${directions.state}-firecannonwalk-${aims.state}`);
+          },
+          _onExit() {
+            this.emit('vulcanmuzzle', { on: false });
           },
           aim: function({ aim, direction, velocities }) {
             aims.transition(aim);
