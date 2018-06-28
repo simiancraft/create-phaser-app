@@ -51,42 +51,86 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.body.setGravityY(325);
 
-    const thrustParticles = scene.add.particles('flares');
-    this.thruster = thrustParticles.createEmitter({
-      frame: 'blue',
-      lifespan: { min: 250, max: 400 },
-      speed: { min: 1, max: 150 },
-      scale: { start: 0.25, end: 0 },
-      quantity: 1,
-      blendMode: 'ADD',
-      on: false
-    });
-
     this.behaviors = new Behaviors({
       scene: scene,
       entity: this
     });
+    this.thruster = this.definePrimaryThruster();
+    this.footThruster = this.defineFootThruster();
 
-    this.thruster.startFollow(this.body);
     scene.add.existing(this);
-    this.behaviors.on('booster', data => {
-      if (data.angle) {
-        this.thruster.setAngle(data.angle);
-      }
-
-      if (data.on !== undefined) {
-        this.thruster.on = data.on;
-      }
-
-      if (data.x && data.y) {
-        this.thruster.setPosition(data.x, data.y);
-      }
-    });
 
     window.thruster = this.thruster;
     window.behaviors = this.behaviors;
     window.entity = this;
     window.scene = this.scene;
+  }
+
+  defineFootThruster() {
+    const { scene } = this;
+    const thrustParticles = scene.add.particles('flares');
+
+    const thruster = thrustParticles.createEmitter({
+      frame: 'red',
+      lifespan: { min: 5, max: 500 },
+      speed: { min: 0, max: 4 },
+      scale: { start: 0.15, end: 0 },
+      quantity: 4,
+      blendMode: 'ADD',
+      on: false
+    });
+
+    this.behaviors.on('footbooster', data => {
+      console.log(data);
+      if (typeof data.angle === 'number') {
+        thruster.setAngle(data.angle);
+      }
+
+      if (data.on !== undefined) {
+        thruster.on = data.on;
+      }
+
+      if (data.x && data.y) {
+        thruster.setPosition(data.x, data.y);
+      }
+    });
+
+    thruster.startFollow(this.body);
+
+    return thruster;
+  }
+
+  definePrimaryThruster() {
+    const { scene } = this;
+    const thrustParticles = scene.add.particles('flares');
+
+    const thruster = thrustParticles.createEmitter({
+      frame: 'blue',
+      lifespan: { min: 250, max: 400 },
+      speed: { min: 1, max: 150 },
+      scale: { start: 0.25, end: 0 },
+      quantity: 2,
+      blendMode: 'ADD',
+      on: false
+    });
+
+    this.behaviors.on('booster', data => {
+      if (typeof data.angle === 'number') {
+        thruster.setAngle(data.angle);
+      }
+
+      if (data.on !== undefined) {
+        thruster.on = data.on;
+      }
+
+      if (data.x && data.y) {
+        thruster.setPosition(data.x, data.y);
+      }
+    });
+
+    thruster.startFollow(this.body);
+
+    return thruster;
   }
 
   hasNoInput() {
@@ -103,7 +147,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       !primaryFire.isDown &&
       !secondaryFire.isDown &&
       !missiles.isDown &&
-      !laser.isDown &&
       !jump.isDown &&
       !boost.isDown &&
       !special1.isDown &&
@@ -134,22 +177,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           onFloor,
           velocities: velocities
         });
-      }
-
-      if (dirUp.isDown && dirLeft.isDown) {
-        behaviors.handle('aim', { aim: 'upfwd', direction: 'left' });
-      } else if (dirUp.isDown && dirRight.isDown) {
-        behaviors.handle('aim', { aim: 'upfwd', direction: 'right' });
-      } else if (dirDown.isDown && dirLeft.isDown) {
-        behaviors.handle('aim', { aim: 'dwnfwd', direction: 'left' });
-      } else if (dirDown.isDown && dirRight.isDown) {
-        behaviors.handle('aim', { aim: 'dwnfwd', direction: 'right' });
-      } else if (dirUp.isDown) {
-        behaviors.handle('aim', { aim: 'up' });
-      } else if (dirDown.isDown) {
-        behaviors.handle('aim', { aim: 'dwn' });
-      } else {
-        behaviors.handle('aim', { aim: 'fwd' });
       }
 
       if (missiles.isDown) {
@@ -205,8 +232,45 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       behaviors.handle('unland', { onFloor, velocities });
     }
 
+    //currently only the vulcan cannon works
     if (primaryFire.isDown) {
       behaviors.handle('shoot', { gun: 'vulcan' });
+    }
+
+    if (primaryFire.isDown) {
+      if (dirUp.isDown && dirLeft.isDown) {
+        behaviors.handle('aim', {
+          aim: 'upfwd',
+          direction: 'left',
+          velocities
+        });
+      } else if (dirUp.isDown && dirRight.isDown) {
+        behaviors.handle('aim', {
+          aim: 'upfwd',
+          direction: 'right',
+          velocities
+        });
+      } else if (dirDown.isDown && dirLeft.isDown) {
+        behaviors.handle('aim', {
+          aim: 'dwnfwd',
+          direction: 'left',
+          velocities
+        });
+      } else if (dirDown.isDown && dirRight.isDown) {
+        behaviors.handle('aim', {
+          aim: 'dwnfwd',
+          direction: 'right',
+          velocities
+        });
+      } else if (dirUp.isDown) {
+        behaviors.handle('aim', { aim: 'up' });
+      } else if (dirDown.isDown) {
+        behaviors.handle('aim', { aim: 'dwn' });
+      } else {
+        behaviors.handle('aim', { aim: 'fwd' });
+      }
+    } else {
+      behaviors.handle('unshoot');
     }
   }
 

@@ -21,6 +21,19 @@ class Directions extends machina.Fsm {
       }
     };
 
+    const footBoosterOpts = {
+      left: {
+        x: 65,
+        y: 80,
+        angle: 0
+      },
+      right: {
+        x: 10,
+        y: 80,
+        angle: 180
+      }
+    }
+
     const directionalFsm = {
       namespace: 'player-directions',
       initialState: 'left',
@@ -29,12 +42,14 @@ class Directions extends machina.Fsm {
           _onEnter: function() {
             this.handle('turn', { direction: 'left' });
             this.emit('booster', boosterOpts.left);
+            this.emit('footbooster', footBoosterOpts.left);
           }
         },
         right: {
           _onEnter: function() {
             this.handle('turn', { direction: 'right' });
             this.emit('booster', boosterOpts.right);
+            this.emit('footbooster', footBoosterOpts.right);
           }
         },
         left2right: {
@@ -56,7 +71,13 @@ class Directions extends machina.Fsm {
 }
 
 class Aims extends machina.Fsm {
+
+
+
   constructor({ scene, entity }) {
+
+
+
     const aimFsm = {
       namespace: 'player-aims',
       initialState: 'fwd',
@@ -171,7 +192,7 @@ export default class Behaviors extends machina.Fsm {
             this.transition('sliding');
           },
           shoot: function(data) {
-            //extend to tell WHICH thing is shooting
+            this.transition('walkshooting')
           }
         },
         turning: {
@@ -392,7 +413,7 @@ export default class Behaviors extends machina.Fsm {
         },
         sliding: {
           _onEnter: function() {
-            this.emit('booster', { on: true });
+            this.emit('footbooster', {on:true});
             let direction = directions.state;
             let { sliding, slideBursting } = entity.velocities;
             if (direction === 'left') {
@@ -400,10 +421,9 @@ export default class Behaviors extends machina.Fsm {
               slideBursting = -slideBursting;
             }
             entity.setVelocityX(slideBursting);
-
             as.sequence(`${directions.state}-slide-stand2slide`).then(() => {
               entity.setVelocityX(sliding);
-              this.emit('booster', { on: false });
+              this.emit('footbooster', {on:false});
               this.timer = setTimeout(
                 function() {
                   this.handle('unboost');
@@ -434,7 +454,8 @@ export default class Behaviors extends machina.Fsm {
           },
           shoot: function() {
             this.transition('shooting');
-          }
+          },
+          idle: 'idling'
         },
         shootturning: {
           _child: directions,
@@ -469,6 +490,57 @@ export default class Behaviors extends machina.Fsm {
           },
           idle: 'idling',
           jump: 'jumping'
+        },
+        walkaiming: {
+          _child: directions,
+          turn: function() {
+            this.transition('walkshootturning');
+          },
+          shoot: function() {
+            this.transition('walkshooting');
+          },
+          idle: 'idling'
+        },
+        walkshootturning: {
+          _child: directions,
+          _onEnter: function() {
+            const { state } = directions;
+            const turnDirection =
+              state === 'right' ? 'left2right' : 'right2left';
+            directions.transition(turnDirection);
+            const face = Math.round(Math.random()) ? 'front' : 'back';
+            const animation = `${directions.state}-walkturn-${face}`;
+
+            as.sequence(animation).then(() => {
+              const dir = turnDirection === 'left2right' ? 'right' : 'left';
+              directions.transition(dir);
+              this.transition('walkshooting');
+            });
+          }
+        },
+        walkshooting: {
+          _child: aims,
+          _onEnter: function() {
+            as.sequence(`${directions.state}-firecannonwalk-${aims.state}`);
+          },
+          aim: function({ aim, direction, velocities }) {
+            aims.transition(aim);
+            if (direction) {
+              directions.transition(direction);
+              let speed = velocities.walking;
+              if (direction === 'left') {
+                speed = -speed;
+              }
+              directions.transition(direction);
+              entity.setVelocityX(speed);
+            }
+          },
+          changeaim: function() {
+            this.transition('walkaiming');
+          },
+          idle: 'idling',
+          jump: 'jumping',
+          unshoot: 'walking'
         }
       }
     };
