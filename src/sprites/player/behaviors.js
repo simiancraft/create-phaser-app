@@ -22,7 +22,7 @@ class Directions extends machina.Fsm {
     };
 
     const directionalFsm = {
-      namespace: 'player-directions1',
+      namespace: 'player-directions',
       initialState: 'left',
       states: {
         left: {
@@ -58,6 +58,7 @@ class Directions extends machina.Fsm {
 export default class Behaviors extends machina.Fsm {
   constructor({ scene, entity }) {
     const directions = new Directions({ scene, entity });
+
     const as = new AnimationSequencer({
       scene,
       entity,
@@ -65,7 +66,7 @@ export default class Behaviors extends machina.Fsm {
     });
 
     const behaviorFsm = {
-      namespace: 'player-behaviors1',
+      namespace: 'player-behaviors',
       initialState: 'idling',
       states: {
         idling: {
@@ -82,6 +83,10 @@ export default class Behaviors extends machina.Fsm {
           },
           jump: function(data) {
             this.transition('jumping');
+          },
+          shootMissiles: 'missilesLaunch',
+          boost: function({ velocities }) {
+            this.transition('sliding');
           }
         },
         walking: {
@@ -115,6 +120,10 @@ export default class Behaviors extends machina.Fsm {
           },
           unland: function() {
             this.transition('flying');
+          },
+          shootMissiles: 'missilesLaunch',
+          boost: function({ velocities }) {
+            this.transition('sliding');
           }
         },
         turning: {
@@ -224,6 +233,39 @@ export default class Behaviors extends machina.Fsm {
             }
           }
         },
+        //TODO: make this like a cannonball sort of thing
+        launching: {
+          _child: directions,
+          _onEnter: function() {
+            let { launchHalt, launchPowerX, launchPowerY } = entity.velocities;
+
+            if (directions.state === 'left') {
+              launchPowerX = -launchPowerX;
+              launchHalt = -launchHalt;
+            }
+
+            console.log('1');
+            entity.setVelocityX(launchHalt);
+            this.emit('booster', { on: true });
+            as.sequence(`${directions.state}-crouchjump`).then(() => {
+              entity.setVelocityX(launchPowerX);
+              if (entity.body.onFloor()) {
+                this.emit('booster', { on: true });
+                entity.setVelocityY(-launchPowerY);
+                this.transition('launched');
+              } else {
+                this.transition('launched');
+              }
+            });
+          }
+        },
+        launched: {
+          _child: directions,
+          land: function() {
+            this.emit('booster', { on: false });
+            this.transition('idling');
+          }
+        },
         flying: {
           _child: directions,
           _onEnter: function() {
@@ -290,7 +332,54 @@ export default class Behaviors extends machina.Fsm {
                 this.transition('idling');
               });
           }
-        }
+        },
+        missilesLaunch: {
+          _onEnter: function() {
+            entity.setVelocityX(0);
+            as.sequence(`${directions.state}-firemissile`).then(() =>
+              this.transition('idling')
+            );
+          }
+        },
+        sliding: {
+          _onEnter: function() {
+            this.emit('booster', { on: true });
+            let direction = directions.state;
+            let { sliding, slideBursting } = entity.velocities;
+            if (direction === 'left') {
+              sliding = -sliding;
+              slideBursting = -slideBursting;
+            }
+            entity.setVelocityX(slideBursting);
+
+            as.sequence(`${directions.state}-slide-stand2slide`).then(() => {
+              entity.setVelocityX(sliding);
+              this.emit('booster', { on: false });
+              this.timer = setTimeout(
+                function() {
+                  this.handle('unboost');
+                }.bind(this),
+                entity.timings.slideDuration
+              );
+            });
+          },
+          unboost: function() {
+            entity.setVelocityX(0);
+            this.transition('slidend');
+          },
+          jump: function() {
+            this.transition('launching');
+          }
+        },
+        slidend: {
+          _onEnter: function() {
+            as.sequence(`${directions.state}-slide-slide2stand`).then(() => {
+              this.transition('idling');
+            });
+          }
+        },
+        shooting: {},
+        walkShooting: {}
       }
     };
 
