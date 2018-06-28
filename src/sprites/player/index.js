@@ -33,12 +33,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   };
 
   energyLevel = 1000;
-  missiles = 9;
+  missileCount = 9;
 
   preload() {
     Behaviors.preload(this.scene);
     //TODO: replace with better thruster image
     this.scene.load.atlas('flares', flaresPNG, flaresJSON);
+    this.buildInputs();
   }
 
   create() {
@@ -82,12 +83,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       }
     });
 
-    this.locomotion = scene.input.keyboard.createCursorKeys();
-    this.cockpit = scene.input.keyboard.addKeys('W,A,S,D,Q,E');
-    const { down, left, right, up, shift, space } = this.locomotion;
-    const { W, A, S, D, Q, E } = this.cockpit;
-    window.cockpit = this.cockpit;
-    window.locomotion = this.locomotion;
     window.thruster = this.thruster;
     window.behaviors = this.behaviors;
     window.entity = this;
@@ -95,45 +90,45 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   hasNoInput() {
-    const { down, left, right, up, shift, space } = this.locomotion;
-    const { W, A, S, D, Q, E } = this.cockpit;
+    const { primaryFire, secondaryFire, missiles, laser } = this.ordinance;
+
+    const { dirUp, dirDown, dirLeft, dirRight, jump, boost } = this.locomotion;
+    const { special1, special2 } = this.specialControls;
 
     return (
-      !W.isDown &&
-      !A.isDown &&
-      !S.isDown &&
-      !D.isDown &&
-      !down.isDown &&
-      !left.isDown &&
-      !right.isDown &&
-      !up.isDown &&
-      !space.isDown &&
-      !shift.isDown
+      !dirUp.isDown &&
+      !dirDown.isDown &&
+      !dirLeft.isDown &&
+      !dirRight.isDown &&
+      !primaryFire.isDown &&
+      !secondaryFire.isDown &&
+      !missiles.isDown &&
+      !laser.isDown &&
+      !jump.isDown &&
+      !boost.isDown &&
+      !special1.isDown &&
+      !special2.isDown
     );
-  }
-
-  hasNoAim() {
-    const { down, left, right, up } = this.locomotion;
-    return !down.isDown && !left.isDown && !right.isDown && !up.isDown;
   }
 
   update() {
     const { scene, behaviors, velocities } = this;
 
-    const { down, left, right, up, shift, space } = this.locomotion;
-    const { W, A, S, D, Q, E } = this.cockpit;
+    const { primaryFire, secondaryFire, missiles, laser } = this.ordinance;
+
+    const { dirUp, dirDown, dirLeft, dirRight, jump, boost } = this.locomotion;
+    const { special1, special2 } = this.specialControls;
 
     const onFloor = this.body.onFloor();
-    const noInput = this.hasNoInput();
 
     if (onFloor) {
-      if (A.isDown) {
+      if (dirLeft.isDown) {
         behaviors.handle('walk', {
           direction: 'left',
           onFloor,
           velocities: velocities
         });
-      } else if (D.isDown) {
+      } else if (dirRight.isDown) {
         behaviors.handle('walk', {
           direction: 'right',
           onFloor,
@@ -141,55 +136,43 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
       }
 
-      if (W.isDown) {
-        if (this.missiles > 0) {
+      if (missiles.isDown) {
+        if (this.missileCount > 0) {
           behaviors.handle('shootMissiles', { onFloor, velocities });
         }
       }
 
-      if (S.isDown) {
+      if (dirDown.isDown) {
         behaviors.handle('crouch', { onFloor, velocities });
-      } else if (!S.isDown) {
+      } else if (!dirDown.isDown) {
         behaviors.handle('uncrouch', { onFloor, velocities });
       }
 
-      if (space.isDown) {
+      if (jump.isDown) {
         behaviors.handle('jump', { onFloor, velocities });
       }
 
-      if (shift.isDown) {
+      if (boost.isDown) {
         behaviors.handle('boost', { onFloor, velocities });
-      } else if (!shift.isDown) {
+      } else if (!boost.isDown) {
         behaviors.handle('unboost', { onFloor, velocities });
       }
 
-      if (noInput) {
+      if (this.hasNoInput()) {
         behaviors.handle('idle', { onFloor, velocities });
-      } else if (this.hasNoAim()) {
-        behaviors.handle('aim', { onFloor, direction: 'none' });
-      } else if (up.isDown && (right.isDown || left.isDown)) {
-        behaviors.handle('aim', { onFloor, direction: 'upfwd' });
-      } else if (down.isDown && (right.isDown || left.isDown)) {
-        behaviors.handle('aim', { onFloor, direction: 'dwnfwd' });
-      } else if (right.isDown || left.isDown) {
-        behaviors.handle('aim', { onFloor, direction: 'fwd' });
-      } else if (up.isDown) {
-        behaviors.handle('aim', { onFloor, direction: 'up' });
-      } else if (down.isDown) {
-        behaviors.handle('aim', { onFloor, direction: 'dwn' });
       }
 
       behaviors.handle('land', { onFloor, velocities });
     }
 
     if (!onFloor) {
-      if (A.isDown) {
+      if (dirLeft.isDown) {
         behaviors.handle('veer', {
           direction: 'left',
           onFloor,
           velocities: velocities
         });
-      } else if (D.isDown) {
+      } else if (dirRight.isDown) {
         behaviors.handle('veer', {
           direction: 'right',
           onFloor,
@@ -197,13 +180,54 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
       }
 
-      if (shift.isDown) {
+      if (boost.isDown) {
         behaviors.handle('boost', { onFloor, velocities });
-      } else if (!shift.isDown) {
+      } else if (!boost.isDown) {
         behaviors.handle('unboost', { onFloor, velocities });
       }
 
       behaviors.handle('unland', { onFloor, velocities });
     }
+  }
+
+  buildInputs() {
+    const cursors = this.scene.input.keyboard.createCursorKeys();
+    const WASDQECtrl = this.scene.input.keyboard.addKeys('W,A,S,D,Q,E, CTRL');
+
+    const { down, left, right, up, shift, space } = cursors;
+    const { W, A, S, D, Q, E } = WASDQECtrl;
+
+    const missiles = up;
+    const primaryFire = left;
+    const laser = down;
+    const secondaryFire = right;
+
+    const dirUp = W;
+    const dirDown = S;
+    const dirLeft = A;
+    const dirRight = D;
+    const jump = space;
+    const boost = shift;
+
+    const special1 = Q;
+    const special2 = E;
+
+    this.ordinance = {
+      primaryFire,
+      secondaryFire,
+      missiles,
+      laser
+    };
+
+    this.locomotion = {
+      dirUp,
+      dirDown,
+      dirLeft,
+      dirRight,
+      jump,
+      boost
+    };
+
+    this.specialControls = { special1, special2 };
   }
 }
