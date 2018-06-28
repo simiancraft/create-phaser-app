@@ -1,5 +1,15 @@
 # Change Log
 
+0.0.12
+
+-   Move the player into its own file, that's an Arcade Sprite.
+-   Extracts the player behavirs into a Finite State machine
+-   Creation fo the animation sequencer to make animations easier to play one after another
+-   ES6 classes for the finite state machine that drives player behavior
+-   Reproduces the walk animations as a hierarchical FSM
+-   Pulls some simple tools, like the Linear Scale tool into its own lib
+-   rudimentary jetpack, flying behavior, landing, etc.
+
 0.0.11
 
 -   Create the tilemap processing pipeline

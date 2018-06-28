@@ -5,25 +5,13 @@ import moon from '../assets/backgrounds/game/moon.png';
 import sea from '../assets/backgrounds/game/sea.png';
 import rockTilemap from '../assets/levels/processed/level-1/rock-tilemap.png';
 import level from '../assets/levels/processed/level-1/test-level.json';
-import playerAnimationList from '../assets/player/player-animation-list';
-import playerJSON from '../assets/player/player.json';
-import playerPNG from '../assets/player/player.png';
 import constants from '../config/constants';
+import linearScale from '../lib/linear-scale';
+import Player from '../sprites/player';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
 let xxx = document.getElementById('experimental-popup');
-
-function linearScale(domain, range) {
-  return function(value) {
-    if (domain[0] === domain[1] || range[0] === range[1]) {
-      return range[0];
-    }
-    var ratio = (range[1] - range[0]) / (domain[1] - domain[0]),
-      result = range[0] + ratio * (value - domain[0]);
-    return result;
-  };
-}
 
 const scaledX = linearScale([0, HEIGHT], [0, window.innerHeight]);
 const scaledY = linearScale([0, WIDTH], [0, window.innerWidth]);
@@ -39,12 +27,14 @@ export default class Game extends Phaser.Scene {
     this.load.image('tilemap-rock-grass', rockTilemap);
     this.load.tilemapTiledJSON('map', level);
 
-    //player
-    this.load.atlas({
-      key: 'player-atlas',
-      textureURL: playerPNG,
-      atlasURL: playerJSON
+    //create player
+    this.player = new Player({
+      scene: this,
+      x: 200,
+      y: 496
     });
+
+    this.player.preload();
   }
   create() {
     this.createBackground(SCALE);
@@ -58,15 +48,6 @@ export default class Game extends Phaser.Scene {
     this.mapLayerGround = this.map.createDynamicLayer('ground', tiles, 0, 0);
     this.mapLayerGround.setCollisionBetween(1, 50);
 
-    //create player
-    this.player = this.physics.add.sprite(200, 400, 'player');
-
-    this.player.body.setSize(75, 95);
-    this.player.setOrigin(0.5, 0.6);
-
-    this.player.body.setGravityY(300);
-    this.player.setBounce(0);
-
     this.physics.add.collider(this.player, this.mapLayerGround);
     this.cameras.main.startFollow(this.player);
     this.cameras.main.setBounds(
@@ -76,108 +57,18 @@ export default class Game extends Phaser.Scene {
       this.map.heightInPixels
     );
     this.cameras.main.setBackgroundColor('#333399');
-    this.makeAnimations();
-    this.player.on('animationcomplete', this.animcomplete, this);
-    this.player.direction = 'left';
-    this.player.movementState = 'idle';
+
     this.debugGraphics = this.add.graphics();
     console.log(this);
     if (this.physics.config.debug) {
       this.drawDebug();
     }
 
-    //window.player = this.player;
+    this.player.create();
   }
 
-  speeds = {
-    walking: 110,
-    flying: 160,
-    highjump: 600,
-    jump: 250
-  };
-
   update() {
-    const { direction, movementState } = this.player;
-    this.cursors = this.input.keyboard.createCursorKeys();
-
-    const onFloor = this.player.body.onFloor();
-
-    if (this.cursors.left.isDown && onFloor && !this.cursors.space.isDown) {
-      if (direction === 'left') {
-        this.player.direction = 'left';
-        this.player.movementState = 'walk';
-        this.player.setVelocityX(-this.speeds.walking);
-      } else if (direction === 'right') {
-        this.player.direction = 'right2left';
-        this.player.setOrigin(0.55, 0.6);
-        const way = Math.round(Math.random()) ? 'front' : 'back';
-        this.player.movementState = `walkturn-${way}`;
-        this.player.setVelocityX(0);
-      }
-    } else if (
-      this.cursors.right.isDown &&
-      onFloor &&
-      !this.cursors.space.isDown
-    ) {
-      if (direction === 'right') {
-        this.player.direction = 'right';
-        this.player.movementState = 'walk';
-        this.player.setVelocityX(this.speeds.walking);
-      } else if (direction === 'left') {
-        this.player.direction = 'left2right';
-        const way = Math.round(Math.random()) ? 'front' : 'back';
-        this.player.movementState = `walkturn-${way}`;
-        this.player.setVelocityX(0);
-      }
-    } else if (this.cursors.left.isDown && !onFloor) {
-      if (direction === 'left') {
-      } else if (direction === 'right') {
-        this.player.direction = `right2left`;
-      }
-
-      this.player.setVelocityX(-this.speeds.flying);
-    } else if (this.cursors.right.isDown && !onFloor) {
-      if (direction === 'right') {
-      } else if (direction === 'left') {
-        this.player.direction = `left2right`;
-      }
-
-      this.player.setVelocityX(this.speeds.flying);
-    } else if (
-      this.cursors.down.isDown &&
-      onFloor &&
-      !this.cursors.space.isDown
-    ) {
-      if (movementState.indexOf('crouch') === -1) {
-        this.player.movementState = 'crouch-up2dwn';
-        this.player.setVelocityX(0);
-      }
-    } else if (
-      !this.cursors.down.isDown &&
-      onFloor &&
-      this.player.movementState.indexOf('crouch') > -1
-    ) {
-      this.player.movementState = 'crouch-dwn2up';
-    } else if (this.cursors.space.isDown && onFloor) {
-      if (this.player.movementState.indexOf('crouch') > -1) {
-        this.player.movementState = 'crouchjump';
-        this.player.setVelocityY(-this.speeds.highjump);
-      } else {
-        this.player.movementState = 'aerial';
-        this.player.setVelocityY(-this.speeds.jump);
-      }
-    } else if (onFloor) {
-      this.player.setVelocityX(0);
-      this.player.movementState = 'idle';
-    } else {
-      this.player.movementState = 'aerial';
-    }
-
-    console.log(this.player);
-
-    //this.experimentalPopup();
-
-    this.setaAnimation();
+    this.player.update();
   }
 
   experimentalPopup() {
@@ -187,52 +78,6 @@ export default class Game extends Phaser.Scene {
     xxx.style.left = `${left}px`;
     xxx.style.top = `${top}px`;
     xxx.innerHTML = `<span>${top}, ${left}</span>`;
-  }
-
-  animcomplete(animation, frame) {
-    const { key } = animation;
-
-    function was(name) {
-      return key.indexOf(name) > -1;
-    }
-
-    if (was('right2left-aerial')) {
-      this.player.direction = 'left';
-    }
-
-    if (was('left2right-aerial')) {
-      this.player.direction = 'right';
-    }
-
-    if (was('right2left-walkturn')) {
-      this.player.direction = 'left';
-      this.player.movementState = 'walk';
-    }
-
-    if (was('left2right-walkturn')) {
-      this.player.direction = 'right';
-      this.player.movementState = 'walk';
-    }
-
-    if (was('crouch-up2dwn')) {
-      this.player.movementState = 'crouch';
-    }
-
-    if (was('crouch-dwn2up')) {
-      this.player.movementState = 'idle';
-    }
-
-    if (was('crouchjump')) {
-      this.player.movementState = 'aerial';
-    }
-  }
-
-  setaAnimation() {
-    const { direction, movementState, frame } = this.player;
-    this.player.anims.play(`${direction}-${movementState}`, true);
-    //console.log(this.player.frame);
-
-    //this.player.body.setSize(frame.width, frame.height);
   }
 
   preloadBackground() {
@@ -260,33 +105,6 @@ export default class Game extends Phaser.Scene {
       .image(center.width * 1.6, center.height * 0.4, 'moon')
       .setScale(scale)
       .setScrollFactor(0, 0);
-  }
-
-  makeAnimation({ name, frames, repeat }) {
-    const FRAMERATE = 24;
-    return this.anims.create({
-      key: `${name}`,
-      frames: this.anims.generateFrameNames('player-atlas', {
-        start: 0,
-        end: frames,
-        zeroPad: 3,
-        suffix: '.png',
-        prefix: `${name}-`
-      }),
-      frameRate: FRAMERATE,
-      repeat: repeat ? -1 : 0
-    });
-  }
-
-  makeAnimations() {
-    playerAnimationList.forEach(animation => {
-      const { name, frames, repeat } = animation;
-      this.makeAnimation({
-        name: name,
-        frames: frames,
-        repeat: !!repeat
-      });
-    });
   }
 
   drawDebug() {

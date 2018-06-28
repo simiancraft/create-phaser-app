@@ -18,13 +18,10 @@ const config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 400 },
-      debug: true
+      debug: false
     }
   },
-  scene: [
-    //  StartScene,
-    GameScene
-  ],
+  scene: [StartScene, GameScene],
   pixelArt: true,
   antialias: false,
   callbacks: {

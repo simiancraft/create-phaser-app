@@ -6,7 +6,7 @@ import cloud2 from '../assets/backgrounds/start/cloud-2.png';
 import ground from '../assets/backgrounds/start/ground.png';
 import moonTitle from '../assets/backgrounds/start/moon.png';
 import seaTitle from '../assets/backgrounds/start/sea.png';
-import playerStill from '../assets/player/player-image.png';
+import playerStill from '../assets/player-image.png';
 import exampleSoundOgg from '../assets/sounds/example_sound.ogg';
 import constants from '../config/constants';
 import { linearScale } from '../utils';
