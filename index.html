@@ -21,6 +21,61 @@
       left: 0;
       width: 225px;
     }
+
+
+    .progress {
+      overflow: hidden;
+      height: 18px;
+
+      background-color: #f7f7f7;
+      background-image: -moz-linear-gradient(top, #f5f5f5, #f9f9f9);
+      background-image: -ms-linear-gradient(top, #f5f5f5, #f9f9f9);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#f9f9f9));
+      background-image: -webkit-linear-gradient(top, #f5f5f5, #f9f9f9);
+      background-image: -o-linear-gradient(top, #f5f5f5, #f9f9f9);
+      background-image: linear-gradient(top, #f5f5f5, #f9f9f9);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#f9f9f9', GradientType=0);
+
+      -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+
+      -webkit-border-radius: 0px;
+      -moz-border-radius: 0px;
+      border-radius: 0px;
+
+    }
+
+    .progress .bar {
+      width: 50%;
+      height: 18px;
+
+
+      background-color: #0e90d2;
+      background-image: -moz-linear-gradient(top, #149bdf, #0480be);
+      background-image: -ms-linear-gradient(top, #149bdf, #0480be);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#149bdf), to(#0480be));
+      background-image: -webkit-linear-gradient(top, #149bdf, #0480be);
+      background-image: -o-linear-gradient(top, #149bdf, #0480be);
+      background-image: linear-gradient(top, #149bdf, #0480be);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#149bdf', endColorstr='#0480be', GradientType=0);
+
+      -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+      -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+
+      -webkit-transition: width 0.6s ease;
+      -moz-transition: width 0.6s ease;
+      -ms-transition: width 0.6s ease;
+      -o-transition: width 0.6s ease;
+      transition: width 0.6s ease;
+    }
   </style>
 </head>
 
@@ -33,13 +88,31 @@
     <table>
       <tr>
         <td>Create-Phaser-App</td>
-        <td>0.0.11</td>
+        <td>0.0.12</td>
       </tr>
       <tr>
         <td>Phaser</td>
         <td>3.10.1</td>
       </tr>
     </table>
+
+    <!-- <div id="experimental-popup" style="
+        position: absolute; 
+        width: 75px; 
+        height: 75px; 
+        background-color: rgba(0,0,0,0.2);
+        border: 1px red solid; 
+        color: white;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+        ">
+
+      Enable Experimental Popup in the game to see this 'follow' the player
+
+    </div> -->
   </div>
 <script type="text/javascript" src="/create-phaser-app/vendors~main.bundle.js"></script><script type="text/javascript" src="/create-phaser-app/main.bundle.js"></script></body>
 
