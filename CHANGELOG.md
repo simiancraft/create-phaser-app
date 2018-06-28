@@ -1,5 +1,10 @@
 # Change Log
 
+0.0.13
+
+-   Removes some unused experimental css
+-   Adds the sliding behaviors and also the 'shoot missiles' (which doesnt launch them just yet)
+
 0.0.12
 
 -   Move the player into its own file, that's an Arcade Sprite.
