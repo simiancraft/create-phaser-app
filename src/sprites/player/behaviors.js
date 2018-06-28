@@ -477,7 +477,7 @@ export default class Behaviors extends machina.Fsm {
             this.transition('walkShootingAiming');
           },
           idle: 'idling',
-          walk: function(data){
+          walk: function(data) {
             const { velocities, direction } = data;
             let speed = velocities.walking;
             if (direction === 'left') {
