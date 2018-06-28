@@ -436,7 +436,7 @@ export default class Behaviors extends machina.Fsm {
             this.transition('shooting');
           }
         },
-        shootturning : {
+        shootturning: {
           _child: directions,
           _onEnter: function() {
             const { state } = directions;
@@ -467,7 +467,8 @@ export default class Behaviors extends machina.Fsm {
           changeaim: function() {
             this.transition('aiming');
           },
-          idle: 'idling'
+          idle: 'idling',
+          jump: 'jumping'
         }
       }
     };
