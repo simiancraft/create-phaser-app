@@ -57,6 +57,7 @@ class Directions extends machina.Fsm {
 
 class Aims extends machina.Fsm {
   constructor({ scene, entity }) {
+
     const aimFsm = {
       namespace: 'player-aims',
       initialState: 'none',
@@ -457,7 +458,10 @@ export default class Behaviors extends machina.Fsm {
             this.transition('shootingAiming');
           },
           idle: 'idling',
-          walk: 'walking'
+          walk: 'walking',
+          turn: function() {
+            this.transition('turning');
+          }
         },
         walkShootingAiming: {
           aim: 'walkShooting',
@@ -485,6 +489,9 @@ export default class Behaviors extends machina.Fsm {
             }
             directions.transition(direction);
             entity.setVelocityX(speed);
+          },
+          turn: function() {
+            this.transition('turning');
           }
         }
       }
