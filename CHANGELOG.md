@@ -8,6 +8,7 @@
 -   ES6 classes for the finite state machine that drives player behavior
 -   Reproduces the walk animations as a hierarchical FSM
 -   Pulls some simple tools, like the Linear Scale tool into its own lib
+-   rudimentary jetpack, flying behavior, landing, etc.
 
 0.0.11
 
