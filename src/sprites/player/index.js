@@ -62,10 +62,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.vulcanMuzzle = this.defineVulcanMuzzle();
 
-    window.thruster = this.thruster;
-    window.behaviors = this.behaviors;
-    window.entity = this;
-    window.scene = this.scene;
+    // window.thruster = this.thruster;
+    // window.behaviors = this.behaviors;
+    // window.entity = this;
+    // window.scene = this.scene;
   }
 
   defineVulcanMuzzle() {
@@ -83,7 +83,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     });
 
     this.behaviors.on('vulcanmuzzle', data => {
-      console.log('vulcanmuzzle', data);
       if (typeof data.angle === 'number') {
         thruster.setAngle(data.angle);
       }
@@ -107,17 +106,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const thrustParticles = scene.add.particles('flares');
 
     const thruster = thrustParticles.createEmitter({
-      frame: 'green',
-      lifespan: { min: 5, max: 500 },
-      speed: { min: 0, max: 4 },
+      frame: 'blue',
+      lifespan: { min: 1, max: 500 },
+      speed: { min: 0, max: 40 },
       scale: { start: 0.15, end: 0 },
-      quantity: 4,
+      quantity: 6,
       blendMode: 'ADD',
       on: false
     });
 
     this.behaviors.on('footbooster', data => {
-      console.log(data);
       if (typeof data.angle === 'number') {
         thruster.setAngle(data.angle);
       }

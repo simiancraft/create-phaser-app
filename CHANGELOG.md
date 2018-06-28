@@ -1,5 +1,9 @@
 # Change Log
 
+0.0.14
+
+-   Complete the player animtaions to include more particles on certain behaviors and add the vulcan cannon.
+
 0.0.13
 
 -   Removes some unused experimental css

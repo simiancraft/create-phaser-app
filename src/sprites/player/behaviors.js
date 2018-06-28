@@ -528,6 +528,7 @@ export default class Behaviors extends machina.Fsm {
           jump: 'jumping',
           unshoot: function() {
             this.emit('vulcanmuzzle', { on: false });
+            this.transition('idling');
           }
         },
         walkaiming: {
@@ -565,7 +566,10 @@ export default class Behaviors extends machina.Fsm {
         walkshooting: {
           _child: aims,
           _onEnter: function() {
-            this.emit('vulcanmuzzle', { on: true, ...getvulcanMuzzleSettings() });
+            this.emit('vulcanmuzzle', {
+              on: true,
+              ...getvulcanMuzzleSettings()
+            });
             as.sequence(`${directions.state}-firecannonwalk-${aims.state}`);
           },
           _onExit() {
