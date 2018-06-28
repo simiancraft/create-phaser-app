@@ -112,6 +112,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     );
   }
 
+  hasNoAim() {
+    const { down, left, right, up } = this.locomotion;
+    return !down.isDown && !left.isDown && !right.isDown && !up.isDown;
+  }
+
   update() {
     const { scene, behaviors, velocities } = this;
 
@@ -160,6 +165,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
       if (noInput) {
         behaviors.handle('idle', { onFloor, velocities });
+      } else if (this.hasNoAim()) {
+        behaviors.handle('aim', { onFloor, direction: 'none' });
+      } else if (up.isDown && (right.isDown || left.isDown)) {
+        behaviors.handle('aim', { onFloor, direction: 'upfwd' });
+      } else if (down.isDown && (right.isDown || left.isDown)) {
+        behaviors.handle('aim', { onFloor, direction: 'dwnfwd' });
+      } else if (right.isDown || left.isDown) {
+        behaviors.handle('aim', { onFloor, direction: 'fwd' });
+      } else if (up.isDown) {
+        behaviors.handle('aim', { onFloor, direction: 'up' });
+      } else if (down.isDown) {
+        behaviors.handle('aim', { onFloor, direction: 'dwn' });
       }
 
       behaviors.handle('land', { onFloor, velocities });
