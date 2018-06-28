@@ -9,6 +9,7 @@
 -   Reproduces the walk animations as a hierarchical FSM
 -   Pulls some simple tools, like the Linear Scale tool into its own lib
 -   rudimentary jetpack, flying behavior, landing, etc.
+-   add flares particle effects (currently jsut using the ones fromt he demos)
 
 0.0.11
 
