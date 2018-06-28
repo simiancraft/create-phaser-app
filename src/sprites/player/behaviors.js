@@ -7,6 +7,20 @@ import playerPNG from './player.png';
 
 class Directions extends machina.Fsm {
   constructor({ scene, entity }) {
+    const _aDelta = 35;
+    const boosterOpts = {
+      left: {
+        x: 65,
+        y: 18,
+        angle: 90 - _aDelta
+      },
+      right: {
+        x: 10,
+        y: 18,
+        angle: 90 + _aDelta
+      }
+    };
+
     const directionalFsm = {
       namespace: 'player-directions1',
       initialState: 'left',
@@ -14,11 +28,13 @@ class Directions extends machina.Fsm {
         left: {
           _onEnter: function() {
             this.handle('turn', { direction: 'left' });
+            this.emit('booster', boosterOpts.left);
           }
         },
         right: {
           _onEnter: function() {
             this.handle('turn', { direction: 'right' });
+            this.emit('booster', boosterOpts.right);
           }
         },
         left2right: {
@@ -88,7 +104,6 @@ export default class Behaviors extends machina.Fsm {
             //console.log('walk called in walking', data);
           },
           turn: function() {
-            console.log('TURNING');
             this.transition('turning');
           },
           crouch: function() {
@@ -240,10 +255,12 @@ export default class Behaviors extends machina.Fsm {
             this.transition('flyTurning');
           },
           boost: function(data) {
-            const { velocities } = data;
-            entity.setVelocityY(-velocities.aerialBoosting);
+            entity.setVelocityY(-data.velocities.aerialBoosting);
+            this.emit('booster', { on: true });
           },
-          unboost: function() {}
+          unboost: function() {
+            this.emit('booster', { on: false });
+          }
         },
         flyTurning: {
           _child: directions,

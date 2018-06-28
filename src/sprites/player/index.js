@@ -21,23 +21,58 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   };
 
   preload() {
+    const PHASER_EXAMPLES = 'http://labs.phaser.io';
     Behaviors.preload(this.scene);
+    //replace with better thruster image
+    this.scene.load.atlas(
+      'flares',
+      `${PHASER_EXAMPLES}/assets/particles/flares.png`,
+      `${PHASER_EXAMPLES}/assets/particles/flares.json`
+    );
   }
 
   create() {
     this.scene.physics.world.enable(this);
-    this.scene.add.existing(this);
+
     this.body.setSize(75, 90);
     this.setOrigin(0.5, 0.63);
 
-    this.body.setGravityY(300);
+    this.body.setGravityY(325);
+
+    const thrustParticles = this.scene.add.particles('flares');
+    this.thruster = thrustParticles.createEmitter({
+      frame: 'blue',
+      lifespan: { min: 250, max: 400 },
+      speed: { min: 1, max: 150 },
+      scale: { start: 0.25, end: 0 },
+      quantity: 1,
+      blendMode: 'ADD',
+      on: false
+    });
+
+    window.thruster = this.thruster;
+    window.behaviors = this.behaviors;
 
     this.behaviors = new Behaviors({
       scene: this.scene,
       entity: this
     });
 
-    window.behaviors = this.behaviors;
+    this.thruster.startFollow(this.body);
+    this.scene.add.existing(this);
+    this.behaviors.on('booster', data => {
+      if (data.angle) {
+        this.thruster.setAngle(data.angle);
+      }
+
+      if (data.on !== undefined) {
+        this.thruster.on = data.on;
+      }
+
+      if (data.x && data.y) {
+        this.thruster.setPosition(data.x, data.y);
+      }
+    });
   }
 
   hasNoInput() {
