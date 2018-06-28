@@ -36,4 +36,25 @@ This project can be used right now as a boilerplate, even without the eventual s
 2.  `yarn install`
 3.  `yarn start`
 
-![image](https://user-images.githubusercontent.com/954596/41559851-fb552aa4-730a-11e8-8491-4f4c05ed9dce.png)
+#Play the Demo!
+
+The work in progress is here:
+🕹️[Working Example Of Create Phaser App](https://simiancraft.github.io/create-phaser-app/)
+
+Click to begin.
+Its currently a simple level, but soon will eventually integrate examples of level triggers, create behavior, and Game UI.
+
+Locomotion:
+
+-   W,A,S,D = walk/aim
+-   Space = jump
+-   Shift = boost/slide
+
+Ordinance:
+
+-   ← = Vulcan Cannon
+-   ↑ = Missile (WIP)
+-   ↓ = Laser (WIP)
+-   → = PLasma Thrower (WIP)
+
+![plus-vulcan](https://user-images.githubusercontent.com/954596/42060091-4b582690-7aeb-11e8-8456-3893f97b1098.gif)

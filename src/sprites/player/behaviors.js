@@ -21,6 +21,19 @@ class Directions extends machina.Fsm {
       }
     };
 
+    const footBoosterOpts = {
+      left: {
+        x: 65,
+        y: 80,
+        angle: 0
+      },
+      right: {
+        x: 10,
+        y: 80,
+        angle: 180
+      }
+    };
+
     const directionalFsm = {
       namespace: 'player-directions',
       initialState: 'left',
@@ -29,12 +42,14 @@ class Directions extends machina.Fsm {
           _onEnter: function() {
             this.handle('turn', { direction: 'left' });
             this.emit('booster', boosterOpts.left);
+            this.emit('footbooster', footBoosterOpts.left);
           }
         },
         right: {
           _onEnter: function() {
             this.handle('turn', { direction: 'right' });
             this.emit('booster', boosterOpts.right);
+            this.emit('footbooster', footBoosterOpts.right);
           }
         },
         left2right: {
@@ -55,15 +70,80 @@ class Directions extends machina.Fsm {
   }
 }
 
+class Aims extends machina.Fsm {
+  constructor({ scene, entity }) {
+    const aimFsm = {
+      namespace: 'player-aims',
+      initialState: 'fwd',
+      states: {
+        up: {
+          _onEnter: function() {
+            this.handle('changeaim', { aim: 'up' });
+          }
+        },
+        upfwd: {
+          _onEnter: function() {
+            this.handle('changeaim', { aim: 'upfwd' });
+          }
+        },
+        fwd: {
+          _onEnter: function() {
+            this.handle('changeaim', { aim: 'fwd' });
+          }
+        },
+        dwnfwd: {
+          _onEnter: function() {
+            this.handle('changeaim', { aim: 'dwnfwd' });
+          }
+        },
+        dwn: {
+          _onEnter: function() {
+            this.handle('changeaim', { aim: 'dwn' });
+          }
+        }
+      }
+    };
+    super(aimFsm);
+    this.scene = scene;
+    this.entity = entity;
+  }
+}
+
 export default class Behaviors extends machina.Fsm {
   constructor({ scene, entity }) {
     const directions = new Directions({ scene, entity });
+
+    const aims = new Aims({ scene, entity });
 
     const as = new AnimationSequencer({
       scene,
       entity,
       animationList
     });
+
+    function getvulcanMuzzleSettings() {
+      const direction = directions.state;
+      const aim = aims.state;
+
+      const settings = {
+        left: {
+          up: { x: 48, y: -32, angle: -90 },
+          upfwd: { x: 2, y: -1, angle: -145 },
+          fwd: { x: -8, y: 27, angle: 180 },
+          dwnfwd: { x: 8, y: 62, angle: 140 },
+          dwn: { x: 55, y: 80, angle: 90 }
+        },
+        right: {
+          up: { x: 48, y: -32, angle: -90 },
+          upfwd: { x: 92, y: 4, angle: -35 },
+          fwd: { x: 95, y: 27, angle: 0 },
+          dwnfwd: { x: 85, y: 62, angle: 40 },
+          dwn: { x: 45, y: 80, angle: 90 }
+        }
+      };
+
+      return settings[direction][aim];
+    }
 
     const behaviorFsm = {
       namespace: 'player-behaviors',
@@ -87,6 +167,10 @@ export default class Behaviors extends machina.Fsm {
           shootMissiles: 'missilesLaunch',
           boost: function({ velocities }) {
             this.transition('sliding');
+          },
+          shoot: function(data) {
+            //extend to tell WHICH thing is shooting
+            this.transition('shooting');
           }
         },
         walking: {
@@ -124,6 +208,9 @@ export default class Behaviors extends machina.Fsm {
           shootMissiles: 'missilesLaunch',
           boost: function({ velocities }) {
             this.transition('sliding');
+          },
+          shoot: function(data) {
+            this.transition('walkshooting');
           }
         },
         turning: {
@@ -149,7 +236,8 @@ export default class Behaviors extends machina.Fsm {
               speed = -speed;
             }
             entity.setVelocityX(speed);
-          }
+          },
+          shoot: function() {}
         },
         crouchingDown: {
           _child: directions,
@@ -343,7 +431,7 @@ export default class Behaviors extends machina.Fsm {
         },
         sliding: {
           _onEnter: function() {
-            this.emit('booster', { on: true });
+            this.emit('footbooster', { on: true });
             let direction = directions.state;
             let { sliding, slideBursting } = entity.velocities;
             if (direction === 'left') {
@@ -351,10 +439,9 @@ export default class Behaviors extends machina.Fsm {
               slideBursting = -slideBursting;
             }
             entity.setVelocityX(slideBursting);
-
             as.sequence(`${directions.state}-slide-stand2slide`).then(() => {
               entity.setVelocityX(sliding);
-              this.emit('booster', { on: false });
+              this.emit('footbooster', { on: false });
               this.timer = setTimeout(
                 function() {
                   this.handle('unboost');
@@ -378,8 +465,135 @@ export default class Behaviors extends machina.Fsm {
             });
           }
         },
-        shooting: {},
-        walkShooting: {}
+        aiming: {
+          _child: directions,
+          turn: function() {
+            this.transition('shootturning');
+          },
+          shoot: function() {
+            const muzzleSettings = getvulcanMuzzleSettings();
+            this.emit('vulcanmuzzle', {
+              on: true,
+              ...muzzleSettings
+            });
+            this.transition('shooting');
+          },
+          idle: 'idling',
+          unshoot: function() {
+            this.emit('vulcanmuzzle', { on: false });
+          }
+        },
+        shootturning: {
+          _child: directions,
+          _onEnter: function() {
+            this.emit('vulcanmuzzle', { on: false });
+            const { state } = directions;
+            const turnDirection =
+              state === 'right' ? 'left2right' : 'right2left';
+            directions.transition(turnDirection);
+            const face = Math.round(Math.random()) ? 'front' : 'back';
+            const animation = `${directions.state}-walkturn-${face}`;
+
+            as.sequence(animation).then(() => {
+              const dir = turnDirection === 'left2right' ? 'right' : 'left';
+              directions.transition(dir);
+              this.transition('shooting');
+            });
+          }
+        },
+        shooting: {
+          _child: aims,
+          _onEnter: function() {
+            this.emit('vulcanmuzzle', {
+              on: true,
+              ...getvulcanMuzzleSettings()
+            });
+            as.sequence(`${directions.state}-firecannon-${aims.state}`).then(
+              () => {}
+            );
+          },
+          _onExit: function() {
+            this.emit('vulcanmuzzle', { on: false });
+          },
+          aim: function({ aim, direction }) {
+            aims.transition(aim);
+            if (direction) {
+              directions.transition(direction);
+            }
+          },
+          changeaim: function() {
+            this.transition('aiming');
+          },
+          idle: 'idling',
+          jump: 'jumping',
+          unshoot: function() {
+            this.emit('vulcanmuzzle', { on: false });
+            this.transition('idling');
+          }
+        },
+        walkaiming: {
+          _child: directions,
+          turn: function() {
+            this.transition('walkshootturning');
+          },
+          shoot: function() {
+            const muzzleSettings = getvulcanMuzzleSettings();
+            this.emit('vulcanmuzzle', {
+              on: true,
+              ...muzzleSettings
+            });
+            this.transition('walkshooting');
+          },
+          idle: 'idling'
+        },
+        walkshootturning: {
+          _child: directions,
+          _onEnter: function() {
+            const { state } = directions;
+            const turnDirection =
+              state === 'right' ? 'left2right' : 'right2left';
+            directions.transition(turnDirection);
+            const face = Math.round(Math.random()) ? 'front' : 'back';
+            const animation = `${directions.state}-walkturn-${face}`;
+
+            as.sequence(animation).then(() => {
+              const dir = turnDirection === 'left2right' ? 'right' : 'left';
+              directions.transition(dir);
+              this.transition('walkshooting');
+            });
+          }
+        },
+        walkshooting: {
+          _child: aims,
+          _onEnter: function() {
+            this.emit('vulcanmuzzle', {
+              on: true,
+              ...getvulcanMuzzleSettings()
+            });
+            as.sequence(`${directions.state}-firecannonwalk-${aims.state}`);
+          },
+          _onExit() {
+            this.emit('vulcanmuzzle', { on: false });
+          },
+          aim: function({ aim, direction, velocities }) {
+            aims.transition(aim);
+            if (direction) {
+              directions.transition(direction);
+              let speed = velocities.walking;
+              if (direction === 'left') {
+                speed = -speed;
+              }
+              directions.transition(direction);
+              entity.setVelocityX(speed);
+            }
+          },
+          changeaim: function() {
+            this.transition('walkaiming');
+          },
+          idle: 'idling',
+          jump: 'jumping',
+          unshoot: 'walking'
+        }
       }
     };
 
