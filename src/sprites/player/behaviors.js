@@ -238,7 +238,12 @@ export default class Behaviors extends machina.Fsm {
           },
           turn: function(data) {
             this.transition('flyTurning');
-          }
+          },
+          boost: function(data) {
+            const { velocities } = data;
+            entity.setVelocityY(-velocities.aerialBoosting);
+          },
+          unboost: function() {}
         },
         flyTurning: {
           _child: directions,
@@ -264,12 +269,6 @@ export default class Behaviors extends machina.Fsm {
               .then(() => {
                 this.transition('idling');
               });
-          },
-          idle: function() {
-            //this.transition('idling');
-          },
-          walk: function() {
-            //this.transition('walking');
           }
         }
       }

@@ -16,7 +16,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     flying: 160,
     highjump: 600,
     jump: 250,
-    landing: 40
+    landing: 40,
+    aerialBoosting: 110
   };
 
   preload() {
@@ -98,6 +99,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         behaviors.handle('jump', { onFloor, velocities });
       }
 
+      if (shift.isDown) {
+        behaviors.handle('boost', { onFloor, velocities });
+      } else if (!shift.isDown) {
+        behaviors.handle('unboost', { onFloor, velocities });
+      }
+
       if (noInput) {
         behaviors.handle('idle', { onFloor, velocities });
       }
@@ -118,6 +125,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           onFloor,
           velocities: velocities
         });
+      }
+
+      if (shift.isDown) {
+        behaviors.handle('boost', { onFloor, velocities });
+      } else if (!shift.isDown) {
+        behaviors.handle('unboost', { onFloor, velocities });
       }
     }
   }
