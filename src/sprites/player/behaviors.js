@@ -57,7 +57,6 @@ class Directions extends machina.Fsm {
 
 class Aims extends machina.Fsm {
   constructor({ scene, entity }) {
-
     const aimFsm = {
       namespace: 'player-aims',
       initialState: 'none',
