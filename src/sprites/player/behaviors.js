@@ -59,42 +59,36 @@ class Aims extends machina.Fsm {
   constructor({ scene, entity }) {
     const aimFsm = {
       namespace: 'player-aims',
-      initialState: 'none',
+      initialState: 'fwd',
       states: {
-        none: {
-          _onEnter: function() {
-            this.handle('changeaim', { direction: 'none' });
-          }
-        },
         up: {
           _onEnter: function() {
-            this.handle('changeaim', { direction: 'up' });
+            this.handle('changeaim', { aim: 'up' });
           }
         },
         upfwd: {
           _onEnter: function() {
-            this.handle('changeaim', { direction: 'upfwd' });
+            this.handle('changeaim', { aim: 'upfwd' });
           }
         },
         fwd: {
           _onEnter: function() {
-            this.handle('changeaim', { direction: 'fwd' });
+            this.handle('changeaim', { aim: 'fwd' });
           }
         },
         dwnfwd: {
           _onEnter: function() {
-            this.handle('changeaim', { direction: 'dwnfwd' });
+            this.handle('changeaim', { aim: 'dwnfwd' });
           }
         },
         dwn: {
           _onEnter: function() {
-            this.handle('changeaim', { direction: 'dwn' });
+            this.handle('changeaim', { aim: 'dwn' });
           }
         }
       }
     };
     super(aimFsm);
-
     this.scene = scene;
     this.entity = entity;
   }
@@ -135,11 +129,9 @@ export default class Behaviors extends machina.Fsm {
           boost: function({ velocities }) {
             this.transition('sliding');
           },
-          aim: function(data) {
-            aims.transition(data.direction);
-            if (data.direction !== 'none') {
-              this.transition('shooting');
-            }
+          shoot: function(data) {
+            //extend to tell WHICH thing is shooting
+            this.transition('shooting');
           }
         },
         walking: {
@@ -178,11 +170,8 @@ export default class Behaviors extends machina.Fsm {
           boost: function({ velocities }) {
             this.transition('sliding');
           },
-          aim: function(data) {
-            aims.transition(data.direction);
-            if (data.direction !== 'none') {
-              this.transition('walkShooting');
-            }
+          shoot: function(data) {
+            //extend to tell WHICH thing is shooting
           }
         },
         turning: {
@@ -208,7 +197,8 @@ export default class Behaviors extends machina.Fsm {
               speed = -speed;
             }
             entity.setVelocityX(speed);
-          }
+          },
+          shoot: function() {}
         },
         crouchingDown: {
           _child: directions,
@@ -437,61 +427,47 @@ export default class Behaviors extends machina.Fsm {
             });
           }
         },
-        shootingAiming: {
-          _onEnter: function() {
-            console.log('move gun');
+        aiming: {
+          _child: directions,
+          turn: function() {
+            this.transition('shootturning');
           },
-          aim: 'shooting',
-          idle: 'idling',
-          walk: 'walking'
+          shoot: function() {
+            this.transition('shooting');
+          }
+        },
+        shootturning : {
+          _child: directions,
+          _onEnter: function() {
+            const { state } = directions;
+            const turnDirection =
+              state === 'right' ? 'left2right' : 'right2left';
+            directions.transition(turnDirection);
+            const face = Math.round(Math.random()) ? 'front' : 'back';
+            const animation = `${directions.state}-walkturn-${face}`;
+
+            as.sequence(animation).then(() => {
+              const dir = turnDirection === 'left2right' ? 'right' : 'left';
+              directions.transition(dir);
+              this.transition('shooting');
+            });
+          }
         },
         shooting: {
           _child: aims,
           _onEnter: function() {
-            if (aims.state != 'none') {
-              as.sequence(`${directions.state}-firecannon-${aims.state}`);
+            as.sequence(`${directions.state}-firecannon-${aims.state}`);
+          },
+          aim: function({ aim, direction }) {
+            aims.transition(aim);
+            if (direction) {
+              directions.transition(direction);
             }
           },
-          aim: function({ direction }) {
-            aims.transition(direction);
-            this.transition('shootingAiming');
+          changeaim: function() {
+            this.transition('aiming');
           },
-          idle: 'idling',
-          walk: 'walking',
-          turn: function() {
-            this.transition('turning');
-          }
-        },
-        walkShootingAiming: {
-          aim: 'walkShooting',
           idle: 'idling'
-        },
-        walkShooting: {
-          _child: aims,
-          _onEnter: function() {
-            if (aims.state != 'none') {
-              as.sequence(`${directions.state}-firecannonwalk-${aims.state}`);
-            } else {
-              this.transition('walking');
-            }
-          },
-          aim: function({ direction }) {
-            aims.transition(direction);
-            this.transition('walkShootingAiming');
-          },
-          idle: 'idling',
-          walk: function(data) {
-            const { velocities, direction } = data;
-            let speed = velocities.walking;
-            if (direction === 'left') {
-              speed = -speed;
-            }
-            directions.transition(direction);
-            entity.setVelocityX(speed);
-          },
-          turn: function() {
-            this.transition('turning');
-          }
         }
       }
     };

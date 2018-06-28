@@ -136,6 +136,22 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
       }
 
+      if (dirUp.isDown && dirLeft.isDown) {
+        behaviors.handle('aim', { aim: 'upfwd', direction: 'left' });
+      } else if (dirUp.isDown && dirRight.isDown) {
+        behaviors.handle('aim', { aim: 'upfwd', direction: 'right' });
+      } else if (dirDown.isDown && dirLeft.isDown) {
+        behaviors.handle('aim', { aim: 'dwnfwd', direction: 'left' });
+      } else if (dirDown.isDown && dirRight.isDown) {
+        behaviors.handle('aim', { aim: 'dwnfwd', direction: 'right' });
+      } else if (dirUp.isDown) {
+        behaviors.handle('aim', { aim: 'up' });
+      } else if (dirDown.isDown) {
+        behaviors.handle('aim', { aim: 'dwn' });
+      } else {
+        behaviors.handle('aim', { aim: 'fwd' });
+      }
+
       if (missiles.isDown) {
         if (this.missileCount > 0) {
           behaviors.handle('shootMissiles', { onFloor, velocities });
@@ -187,6 +203,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       }
 
       behaviors.handle('unland', { onFloor, velocities });
+    }
+
+    if (primaryFire.isDown) {
+      behaviors.handle('shoot', { gun: 'vulcan' });
     }
   }
 
