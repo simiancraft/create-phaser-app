@@ -19,25 +19,38 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     highjump: 600,
     jump: 250,
     landing: 40,
-    aerialBoosting: 110
+    aerialBoosting: 110,
+    slideBursting: 500,
+    sliding: 160,
+    launchHalt: 30,
+    launchPowerX: 500,
+    launchPowerY: 450
   };
 
+  timings = {
+    launchTime: 1000,
+    slideDuration: 350
+  };
+
+  energyLevel = 1000;
+  missiles = 9;
+
   preload() {
-    const PHASER_EXAMPLES = 'http://labs.phaser.io';
     Behaviors.preload(this.scene);
     //TODO: replace with better thruster image
     this.scene.load.atlas('flares', flaresPNG, flaresJSON);
   }
 
   create() {
-    this.scene.physics.world.enable(this);
+    const { scene } = this;
+    scene.physics.world.enable(this);
 
     this.body.setSize(75, 90);
     this.setOrigin(0.5, 0.63);
 
     this.body.setGravityY(325);
 
-    const thrustParticles = this.scene.add.particles('flares');
+    const thrustParticles = scene.add.particles('flares');
     this.thruster = thrustParticles.createEmitter({
       frame: 'blue',
       lifespan: { min: 250, max: 400 },
@@ -48,16 +61,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       on: false
     });
 
-    window.thruster = this.thruster;
-    window.behaviors = this.behaviors;
-
     this.behaviors = new Behaviors({
-      scene: this.scene,
+      scene: scene,
       entity: this
     });
 
     this.thruster.startFollow(this.body);
-    this.scene.add.existing(this);
+    scene.add.existing(this);
     this.behaviors.on('booster', data => {
       if (data.angle) {
         this.thruster.setAngle(data.angle);
@@ -71,6 +81,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.thruster.setPosition(data.x, data.y);
       }
     });
+
+    this.locomotion = scene.input.keyboard.createCursorKeys();
+    this.cockpit = scene.input.keyboard.addKeys('W,A,S,D,Q,E');
+    const { down, left, right, up, shift, space } = this.locomotion;
+    const { W, A, S, D, Q, E } = this.cockpit;
+    window.cockpit = this.cockpit;
+    window.locomotion = this.locomotion;
+    window.thruster = this.thruster;
+    window.behaviors = this.behaviors;
+    window.entity = this;
+    window.scene = this.scene;
   }
 
   hasNoInput() {
@@ -94,13 +115,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   update() {
     const { scene, behaviors, velocities } = this;
 
-    this.locomotion = scene.input.keyboard.createCursorKeys();
-    this.cockpit = scene.input.keyboard.addKeys('W,A,S,D,Q,E');
-
-    window.entity = this;
-    window.scene = this.scene;
-    window.cockpit = this.cockpit;
-    window.cursors = this.cursors;
     const { down, left, right, up, shift, space } = this.locomotion;
     const { W, A, S, D, Q, E } = this.cockpit;
 
@@ -120,6 +134,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           onFloor,
           velocities: velocities
         });
+      }
+
+      if (W.isDown) {
+        if (this.missiles > 0) {
+          behaviors.handle('shootMissiles', { onFloor, velocities });
+        }
       }
 
       if (S.isDown) {
