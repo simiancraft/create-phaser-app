@@ -13,7 +13,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   velocities = {
-    walking: 110,
+    walking: 50,
     turning: 30,
     flying: 160,
     highjump: 600,
