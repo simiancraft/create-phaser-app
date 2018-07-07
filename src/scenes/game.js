@@ -3,8 +3,8 @@ import Phaser from 'phaser';
 import backgroundGradient from '../assets/backgrounds/game/background-new.png';
 import clouds from '../assets/backgrounds/game/clouds.png';
 import sea from '../assets/backgrounds/game/sea.png';
-import rockTilemap from '../assets/levels/processed/level-1/rock-tilemap.png';
-import level from '../assets/levels/processed/level-1/test-level.json';
+import rockTilemap from '../assets/levels/processed/test-level/rocks-grass-test.png';
+import level from '../assets/levels/processed/test-level/test.json';
 import constants from '../config/constants';
 import linearScale from '../lib/linear-scale';
 import Player from '../sprites/player';
@@ -43,14 +43,21 @@ export default class Game extends Phaser.Scene {
     //create Level
     this.map = this.make.tilemap({ key: 'map' });
     const tiles = this.map.addTilesetImage(
-      'rock-tilemap',
+      'rocks-grass-test',
       'tilemap-rock-grass'
     );
+    this.mapLayerGrassBlades = this.map.createStaticLayer(
+      'grass-top',
+      tiles,
+      0,
+      0
+    );
     this.mapLayerGrass = this.map.createStaticLayer('grass', tiles, 0, 0);
-    this.mapLayerGround = this.map.createDynamicLayer('ground', tiles, 0, 0);
-    this.mapLayerGround.setCollisionBetween(1, 50);
+    this.mapLayerGround = this.map.createStaticLayer('rock-only', tiles, 0, 0);
 
-    this.physics.add.collider(this.player, this.mapLayerGround);
+    this.mapLayerGrass.setCollisionBetween(1, 150);
+
+    this.physics.add.collider(this.player, this.mapLayerGrass);
     this.cameras.main.startFollow(this.player);
     this.cameras.main.setBounds(
       0,
