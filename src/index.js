@@ -22,7 +22,7 @@ const config = {
     }
   },
   scene: [
-  //  StartScene, 
+    //  StartScene,
     GameScene
   ],
   pixelArt: true,
