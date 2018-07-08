@@ -1,7 +1,7 @@
 const SCALE = 1;
 
 export default {
-  WIDTH: 1024 * SCALE,
-  HEIGHT: 576 * SCALE,
+  WIDTH: 768 * SCALE,
+  HEIGHT: 432 * SCALE,
   SCALE: SCALE
 };

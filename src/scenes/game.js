@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import backgroundGradient from '../assets/backgrounds/game/background-new.png';
 import clouds from '../assets/backgrounds/game/clouds.png';
+import mountains from '../assets/backgrounds/game/mountains.png';
 import sea from '../assets/backgrounds/game/sea.png';
 import rockTilemap from '../assets/levels/processed/test-level/rocks-grass-test.png';
 import level from '../assets/levels/processed/test-level/test.json';
@@ -93,7 +94,8 @@ export default class Game extends Phaser.Scene {
   preloadBackground() {
     this.load.image('back-gradient', backgroundGradient);
     this.load.image('clouds', clouds);
-    // this.load.image('moon', moon);
+    // this.load.image('moon', moon);\
+    this.load.image('mountains', mountains);
     this.load.image('sea', sea);
   }
 
@@ -110,6 +112,10 @@ export default class Game extends Phaser.Scene {
     this.clouds = this.add
       .tileSprite(center.width, center.height, WIDTH, HEIGHT, 'clouds')
       .setScrollFactor(0, 0);
+
+    this.mountains = this.add
+      .tileSprite(center.width, center.height, WIDTH, HEIGHT, 'mountains')
+      .setScrollFactor(0.1, 0);
 
     this.add
       .image(center.width, center.height * 2.25, 'sea')
