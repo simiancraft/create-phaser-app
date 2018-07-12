@@ -10,26 +10,26 @@ class Directions extends machina.Fsm {
     const _aDelta = 35;
     const boosterOpts = {
       left: {
-        x: 65,
-        y: 18,
+        x: 30,
+        y: 10,
         angle: 90 - _aDelta
       },
       right: {
-        x: 10,
-        y: 18,
+        x: 5,
+        y: 10,
         angle: 90 + _aDelta
       }
     };
 
     const footBoosterOpts = {
       left: {
-        x: 65,
-        y: 80,
+        x: 25,
+        y: 50,
         angle: 0
       },
       right: {
-        x: 10,
-        y: 80,
+        x: 16,
+        y: 50,
         angle: 180
       }
     };
@@ -127,18 +127,18 @@ export default class Behaviors extends machina.Fsm {
 
       const settings = {
         left: {
-          up: { x: 48, y: -32, angle: -90 },
-          upfwd: { x: 2, y: -1, angle: -145 },
-          fwd: { x: -8, y: 27, angle: 180 },
-          dwnfwd: { x: 8, y: 62, angle: 140 },
-          dwn: { x: 55, y: 80, angle: 90 }
+          up: { x: 20, y: -25, angle: -90 },
+          upfwd: { x: -5, y: -1, angle: -145 },
+          fwd: { x: -15, y: 13, angle: 180 },
+          dwnfwd: { x: -5, y: 35, angle: 140 },
+          dwn: { x: 25, y: 50, angle: 90 }
         },
         right: {
-          up: { x: 48, y: -32, angle: -90 },
-          upfwd: { x: 92, y: 4, angle: -35 },
-          fwd: { x: 95, y: 27, angle: 0 },
-          dwnfwd: { x: 85, y: 62, angle: 40 },
-          dwn: { x: 45, y: 80, angle: 90 }
+          up: { x: 20, y: -25, angle: -90 },
+          upfwd: { x: 47, y: 0, angle: -35 },
+          fwd: { x: 55, y: 13, angle: 0 },
+          dwnfwd: { x: 45, y: 36, angle: 40 },
+          dwn: { x: 15, y: 50, angle: 90 }
         }
       };
 

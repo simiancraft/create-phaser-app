@@ -1,13 +1,16 @@
 import Phaser from 'phaser';
 
-import backgroundGradient from '../assets/backgrounds/game/back-gradient.png';
-import moon from '../assets/backgrounds/game/moon.png';
+import backgroundGradient from '../assets/backgrounds/game/background-new.png';
+import clouds from '../assets/backgrounds/game/clouds.png';
+import mountains from '../assets/backgrounds/game/mountains.png';
 import sea from '../assets/backgrounds/game/sea.png';
-import rockTilemap from '../assets/levels/processed/level-1/rock-tilemap.png';
-import level from '../assets/levels/processed/level-1/test-level.json';
+import rockTilemap from '../assets/levels/processed/new-test-level/rock-and-moss.png';
+import level from '../assets/levels/processed/new-test-level/test.json';
 import constants from '../config/constants';
 import linearScale from '../lib/linear-scale';
 import Player from '../sprites/player';
+
+// import moon from '../assets/backgrounds/game/moon.png';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -27,7 +30,7 @@ export default class Game extends Phaser.Scene {
     this.load.image('tilemap-rock-grass', rockTilemap);
     this.load.tilemapTiledJSON('map', level);
 
-    //create player
+    //create playerd
     this.player = new Player({
       scene: this,
       x: 200,
@@ -41,12 +44,13 @@ export default class Game extends Phaser.Scene {
     //create Level
     this.map = this.make.tilemap({ key: 'map' });
     const tiles = this.map.addTilesetImage(
-      'rock-tilemap',
+      'rock-and-moss',
       'tilemap-rock-grass'
     );
-    this.mapLayerGrass = this.map.createStaticLayer('grass', tiles, 0, 0);
-    this.mapLayerGround = this.map.createDynamicLayer('ground', tiles, 0, 0);
-    this.mapLayerGround.setCollisionBetween(1, 50);
+
+    this.mapLayerGround = this.map.createStaticLayer('moss-rock', tiles, 0, 0);
+
+    this.mapLayerGround.setCollisionBetween(1, 150);
 
     this.physics.add.collider(this.player, this.mapLayerGround);
     this.cameras.main.startFollow(this.player);
@@ -69,6 +73,7 @@ export default class Game extends Phaser.Scene {
 
   update() {
     this.player.update();
+    this.clouds.setTilePosition(this.clouds.tilePositionX - 0.3, 0);
   }
 
   experimentalPopup() {
@@ -82,7 +87,9 @@ export default class Game extends Phaser.Scene {
 
   preloadBackground() {
     this.load.image('back-gradient', backgroundGradient);
-    this.load.image('moon', moon);
+    this.load.image('clouds', clouds);
+    // this.load.image('moon', moon);\
+    this.load.image('mountains', mountains);
     this.load.image('sea', sea);
   }
 
@@ -96,15 +103,23 @@ export default class Game extends Phaser.Scene {
       .setScale(scale)
       .setScrollFactor(0, 0);
 
+    this.clouds = this.add
+      .tileSprite(center.width, center.height, WIDTH, HEIGHT, 'clouds')
+      .setScrollFactor(0, 0);
+
+    this.mountains = this.add
+      .tileSprite(center.width, center.height * 0.8, WIDTH, HEIGHT, 'mountains')
+      .setScrollFactor(0.1, 0);
+
     this.add
-      .image(center.width, center.height * 1.4, 'sea')
+      .image(center.width, center.height * 2.5, 'sea')
       .setScale(scale)
       .setScrollFactor(0, 0.1);
 
-    this.add
-      .image(center.width * 1.6, center.height * 0.4, 'moon')
-      .setScale(scale)
-      .setScrollFactor(0, 0);
+    // this.add
+    //   .image(center.width * 1.6, center.height * 0.4, 'moon')
+    //   .setScale(scale)
+    //   .setScrollFactor(0, 0);
   }
 
   drawDebug() {
