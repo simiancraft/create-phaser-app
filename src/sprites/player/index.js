@@ -13,7 +13,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   velocities = {
-    walking: 50,
+    walking: 45,
     turning: 30,
     flying: 160,
     highjump: 600,
@@ -46,8 +46,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const { scene } = this;
     scene.physics.world.enable(this);
 
-    this.body.setSize(75, 90);
-    this.setOrigin(0.5, 0.63);
+    this.body.setSize(27, 55);
+    this.setOrigin(0.5, 0.65);
 
     this.body.setGravityY(325);
 
