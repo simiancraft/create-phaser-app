@@ -74,9 +74,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     const thruster = thrustParticles.createEmitter({
       frame: 'yellow',
-      lifespan: { min: 10, max: 250 },
+      lifespan: { min: 10, max: 150 },
       speed: { min: 1, max: 1400 },
-      scale: { start: 0.275, end: 0 },
+      scale: { start: 0.1, end: 0 },
       quantity: 12,
       blendMode: 'ADD',
       on: false
