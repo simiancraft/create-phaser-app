@@ -108,11 +108,11 @@ export default class Game extends Phaser.Scene {
       .setScrollFactor(0, 0);
 
     this.mountains = this.add
-      .tileSprite(center.width, center.height, WIDTH, HEIGHT, 'mountains')
+      .tileSprite(center.width, center.height * 0.8, WIDTH, HEIGHT, 'mountains')
       .setScrollFactor(0.1, 0);
 
     this.add
-      .image(center.width, center.height * 2.25, 'sea')
+      .image(center.width, center.height * 2.5, 'sea')
       .setScale(scale)
       .setScrollFactor(0, 0.1);
 
