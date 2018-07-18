@@ -13,7 +13,7 @@ export default class AnimationSequencer {
       frames: scene.anims.generateFrameNames('player-atlas', {
         start: 0,
         end: frames,
-        zeroPad: 3,
+        zeroPad: 0,
         suffix: '.png',
         prefix: `${name}-`
       }),
