@@ -19,6 +19,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     highjump: 600,
     jump: 250,
     landing: 40,
+    launchlanding: 120,
     aerialBoosting: 110,
     slideBursting: 500,
     sliding: 160,

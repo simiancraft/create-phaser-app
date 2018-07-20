@@ -279,9 +279,11 @@ export default class Behaviors extends machina.Fsm {
         jumpPrepping: {
           _child: directions,
           _onEnter: function() {
-            as.sequence(`${directions.state}-crouchjump`).then(() => {
-              this.transition('highJumping');
-            });
+            as.sequence(`${directions.state}-crouchjumpprep`)
+              .then(() => as.sequence(`${directions.state}-crouchjump`))
+              .then(() => {
+                this.transition('highJumping');
+              });
           },
           jump: function(data) {
             const { velocities, onFloor } = data;
@@ -335,23 +337,35 @@ export default class Behaviors extends machina.Fsm {
             console.log('1');
             entity.setVelocityX(launchHalt);
             this.emit('booster', { on: true });
-            as.sequence(`${directions.state}-crouchjump`).then(() => {
-              entity.setVelocityX(launchPowerX);
-              if (entity.body.onFloor()) {
-                this.emit('booster', { on: true });
-                entity.setVelocityY(-launchPowerY);
-                this.transition('launched');
-              } else {
-                this.transition('launched');
-              }
-            });
+            as.sequence(`${directions.state}-crouchjumpprep`)
+              .then(() => as.sequence(`${directions.state}-crouchjump`))
+              .then(() => {
+                entity.setVelocityX(launchPowerX);
+                if (entity.body.onFloor()) {
+                  this.emit('booster', { on: true });
+                  entity.setVelocityY(-launchPowerY);
+                  this.transition('launched');
+                } else {
+                  this.transition('launched');
+                }
+              });
           }
         },
         launched: {
           _child: directions,
           land: function() {
+            let { velocities } = entity;
+            let speed = velocities.launchlanding;
+            let _velX = entity.body.velocity.x;
+            if (directions.state === 'left') {
+              speed = -speed;
+              speed = _velX < speed ? _velX : speed;
+            } else {
+              speed = _velX < speed ? _velX : speed;
+            }
+            entity.setVelocityX(speed);
             this.emit('booster', { on: false });
-            this.transition('idling');
+            this.transition('launchlanding');
           }
         },
         flying: {
@@ -412,6 +426,16 @@ export default class Behaviors extends machina.Fsm {
           }
         },
         landing: {
+          _child: directions,
+          _onEnter: function() {
+            as.sequence(`${directions.state}-crouch-up2dwn`)
+              .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
+              .then(() => {
+                this.transition('idling');
+              });
+          }
+        },
+        launchlanding: {
           _child: directions,
           _onEnter: function() {
             as.sequence(`${directions.state}-crouch-up2dwn`)
