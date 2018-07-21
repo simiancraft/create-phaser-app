@@ -5,6 +5,12 @@ import animationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
 
+import linearScale from '../../lib/linear-scale';
+
+const shakeForceScale = linearScale([225, 900],[0, 0.03]);
+const shakeIntensityScale = linearScale([225, 900],[0, 0.03]);
+const shakeDurationScale = linearScale([225, 900], [0, 200]);
+
 class Directions extends machina.Fsm {
   constructor({ scene, entity }) {
     const _aDelta = 35;
@@ -334,7 +340,7 @@ export default class Behaviors extends machina.Fsm {
               launchHalt = -launchHalt;
             }
 
-            console.log('1');
+            //console.log('1');
             entity.setVelocityX(launchHalt);
             this.emit('booster', { on: true });
             as.sequence(`${directions.state}-crouchjumpprep`)
@@ -354,17 +360,7 @@ export default class Behaviors extends machina.Fsm {
         launched: {
           _child: directions,
           land: function() {
-            let { velocities } = entity;
-            let speed = velocities.launchlanding;
-            let _velX = entity.body.velocity.x;
-            if (directions.state === 'left') {
-              speed = -speed;
-              speed = _velX < speed ? _velX : speed;
-            } else {
-              speed = _velX < speed ? _velX : speed;
-            }
-            entity.setVelocityX(speed);
-            this.emit('booster', { on: false });
+
             this.transition('launchlanding');
           }
         },
@@ -374,10 +370,10 @@ export default class Behaviors extends machina.Fsm {
             as.sequence(`${directions.state}-aerial`);
           },
           land: function(data) {
-            const { velocities, onFloor } = data;
+            let { velocities, shakes } = entity;
             let speed = velocities.landing;
             let _velX = entity.body.velocity.x;
-
+ 
             if (directions.state === 'left') {
               speed = -speed;
               speed = _velX > speed ? _velX : speed;
@@ -385,7 +381,17 @@ export default class Behaviors extends machina.Fsm {
               speed = _velX < speed ? _velX : speed;
             }
 
+            
+            if(data.fallForce){
+              let shakeForce = shakeForceScale(data.fallForce);
+              let shakeIntensity = shakeIntensityScale(data.fallForce);
+              let shakeDuration = shakeDurationScale(data.fallForce);
+              //console.log(data.fallForce, shakeForce)
+              entity.scene.cameras.main.shake(shakeDuration, shakeIntensity, shakeForce);
+            }
+            
             entity.setVelocityX(speed);
+            this.emit('booster', { on: false });
             this.transition('landing');
           },
           veer: function(data) {
@@ -428,6 +434,8 @@ export default class Behaviors extends machina.Fsm {
         landing: {
           _child: directions,
           _onEnter: function() {
+
+
             as.sequence(`${directions.state}-crouch-up2dwn`)
               .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
               .then(() => {
@@ -438,6 +446,27 @@ export default class Behaviors extends machina.Fsm {
         launchlanding: {
           _child: directions,
           _onEnter: function() {
+
+            let { velocities, shakes } = entity;
+            let speed = velocities.launchlanding;
+            let _velX = entity.body.velocity.x;
+            let _velY = entity.body.velocity.y;
+            let shakeThreshold = (velocities.launchlanding);
+            let doShake = false;
+
+            if (directions.state === 'left') {
+              speed = -speed;
+              doShake = _velX < speed;
+              speed = _velX > speed ? _velX : speed;
+            } else {
+              doShake = _velX > speed;
+              speed = _velX < speed ? _velX : speed;
+            }
+            if(doShake){
+              entity.scene.cameras.main.shake(shakes.launchLand, 0.02, 0.02 );
+            }
+            entity.setVelocityX(speed);
+            this.emit('booster', { on: false });
             as.sequence(`${directions.state}-crouch-up2dwn`)
               .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
               .then(() => {
