@@ -5,17 +5,23 @@ import animationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
 
+import linearScale from '../../lib/linear-scale';
+
+const shakeForceScale = linearScale([225, 900], [0, 0.03]);
+const shakeIntensityScale = linearScale([225, 900], [0, 0.03]);
+const shakeDurationScale = linearScale([225, 900], [0, 200]);
+
 class Directions extends machina.Fsm {
   constructor({ scene, entity }) {
     const _aDelta = 35;
     const boosterOpts = {
       left: {
-        x: 30,
+        x: 25,
         y: 10,
         angle: 90 - _aDelta
       },
       right: {
-        x: 5,
+        x: 0,
         y: 10,
         angle: 90 + _aDelta
       }
@@ -24,12 +30,12 @@ class Directions extends machina.Fsm {
     const footBoosterOpts = {
       left: {
         x: 25,
-        y: 50,
+        y: 40,
         angle: 0
       },
       right: {
-        x: 16,
-        y: 50,
+        x: 0,
+        y: 40,
         angle: 180
       }
     };
@@ -127,18 +133,18 @@ export default class Behaviors extends machina.Fsm {
 
       const settings = {
         left: {
-          up: { x: 20, y: -25, angle: -90 },
-          upfwd: { x: -5, y: -1, angle: -145 },
-          fwd: { x: -15, y: 13, angle: 180 },
-          dwnfwd: { x: -5, y: 35, angle: 140 },
-          dwn: { x: 25, y: 50, angle: 90 }
+          up: { x: 18, y: -20, angle: -90 },
+          upfwd: { x: -6, y: -1, angle: -150 },
+          fwd: { x: -15, y: 12, angle: 180 },
+          dwnfwd: { x: -6, y: 32, angle: 140 },
+          dwn: { x: 19, y: 40, angle: 90 }
         },
         right: {
-          up: { x: 20, y: -25, angle: -90 },
-          upfwd: { x: 47, y: 0, angle: -35 },
-          fwd: { x: 55, y: 13, angle: 0 },
-          dwnfwd: { x: 45, y: 36, angle: 40 },
-          dwn: { x: 15, y: 50, angle: 90 }
+          up: { x: 18, y: -20, angle: -90 },
+          upfwd: { x: 40, y: 0, angle: -30 },
+          fwd: { x: 46, y: 12, angle: 0 },
+          dwnfwd: { x: 41, y: 33, angle: 40 },
+          dwn: { x: 12, y: 40, angle: 90 }
         }
       };
 
@@ -279,9 +285,11 @@ export default class Behaviors extends machina.Fsm {
         jumpPrepping: {
           _child: directions,
           _onEnter: function() {
-            as.sequence(`${directions.state}-crouchjump`).then(() => {
-              this.transition('highJumping');
-            });
+            as.sequence(`${directions.state}-crouchjumpprep`)
+              .then(() => as.sequence(`${directions.state}-crouchjump`))
+              .then(() => {
+                this.transition('highJumping');
+              });
           },
           jump: function(data) {
             const { velocities, onFloor } = data;
@@ -332,26 +340,27 @@ export default class Behaviors extends machina.Fsm {
               launchHalt = -launchHalt;
             }
 
-            console.log('1');
+            //console.log('1');
             entity.setVelocityX(launchHalt);
             this.emit('booster', { on: true });
-            as.sequence(`${directions.state}-crouchjump`).then(() => {
-              entity.setVelocityX(launchPowerX);
-              if (entity.body.onFloor()) {
-                this.emit('booster', { on: true });
-                entity.setVelocityY(-launchPowerY);
-                this.transition('launched');
-              } else {
-                this.transition('launched');
-              }
-            });
+            as.sequence(`${directions.state}-crouchjumpprep`)
+              .then(() => as.sequence(`${directions.state}-crouchjump`))
+              .then(() => {
+                entity.setVelocityX(launchPowerX);
+                if (entity.body.onFloor()) {
+                  this.emit('booster', { on: true });
+                  entity.setVelocityY(-launchPowerY);
+                  this.transition('launched');
+                } else {
+                  this.transition('launched');
+                }
+              });
           }
         },
         launched: {
           _child: directions,
           land: function() {
-            this.emit('booster', { on: false });
-            this.transition('idling');
+            this.transition('launchlanding');
           }
         },
         flying: {
@@ -360,7 +369,7 @@ export default class Behaviors extends machina.Fsm {
             as.sequence(`${directions.state}-aerial`);
           },
           land: function(data) {
-            const { velocities, onFloor } = data;
+            let { velocities, shakes } = entity;
             let speed = velocities.landing;
             let _velX = entity.body.velocity.x;
 
@@ -371,7 +380,20 @@ export default class Behaviors extends machina.Fsm {
               speed = _velX < speed ? _velX : speed;
             }
 
+            if (data.fallForce) {
+              let shakeForce = shakeForceScale(data.fallForce);
+              let shakeIntensity = shakeIntensityScale(data.fallForce);
+              let shakeDuration = shakeDurationScale(data.fallForce);
+              //console.log(data.fallForce, shakeForce)
+              entity.scene.cameras.main.shake(
+                shakeDuration,
+                shakeIntensity,
+                shakeForce
+              );
+            }
+
             entity.setVelocityX(speed);
+            this.emit('booster', { on: false });
             this.transition('landing');
           },
           veer: function(data) {
@@ -414,6 +436,36 @@ export default class Behaviors extends machina.Fsm {
         landing: {
           _child: directions,
           _onEnter: function() {
+            as.sequence(`${directions.state}-crouch-up2dwn`)
+              .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
+              .then(() => {
+                this.transition('idling');
+              });
+          }
+        },
+        launchlanding: {
+          _child: directions,
+          _onEnter: function() {
+            let { velocities, shakes } = entity;
+            let speed = velocities.launchlanding;
+            let _velX = entity.body.velocity.x;
+            let _velY = entity.body.velocity.y;
+            let shakeThreshold = velocities.launchlanding;
+            let doShake = false;
+
+            if (directions.state === 'left') {
+              speed = -speed;
+              doShake = _velX < speed;
+              speed = _velX > speed ? _velX : speed;
+            } else {
+              doShake = _velX > speed;
+              speed = _velX < speed ? _velX : speed;
+            }
+            if (doShake) {
+              entity.scene.cameras.main.shake(shakes.launchLand, 0.02, 0.02);
+            }
+            entity.setVelocityX(speed);
+            this.emit('booster', { on: false });
             as.sequence(`${directions.state}-crouch-up2dwn`)
               .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
               .then(() => {

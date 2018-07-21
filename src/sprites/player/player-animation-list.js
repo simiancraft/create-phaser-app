@@ -1,4 +1,9 @@
-export default [
+import animationlist from './animation-list.json';
+
+export default animationlist;
+
+/* OLD
+[
   { name: 'left-aerial', frames: 0 },
   { name: 'left-crouch', frames: 0 },
   { name: 'left-crouch-dwn2up', frames: 5 },
@@ -49,4 +54,5 @@ export default [
   { name: 'right2left-aerial', frames: 5 },
   { name: 'right2left-walkturn-back', frames: 11 },
   { name: 'right2left-walkturn-front', frames: 11 }
-];
+]
+*/

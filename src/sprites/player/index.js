@@ -19,12 +19,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     highjump: 600,
     jump: 250,
     landing: 40,
+    launchlanding: 80,
     aerialBoosting: 110,
     slideBursting: 500,
     sliding: 160,
     launchHalt: 30,
     launchPowerX: 500,
     launchPowerY: 450
+  };
+
+  shakes = {
+    highjumpLand: 25,
+    launchLand: 100
   };
 
   timings = {
@@ -46,8 +52,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const { scene } = this;
     scene.physics.world.enable(this);
 
-    this.body.setSize(27, 55);
-    this.setOrigin(0.5, 0.65);
+    this.body.setSize(23, 45);
+    this.setOrigin(0.5, 0.64);
 
     this.body.setGravityY(325);
 
@@ -188,6 +194,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     );
   }
 
+  fallForce = 0;
+
   update() {
     const { scene, behaviors, velocities } = this;
 
@@ -239,7 +247,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         behaviors.handle('idle', { onFloor, velocities });
       }
 
-      behaviors.handle('land', { onFloor, velocities });
+      behaviors.handle('land', {
+        onFloor,
+        velocities,
+        fallForce: this.fallForce
+      });
     }
 
     if (!onFloor) {
@@ -264,6 +276,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       }
 
       behaviors.handle('unland', { onFloor, velocities });
+      this.fallForce = this.body.velocity.y;
     }
 
     //currently only the vulcan cannon works
