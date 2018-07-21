@@ -7,8 +7,8 @@ import playerPNG from './player.png';
 
 import linearScale from '../../lib/linear-scale';
 
-const shakeForceScale = linearScale([225, 900],[0, 0.03]);
-const shakeIntensityScale = linearScale([225, 900],[0, 0.03]);
+const shakeForceScale = linearScale([225, 900], [0, 0.03]);
+const shakeIntensityScale = linearScale([225, 900], [0, 0.03]);
 const shakeDurationScale = linearScale([225, 900], [0, 200]);
 
 class Directions extends machina.Fsm {
@@ -360,7 +360,6 @@ export default class Behaviors extends machina.Fsm {
         launched: {
           _child: directions,
           land: function() {
-
             this.transition('launchlanding');
           }
         },
@@ -373,7 +372,7 @@ export default class Behaviors extends machina.Fsm {
             let { velocities, shakes } = entity;
             let speed = velocities.landing;
             let _velX = entity.body.velocity.x;
- 
+
             if (directions.state === 'left') {
               speed = -speed;
               speed = _velX > speed ? _velX : speed;
@@ -381,15 +380,18 @@ export default class Behaviors extends machina.Fsm {
               speed = _velX < speed ? _velX : speed;
             }
 
-            
-            if(data.fallForce){
+            if (data.fallForce) {
               let shakeForce = shakeForceScale(data.fallForce);
               let shakeIntensity = shakeIntensityScale(data.fallForce);
               let shakeDuration = shakeDurationScale(data.fallForce);
               //console.log(data.fallForce, shakeForce)
-              entity.scene.cameras.main.shake(shakeDuration, shakeIntensity, shakeForce);
+              entity.scene.cameras.main.shake(
+                shakeDuration,
+                shakeIntensity,
+                shakeForce
+              );
             }
-            
+
             entity.setVelocityX(speed);
             this.emit('booster', { on: false });
             this.transition('landing');
@@ -434,8 +436,6 @@ export default class Behaviors extends machina.Fsm {
         landing: {
           _child: directions,
           _onEnter: function() {
-
-
             as.sequence(`${directions.state}-crouch-up2dwn`)
               .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
               .then(() => {
@@ -446,12 +446,11 @@ export default class Behaviors extends machina.Fsm {
         launchlanding: {
           _child: directions,
           _onEnter: function() {
-
             let { velocities, shakes } = entity;
             let speed = velocities.launchlanding;
             let _velX = entity.body.velocity.x;
             let _velY = entity.body.velocity.y;
-            let shakeThreshold = (velocities.launchlanding);
+            let shakeThreshold = velocities.launchlanding;
             let doShake = false;
 
             if (directions.state === 'left') {
@@ -462,8 +461,8 @@ export default class Behaviors extends machina.Fsm {
               doShake = _velX > speed;
               speed = _velX < speed ? _velX : speed;
             }
-            if(doShake){
-              entity.scene.cameras.main.shake(shakes.launchLand, 0.02, 0.02 );
+            if (doShake) {
+              entity.scene.cameras.main.shake(shakes.launchLand, 0.02, 0.02);
             }
             entity.setVelocityX(speed);
             this.emit('booster', { on: false });
