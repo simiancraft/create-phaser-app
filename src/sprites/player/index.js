@@ -52,8 +52,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const { scene } = this;
     scene.physics.world.enable(this);
 
-    this.body.setSize(27, 55);
-    this.setOrigin(0.5, 0.65);
+    this.body.setSize(23, 45);
+    this.setOrigin(0.5, 0.64);
 
     this.body.setGravityY(325);
 
