@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="3" height="3" tilewidth="16" tileheight="16" infinite="0" nextobjectid="1">
+ <tileset firstgid="1" source="rock-moss-plants-doors.tsx"/>
+ <layer name="regions" width="3" height="3">
+  <data encoding="csv">
+0,0,0,
+0,38,0,
+0,0,0
+</data>
+ </layer>
+ <layer name="input_Rock" width="3" height="3">
+  <data encoding="csv">
+0,0,0,
+0,1,0,
+0,0,0
+</data>
+ </layer>
+ <layer name="output_Rock" width="3" height="3">
+  <data encoding="csv">
+0,0,0,
+0,54,0,
+0,0,0
+</data>
+ </layer>
+</map>
