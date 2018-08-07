@@ -1,10 +1,6 @@
 import Phaser from 'phaser';
 
-import backgroundGradient from '../assets/backgrounds/game/background-new.png';
-import clouds from '../assets/backgrounds/game/clouds.png';
-import mountains from '../assets/backgrounds/game/mountains.png';
-import sea from '../assets/backgrounds/game/sea.png';
-import rockTilemap from '../assets/levels/processed/new-test-level/rock-and-moss.png';
+import rockTilemap from '../assets/levels/processed/level-0/rock-moss-plants-doors.png';
 import level from '../assets/levels/processed/new-test-level/test.json';
 import constants from '../config/constants';
 import linearScale from '../lib/linear-scale';
@@ -85,41 +81,13 @@ export default class Game extends Phaser.Scene {
     xxx.innerHTML = `<span>${top}, ${left}</span>`;
   }
 
-  preloadBackground() {
-    this.load.image('back-gradient', backgroundGradient);
-    this.load.image('clouds', clouds);
-    // this.load.image('moon', moon);\
-    this.load.image('mountains', mountains);
-    this.load.image('sea', sea);
-  }
+  preloadBackground() {}
 
   createBackground(scale) {
     const center = {
       width: WIDTH * 0.5,
       height: HEIGHT * 0.5
     };
-    this.backGradient = this.add
-      .image(center.width, center.height, 'back-gradient')
-      .setScale(scale)
-      .setScrollFactor(0, 0);
-
-    this.clouds = this.add
-      .tileSprite(center.width, center.height, WIDTH, HEIGHT, 'clouds')
-      .setScrollFactor(0, 0);
-
-    this.mountains = this.add
-      .tileSprite(center.width, center.height * 0.8, WIDTH, HEIGHT, 'mountains')
-      .setScrollFactor(0.1, 0);
-
-    this.add
-      .image(center.width, center.height * 2.5, 'sea')
-      .setScale(scale)
-      .setScrollFactor(0, 0.1);
-
-    // this.add
-    //   .image(center.width * 1.6, center.height * 0.4, 'moon')
-    //   .setScale(scale)
-    //   .setScrollFactor(0, 0);
   }
 
   drawDebug() {
