@@ -1,5 +1,17 @@
 console.log('Processing Levels');
 
+//TODO:
+/*
+- Squish images
+
+- update the processor to ignore layerr that are 'raw input'
+by allowing the user to mark them as irrelevant in Tiled
+
+- Same thing with tilemaps! Mark the input tilemap as irrelevant
+
+- Document this and teach users hwo to use the level processor
+*/
+
 const path = require('path');
 const fs = require('fs');
 const tileExtruder = require('tile-extruder');
