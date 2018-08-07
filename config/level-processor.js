@@ -66,40 +66,75 @@ async function rewriteLevel(inputPath, index) {
 
   const thisDir = path.dirname(inputPath);
 
-  const updateTilesets = tilesets.map((tileset, index) => {
-    const {
-      image,
-      tileheight,
-      tilewidth,
-      spacing,
-      margin,
-      columns,
-      imageheight,
-      imagewidth
-    } = tileset;
-    const levelImageInputPath = path.resolve(__dirname, thisDir, image);
-    const levelImageOutputPath = getOutputPath(levelImageInputPath);
-    extrudeTileset({
-      input: levelImageInputPath,
-      output: levelImageOutputPath,
-      width: tilewidth,
-      height: tileheight,
-      spacing: spacing,
-      margin: margin
-    });
+  if (!tilesets) {
+    //there's not any tilesets
+    return;
+  }
 
-    const rows = Math.round(imageheight / (tileheight + spacing));
-
-    return {
-      ...tileset,
-      ...{
-        margin: margin + 1,
-        spacing: spacing + 2,
-        imageheight: rows * (tileheight + spacing + 2),
-        imagewidth: columns * (tilewidth + spacing + 2)
+  const updateTilesets = tilesets
+    //tilesets To fully embedded tilesets
+    .map(tileset => {
+      //the user embedded the tilemap, so just.. give it back!
+      if (!tileset.source) {
+        return tileset;
       }
-    };
-  });
+
+      // the user has NOT embedded the tileset, so we are
+      // going to go get it and the 'output'
+      // in the processed folder, that shall be embedded
+
+      let _jsonSource = tileset.source.replace('.tsx', '.json');
+
+      let externalTileset = fs.readFileSync(
+        path.resolve(__dirname, thisDir, _jsonSource)
+      );
+
+      return JSON.parse(externalTileset);
+    })
+    //tilesets to 'fixed' tilesets
+    .map((tileset, index) => {
+      console.log('tileset');
+      console.log(tileset);
+
+      const {
+        image,
+        tileheight,
+        tilewidth,
+        spacing,
+        margin,
+        columns,
+        imageheight,
+        imagewidth,
+        type
+      } = tileset;
+
+      console.log('type', type);
+      console.log('dir', thisDir);
+      console.log('img', image);
+
+      const levelImageInputPath = path.resolve(__dirname, thisDir, image);
+      const levelImageOutputPath = getOutputPath(levelImageInputPath);
+      extrudeTileset({
+        input: levelImageInputPath,
+        output: levelImageOutputPath,
+        width: tilewidth,
+        height: tileheight,
+        spacing: spacing,
+        margin: margin
+      });
+
+      const rows = Math.round(imageheight / (tileheight + spacing));
+
+      return {
+        ...tileset,
+        ...{
+          margin: margin + 1,
+          spacing: spacing + 2,
+          imageheight: rows * (tileheight + spacing + 2),
+          imagewidth: columns * (tilewidth + spacing + 2)
+        }
+      };
+    });
 
   const newLevel = JSON.stringify({
     ...level,
