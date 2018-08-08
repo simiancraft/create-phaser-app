@@ -2,33 +2,57 @@
  "infinite":false,
  "layers":[
         {
-         "image":"..\/..\/..\/backgrounds\/game\/background-with-planets.png",
-         "name":"Background-Gradient",
+         "image":"background-with-planets.png",
+         "name":"BackgroundGradient",
          "offsetx":16,
          "offsety":16,
          "opacity":1,
+         "properties":
+            {
+             "role":"background"
+            },
+         "propertytypes":
+            {
+             "role":"string"
+            },
          "type":"imagelayer",
          "visible":true,
          "x":0,
          "y":0
         }, 
         {
-         "image":"..\/..\/..\/backgrounds\/game\/mountain_and_sea.png",
-         "name":"Background-Sea",
+         "image":"mountain_and_sea.png",
+         "name":"BackgroundSea",
          "offsetx":16,
          "offsety":16,
          "opacity":1,
+         "properties":
+            {
+             "role":"background"
+            },
+         "propertytypes":
+            {
+             "role":"string"
+            },
          "type":"imagelayer",
          "visible":true,
          "x":0,
          "y":0
         }, 
         {
-         "image":"..\/..\/..\/backgrounds\/game\/clouds.png",
-         "name":"Background-Clouds",
+         "image":"clouds.png",
+         "name":"BackgroundClouds",
          "offsetx":16,
          "offsety":16,
          "opacity":1,
+         "properties":
+            {
+             "role":"background"
+            },
+         "propertytypes":
+            {
+             "role":"string"
+            },
          "type":"imagelayer",
          "visible":true,
          "x":0,

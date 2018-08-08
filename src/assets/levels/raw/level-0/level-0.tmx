@@ -2,14 +2,23 @@
 <map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="66" height="34" tilewidth="16" tileheight="16" infinite="0" nextobjectid="9">
  <tileset firstgid="1" source="rock-moss-plants-doors.tsx"/>
  <tileset firstgid="129" source="input-tiles.tsx"/>
- <imagelayer name="Background-Gradient" offsetx="16" offsety="16">
-  <image source="../../../backgrounds/game/background-with-planets.png" width="768" height="320"/>
+ <imagelayer name="BackgroundGradient" offsetx="16" offsety="16">
+  <image source="background-with-planets.png" width="768" height="320"/>
+  <properties>
+   <property name="role" value="background"/>
+  </properties>
  </imagelayer>
- <imagelayer name="Background-Sea" offsetx="16" offsety="16">
-  <image source="../../../backgrounds/game/mountain_and_sea.png" width="768" height="320"/>
+ <imagelayer name="BackgroundSea" offsetx="16" offsety="16">
+  <image source="mountain_and_sea.png" width="768" height="320"/>
+  <properties>
+   <property name="role" value="background"/>
+  </properties>
  </imagelayer>
- <imagelayer name="Background-Clouds" offsetx="16" offsety="16">
-  <image source="../../../backgrounds/game/clouds.png" width="1050" height="288"/>
+ <imagelayer name="BackgroundClouds" offsetx="16" offsety="16">
+  <image source="clouds.png" width="1050" height="288"/>
+  <properties>
+   <property name="role" value="background"/>
+  </properties>
  </imagelayer>
  <layer name="raw-rock-background" width="66" height="34" opacity="0.6">
   <data encoding="csv">

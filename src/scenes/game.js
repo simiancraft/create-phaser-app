@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Phaser from 'phaser';
 
 import level from '../assets/levels/processed/level-0/level-0.json';
@@ -57,7 +58,25 @@ export default class Game extends Phaser.Scene {
     //this.clouds.setTilePosition(this.clouds.tilePositionX - 0.3, 0);
   }
 
-  preloadBackground() {}
+  preloadBackground() {
+    const { layers } = level;
+    const backgroundLayers = _.filter(layers, layer => {
+      if (
+        layer.image &&
+        layer.properties &&
+        layer.properties.role === 'background'
+      ) {
+        return layer;
+      } else {
+        return null;
+      }
+    });
+
+    _.each(backgroundLayers, layer => {
+      console.log(layer);
+      this.load.image(layer.name, layer.image);
+    });
+  }
 
   createCamera() {
     this.cameras.main.startFollow(this.player);
