@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
+import level from '../assets/levels/processed/level-0/level-0.json';
 import rockTilemap from '../assets/levels/processed/level-0/rock-moss-plants-doors.png';
-import level from '../assets/levels/processed/new-test-level/test.json';
 import constants from '../config/constants';
 import Player from '../sprites/player';
 
@@ -17,6 +17,8 @@ export default class Game extends Phaser.Scene {
     //map
     this.load.image('tilemap-rock-grass', rockTilemap);
     this.load.tilemapTiledJSON('map', level);
+
+    console.log(level);
 
     //create playerd
     this.player = new Player({

@@ -61,6 +61,8 @@
         "import-sort-style-module": "4.2.0",
         "jest": "^23.1.0",
         "json-loader": "0.5.7",
+        "lodash": "^4.17.10",
+        "machina": "^2.0.2",
         "phaser": "3.10.1",
         "phaser-animated-tiles": "2.0.2",
         "prettier": "1.13.5",
