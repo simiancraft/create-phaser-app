@@ -2,7 +2,7 @@
 <map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="15" height="29" tilewidth="16" tileheight="16" infinite="0" nextobjectid="1">
  <tileset firstgid="1" source="input-tiles.tsx"/>
  <tileset firstgid="13" source="rock-moss-plants-doors.tsx"/>
- <layer name="Regions" width="15" height="29">
+ <layer name="Regions" width="15" height="29" opacity="0.5">
   <data encoding="csv">
 4,4,0,4,4,0,4,4,0,4,4,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -35,7 +35,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="Input_Rock-Forground" width="15" height="29">
+ <layer name="Input_Rock-Foreground" width="15" height="29" opacity="0.5">
   <data encoding="csv">
 14,14,0,15,15,0,38,38,0,39,39,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -68,9 +68,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="Output_Rock-Foreground" width="15" height="29">
+ <layer name="Output_Rock-Foreground" width="15" height="29" opacity="0.5">
   <data encoding="csv">
-14,15,0,14,15,0,38,39,0,38,39,0,0,0,0,
+14,15,0,115,115,0,38,39,0,38,39,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 21,0,21,0,24,0,24,0,0,0,0,0,0,0,0,
 29,0,29,0,32,0,32,0,59,0,84,0,0,0,0,
