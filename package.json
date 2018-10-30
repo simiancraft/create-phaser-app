@@ -1,6 +1,6 @@
 {
     "name": "create-phaser-app",
-    "version": "0.0.14",
+    "version": "0.0.15",
     "description": "A boiler plate to start your phaser app with webpack4, babel7+ and Phaser 3",
     "author": "Jesse Harlin",
     "homepage": "https://github.com/simiancraft/create-phaser-app",
@@ -77,7 +77,7 @@
         "webpack-bundle-analyzer": "2.13.1",
         "webpack-cli": "3.0.4",
         "webpack-dev-server": "3.1.4",
-        "yarn": "1.7.0"
+        "yarn": "1.12.1"
     },
     "babel": {
         "presets": [

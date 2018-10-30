@@ -70,20 +70,17 @@ function getOutputPath(inputPath) {
 async function rewriteLevel(inputPath, index) {
   inputPath = path.resolve(inputPath);
   const outputPath = getOutputPath(inputPath);
-  logProcess(inputPath, outputPath);
-
   const level = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
-
   const { tilesets } = level;
-
   const thisDir = path.dirname(inputPath);
 
+  //gathers external tilesets for embedding
   if (!tilesets) {
     //there's not any tilesets
     return;
   }
 
-  const updateTilesets = tilesets
+  const updatedTilesets = tilesets
     //tilesets To fully embedded tilesets
     .map(tileset => {
       //the user embedded the tilemap, so just.. give it back!
@@ -94,7 +91,6 @@ async function rewriteLevel(inputPath, index) {
       // the user has NOT embedded the tileset, so we are
       // going to go get it and the 'output'
       // in the processed folder, that shall be embedded
-
       let _jsonSource = tileset.source.replace('.tsx', '.json');
 
       let externalTileset = fs.readFileSync(
@@ -106,7 +102,7 @@ async function rewriteLevel(inputPath, index) {
     //tilesets to 'fixed' tilesets
     .map((tileset, index) => {
       console.log('tileset');
-      console.log(tileset);
+      //console.log(tileset);
 
       const {
         image,
@@ -126,6 +122,7 @@ async function rewriteLevel(inputPath, index) {
 
       const levelImageInputPath = path.resolve(__dirname, thisDir, image);
       const levelImageOutputPath = getOutputPath(levelImageInputPath);
+
       extrudeTileset({
         input: levelImageInputPath,
         output: levelImageOutputPath,
@@ -148,14 +145,74 @@ async function rewriteLevel(inputPath, index) {
       };
     });
 
-  const newLevel = JSON.stringify({
+  const newLevel = {
     ...level,
     ...{
-      tilesets: updateTilesets
+      tilesets: updatedTilesets
     }
+  };
+
+  moveLayerImages(newLevel, thisDir);
+  templateImageImportFile(newLevel, thisDir);
+
+  //write the completed Json!
+  const newLevelFileContents = JSON.stringify(newLevel);
+  return fs.writeFileSync(outputPath, newLevelFileContents);
+}
+
+function moveLayerImages(embeddedLevel, thisDir) {
+  const outputPath = getOutputPath(thisDir);
+
+  function moveImageToProcessedFolder(img) {
+    log(chalk.green(`➡️ ${img}`));
+    var inStr = fs.createReadStream(`${thisDir}/${img}`);
+    var outStr = fs.createWriteStream(`${outputPath}/${img}`);
+    inStr.pipe(outStr);
+  }
+
+  const { layers } = embeddedLevel;
+  const layersWithimages = layers
+    .filter(layer => {
+      return layer.image;
+    })
+    .map(x => x.image);
+
+  layersWithimages.forEach(moveImageToProcessedFolder);
+}
+
+function templateImageImportFile(embeddedLevel, thisDir) {
+  const { layers } = embeddedLevel;
+  const outputPath = `${getOutputPath(thisDir)}/images.js`;
+
+  const templateImgImport = (file, name) => {
+    return `import ${name} from './${file}';`;
+  };
+
+  const layersWithimages = layers.filter(layer => {
+    return layer.image;
   });
 
-  return fs.writeFileSync(outputPath, newLevel);
+  const layerImageImports = layersWithimages
+    .map(({ image, name }) => templateImgImport(image, name))
+    .join(`\n`);
+
+  const layerImageExportNames = layersWithimages
+    .map(({ name }) => {
+      return name;
+    })
+    .join(',\n');
+
+  const fileTemplate = `
+    \n
+    ${layerImageImports}
+
+
+    export default {
+      ${layerImageExportNames}
+    };
+  `;
+
+  return fs.writeFileSync(outputPath, fileTemplate);
 }
 
 function logProcess(input, output) {
