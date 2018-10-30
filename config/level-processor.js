@@ -198,7 +198,7 @@ function templateImageImportFile(embeddedLevel, thisDir) {
 
   const layerImageExportNames = layersWithimages
     .map(({ name }) => {
-      return name;
+      return `'${name}':${name}`;
     })
     .join(',\n');
 
@@ -208,7 +208,7 @@ function templateImageImportFile(embeddedLevel, thisDir) {
 
 
     export default {
-      ${layerImageExportNames}
+       ${layerImageExportNames}
     };
   `;
 
