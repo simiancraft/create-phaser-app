@@ -65,7 +65,7 @@
         "lodash": "^4.17.10",
         "lodash-webpack-plugin": "^0.11.5",
         "machina": "^2.0.2",
-        "phaser": "3.10.1",
+        "phaser": "3.15.1",
         "phaser-animated-tiles": "2.0.2",
         "prettier": "1.13.5",
         "prettier-eslint": "8.8.1",
