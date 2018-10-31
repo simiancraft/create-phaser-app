@@ -18,7 +18,11 @@ export default class Game extends Phaser.Scene {
   preload() {
     this.preloadBackground();
     //map
-    this.load.image('tilemap-rock-grass', rockTilemap);
+    this.load.image(
+      'rock-moss-plants-doors',
+      levelImages['rock-moss-plants-doors']
+    );
+
     this.load.tilemapTiledJSON('map', level);
 
     console.log(level);
@@ -38,7 +42,7 @@ export default class Game extends Phaser.Scene {
     //create Level
     this.map = this.make.tilemap({ key: 'map' });
     const tiles = this.map.addTilesetImage(
-      'rock-and-moss',
+      'rock-moss-plants-doors',
       'tilemap-rock-grass'
     );
 

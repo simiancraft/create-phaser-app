@@ -24,6 +24,7 @@ const SPACING = 0;
 const COLOR = 0x00000000;
 const RAW_FOLDER = 'raw';
 const PROCESSED_FOLDER = 'processed';
+const INPUT_ONLY_PROP = 'InputOnly';
 
 const globby = require('globby');
 
@@ -71,7 +72,7 @@ async function rewriteLevel(inputPath, index) {
   inputPath = path.resolve(inputPath);
   const outputPath = getOutputPath(inputPath);
   const level = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
-  const { tilesets } = level;
+  const { tilesets, layers } = level;
   const thisDir = path.dirname(inputPath);
 
   //gathers external tilesets for embedding
@@ -145,9 +146,21 @@ async function rewriteLevel(inputPath, index) {
       };
     });
 
+  const updatedLayers = layers.filter(layer => {
+    if (
+      layer.properties &&
+      layer.properties[INPUT_ONLY_PROP] &&
+      layer.properties[INPUT_ONLY_PROP] === true
+    ) {
+      return false;
+    }
+    return true;
+  });
+
   const newLevel = {
     ...level,
     ...{
+      layers: updatedLayers,
       tilesets: updatedTilesets
     }
   };
