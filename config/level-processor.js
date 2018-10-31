@@ -226,18 +226,15 @@ function templateImageImportFile(embeddedLevel, thisDir) {
     .join(',\n');
 
   const fileTemplate = `
-    \n
-    ${layerImageImports}
-    \n
-    ${tilesetImageImports}
-
-    export default {
-       \n
-       ${layerImageExportNames},
-       \n
-       ${tilesetImageExportNames}
-    };
-  `;
+\n
+${layerImageImports}
+\n
+${tilesetImageImports}
+export default {
+  \n${layerImageExportNames},
+  \n${tilesetImageExportNames}
+};
+`;
 
   return fs.writeFileSync(outputPath, fileTemplate);
 }
