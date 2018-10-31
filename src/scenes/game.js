@@ -51,11 +51,21 @@ export default class Game extends Phaser.Scene {
     this.tilemapLayers = {};
 
     _.each(tilemapLayers, tilemapLayer => {
-      this.tilemapLayers[
-        _.camelCase(tilemapLayer.name)
-      ] = this.map.createStaticLayer(tilemapLayer.name, tiles, 0, 0);
+      let layerName = _.camelCase(tilemapLayer.name);
 
+      this.tilemapLayers[layerName] = this.map.createStaticLayer(
+        tilemapLayer.name,
+        tiles,
+        0,
+        0
+      );
+
+      //set props
       if (tilemapLayer.properties) {
+        if (tilemapLayer.properties.collision) {
+          this.tilemapLayers[layerName].setCollisionBetween(0, 999);
+          this.physics.add.collider(this.player, this.tilemapLayers[layerName]);
+        }
       }
     });
 
@@ -67,10 +77,6 @@ export default class Game extends Phaser.Scene {
     //create Level
 
     this.createStaticLayers();
-
-    this.tilemapLayers.setCollisionBetween(1, 999);
-
-    this.physics.add.collider(this.player, this.mapLayerRockFloor);
 
     this.createCamera();
     this.handleDebugging();
