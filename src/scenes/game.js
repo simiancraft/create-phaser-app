@@ -68,12 +68,10 @@ export default class Game extends Phaser.Scene {
         }
       }
     });
-
-    console.log(this);
   }
 
   create() {
-    this.createBackground(SCALE);
+    this.createBackgrounds(SCALE);
     //create Level
 
     this.createStaticLayers();
@@ -85,9 +83,10 @@ export default class Game extends Phaser.Scene {
 
   update() {
     this.player.update();
-
-    //read from map?
-    //this.clouds.setTilePosition(this.clouds.tilePositionX - 0.3, 0);
+    this.backgroundImages.backgroundClouds.setTilePosition(
+      this.backgroundImages.backgroundClouds.tilePositionX + 0.2,
+      0
+    );
   }
 
   preloadBackground() {
@@ -105,7 +104,7 @@ export default class Game extends Phaser.Scene {
     });
 
     _.each(backgroundLayers, layer => {
-      this.load.image(layer.name, levelImages[layer.name]);
+      this.load.image(_.camelCase(layer.name), levelImages[layer.name]);
     });
   }
 
@@ -117,14 +116,63 @@ export default class Game extends Phaser.Scene {
       this.map.widthInPixels,
       this.map.heightInPixels
     );
-    this.cameras.main.setBackgroundColor('#333399');
+    this.cameras.main.setBackgroundColor('#111111');
   }
 
-  createBackground(scale) {
+  createBackgrounds(scale) {
     const center = {
       width: WIDTH * 0.5,
       height: HEIGHT * 0.5
     };
+
+    const backgroundLayers = level.layers.filter(layer => {
+      return (
+        layer.visible &&
+        layer.type === 'imagelayer' &&
+        layer.properties &&
+        layer.properties.role === 'background'
+      );
+    });
+
+    console.log(SCALE);
+    _.each(backgroundLayers, layer => {
+      console.log(layer);
+      let layerName = _.camelCase(layer.name);
+      let scrollx = 0;
+      let scrolly = 0;
+      this.backgroundImages = this.backgroundImages || {};
+
+      console.log(layerName);
+
+      if (layer.properties.scrollFactorX) {
+        scrollx = layer.properties.scrollFactorX;
+      }
+
+      if (layer.properties.scrollFactorY) {
+        scrolly = layer.properties.scrollFactorY;
+      }
+
+      if (layer.properties.fixed) {
+        let offsetx = layer.offsetx * 0.5;
+        let offsety = layer.offsety * 0.5;
+
+        this.backgroundImages[layerName] = this.add
+          .image(
+            (center.width + offsetx) * SCALE,
+            (center.height + offsety) * SCALE,
+            layerName
+          )
+          .setScale(SCALE)
+          .setScrollFactor(scrollx, scrolly);
+      } else {
+        this.backgroundImages[layerName] = this.add
+          .tileSprite(center.width, center.height, WIDTH, HEIGHT, layerName)
+          .setScale(SCALE)
+          .setScrollFactor(scrollx, scrolly);
+      }
+    });
+
+    console.log(this);
   }
 
   handleDebugging() {
