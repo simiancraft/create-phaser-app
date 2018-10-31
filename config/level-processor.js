@@ -180,35 +180,62 @@ function moveLayerImages(embeddedLevel, thisDir) {
   layersWithimages.forEach(moveImageToProcessedFolder);
 }
 
+function kebabToCamel(name) {
+  return name.replace(/-([a-z])/g, function(g) {
+    return g[1].toUpperCase();
+  });
+}
+
 function templateImageImportFile(embeddedLevel, thisDir) {
-  const { layers } = embeddedLevel;
+  const { layers, tilesets } = embeddedLevel;
   const outputPath = `${getOutputPath(thisDir)}/images.js`;
 
   const templateImgImport = (file, name) => {
-    return `import ${name} from './${file}';`;
+    let cleanName = kebabToCamel(name);
+    return `import ${cleanName} from './${file}';`;
   };
 
   const layersWithimages = layers.filter(layer => {
     return layer.image;
   });
 
+  const tileSetsWithImages = tilesets.filter(tileset => {
+    return tileset.image;
+  });
+
   const layerImageImports = layersWithimages
+    .map(({ image, name }) => templateImgImport(image, name))
+    .join(`\n`);
+
+  const tilesetImageImports = tileSetsWithImages
     .map(({ image, name }) => templateImgImport(image, name))
     .join(`\n`);
 
   const layerImageExportNames = layersWithimages
     .map(({ name }) => {
-      return `'${name}':${name}`;
+      let cleanName = kebabToCamel(name);
+      return `'${name}':${cleanName}`;
+    })
+    .join(',\n');
+
+  const tilesetImageExportNames = tileSetsWithImages
+    .map(({ name }) => {
+      let cleanName = kebabToCamel(name);
+      return `'${name}':${cleanName}`;
     })
     .join(',\n');
 
   const fileTemplate = `
     \n
     ${layerImageImports}
-
+    \n
+    ${tilesetImageImports}
 
     export default {
-       ${layerImageExportNames}
+       \n
+       ${layerImageExportNames},
+       \n
+       ${tilesetImageExportNames}
     };
   `;
 
