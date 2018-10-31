@@ -158,16 +158,10 @@ export default class Game extends Phaser.Scene {
           .setAlpha(layer.opacity)
           .setScrollFactor(scrollx, scrolly);
       } else {
-        let offsetx = layer.offsetx * SCALE;
-        let offsety = layer.offsety * SCALE;
+        let offsetx = (layer.offsetx / 2) * SCALE;
+        let offsety = (layer.offsety / 2) * SCALE;
         this.backgroundImages[layerName] = this.add
-          .tileSprite(
-            center.width + offsetx,
-            center.height + offsety,
-            WIDTH,
-            HEIGHT,
-            layerName
-          )
+          .tileSprite(center.width, center.height, WIDTH, HEIGHT, layerName)
           .setScale(SCALE)
           .setAlpha(layer.opacity)
           .setScrollFactor(scrollx, scrolly);
