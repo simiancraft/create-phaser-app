@@ -1,5 +1,13 @@
 # Change Log
 
+0.0.15
+
+-   BIG UPDATE
+-   replaces all the level art with new assets
+-   Includes the .tmx levels for Tiled
+-   Tiled is now a 'must have' utility for making levels
+-   Maps are loaded according to tiled properties (opacity, etc) this will be more tightly integrated over time
+
 0.0.14
 
 -   Complete the player animtaions to include more particles on certain behaviors and add the vulcan cannon.
