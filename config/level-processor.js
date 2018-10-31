@@ -141,7 +141,8 @@ async function rewriteLevel(inputPath, index) {
           margin: margin + 1,
           spacing: spacing + 2,
           imageheight: rows * (tileheight + spacing + 2),
-          imagewidth: columns * (tilewidth + spacing + 2)
+          imagewidth: columns * (tilewidth + spacing + 2),
+          firstgid: 1
         }
       };
     });
@@ -154,6 +155,11 @@ async function rewriteLevel(inputPath, index) {
     ) {
       return false;
     }
+
+    if (layer.type !== 'tilelayer') {
+      return false;
+    }
+
     return true;
   });
 

@@ -18,12 +18,9 @@ export default class Game extends Phaser.Scene {
   preload() {
     this.preloadBackground();
     //map
-    this.load.image(
-      'rock-moss-plants-doors',
-      levelImages['rock-moss-plants-doors']
-    );
+    this.load.image('tiles', levelImages['rock-moss-plants-doors']);
 
-    this.load.tilemapTiledJSON('map', level);
+    this.load.tilemapTiledJSON('level-0', level);
 
     console.log(level);
 
@@ -40,13 +37,24 @@ export default class Game extends Phaser.Scene {
   create() {
     this.createBackground(SCALE);
     //create Level
-    this.map = this.make.tilemap({ key: 'map' });
-    const tiles = this.map.addTilesetImage(
-      'rock-moss-plants-doors',
-      'tilemap-rock-grass'
+    this.map = this.make.tilemap({ key: 'level-0' });
+    const tiles = this.map.addTilesetImage('rock-moss-plants-doors', 'tiles');
+
+    this.mapLayerGround = this.map.createStaticLayer(
+      'Rock-Background',
+      tiles,
+      0,
+      0
     );
 
-    this.mapLayerGround = this.map.createStaticLayer('moss-rock', tiles, 0, 0);
+    this.mapLayerGround = this.map.createStaticLayer(
+      'Rock-Foreground',
+      tiles,
+      0,
+      0
+    );
+
+    this.mapLayerGround = this.map.createStaticLayer('RockMoss', tiles, 0, 0);
 
     this.mapLayerGround.setCollisionBetween(1, 150);
 
