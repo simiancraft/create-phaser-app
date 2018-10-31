@@ -9,13 +9,6 @@
    <property name="role" value="background"/>
   </properties>
  </imagelayer>
- <imagelayer name="BackgroundClouds2" opacity="0.7" offsetx="168" offsety="200">
-  <image source="clouds.png" width="1050" height="288"/>
-  <properties>
-   <property name="role" value="background"/>
-   <property name="scrollingx" type="float" value="0.3"/>
-  </properties>
- </imagelayer>
  <imagelayer name="BackgroundSea" offsetx="-205.5" offsety="-26.5">
   <image source="mountain_and_sea.png" width="768" height="320"/>
   <properties>
@@ -24,7 +17,7 @@
    <property name="scrollFactorX" type="float" value="-0.0007"/>
   </properties>
  </imagelayer>
- <imagelayer name="BackgroundClouds" offsetx="0" offsety="26">
+ <imagelayer name="BackgroundClouds" offsetx="-20.5" offsety="26">
   <image source="clouds.png" width="1050" height="288"/>
   <properties>
    <property name="role" value="background"/>

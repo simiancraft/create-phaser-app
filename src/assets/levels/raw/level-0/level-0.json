@@ -23,27 +23,6 @@
          "y":0
         }, 
         {
-         "image":"clouds.png",
-         "name":"BackgroundClouds2",
-         "offsetx":168,
-         "offsety":200,
-         "opacity":0.7,
-         "properties":
-            {
-             "role":"background",
-             "scrollingx":0.3
-            },
-         "propertytypes":
-            {
-             "role":"string",
-             "scrollingx":"float"
-            },
-         "type":"imagelayer",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
          "image":"mountain_and_sea.png",
          "name":"BackgroundSea",
          "offsetx":-205.5,
@@ -69,7 +48,7 @@
         {
          "image":"clouds.png",
          "name":"BackgroundClouds",
-         "offsetx":0,
+         "offsetx":-20.5,
          "offsety":26,
          "opacity":1,
          "properties":

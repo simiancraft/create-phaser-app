@@ -87,10 +87,6 @@ export default class Game extends Phaser.Scene {
       this.backgroundImages.backgroundClouds.tilePositionX + 0.2,
       0
     );
-    this.backgroundImages.backgroundClouds2.setTilePosition(
-      this.backgroundImages.backgroundClouds2.tilePositionX + 0.05,
-      0
-    );
   }
 
   preloadBackground() {
