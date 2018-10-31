@@ -28,7 +28,7 @@ export default class Game extends Phaser.Scene {
     this.player = new Player({
       scene: this,
       x: 200,
-      y: 496 //this needs to be the spawn player position
+      y: 400 //this needs to be the spawn player position
     });
 
     this.player.preload();
@@ -40,25 +40,25 @@ export default class Game extends Phaser.Scene {
     this.map = this.make.tilemap({ key: 'level-0' });
     const tiles = this.map.addTilesetImage('rock-moss-plants-doors', 'tiles');
 
-    this.mapLayerGround = this.map.createStaticLayer(
+    this.mapLayerBackground = this.map.createStaticLayer(
       'Rock-Background',
       tiles,
       0,
       0
     );
 
-    this.mapLayerGround = this.map.createStaticLayer(
+    this.mapLayerRockFloor = this.map.createStaticLayer(
       'Rock-Foreground',
       tiles,
       0,
       0
     );
 
-    this.mapLayerGround = this.map.createStaticLayer('RockMoss', tiles, 0, 0);
+    this.mapLayerMoss = this.map.createStaticLayer('RockMoss', tiles, 0, 0);
 
-    this.mapLayerGround.setCollisionBetween(1, 150);
+    this.mapLayerRockFloor.setCollisionBetween(1, 999);
 
-    this.physics.add.collider(this.player, this.mapLayerGround);
+    this.physics.add.collider(this.player, this.mapLayerRockFloor);
 
     this.createCamera();
     this.handleDebugging();

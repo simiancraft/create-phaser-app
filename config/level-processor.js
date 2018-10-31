@@ -81,6 +81,8 @@ async function rewriteLevel(inputPath, index) {
     return;
   }
 
+  let gid = 1;
+
   const updatedTilesets = tilesets
     //tilesets To fully embedded tilesets
     .map(tileset => {
@@ -135,6 +137,9 @@ async function rewriteLevel(inputPath, index) {
 
       const rows = Math.round(imageheight / (tileheight + spacing));
 
+      const currentGid = gid;
+      gid = gid + tileset.tilecount;
+
       return {
         ...tileset,
         ...{
@@ -142,7 +147,7 @@ async function rewriteLevel(inputPath, index) {
           spacing: spacing + 2,
           imageheight: rows * (tileheight + spacing + 2),
           imagewidth: columns * (tilewidth + spacing + 2),
-          firstgid: 1
+          firstgid: currentGid
         }
       };
     });
@@ -153,10 +158,6 @@ async function rewriteLevel(inputPath, index) {
       layer.properties[INPUT_ONLY_PROP] &&
       layer.properties[INPUT_ONLY_PROP] === true
     ) {
-      return false;
-    }
-
-    if (layer.type !== 'tilelayer') {
       return false;
     }
 

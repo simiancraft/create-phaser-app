@@ -3,6 +3,103 @@
     "infinite": false,
     "layers": [
         {
+            "image": "background-with-planets.png",
+            "name": "BackgroundGradient",
+            "offsetx": 16,
+            "offsety": 16,
+            "opacity": 1,
+            "properties": { "role": "background" },
+            "propertytypes": { "role": "string" },
+            "type": "imagelayer",
+            "visible": true,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "image": "mountain_and_sea.png",
+            "name": "BackgroundSea",
+            "offsetx": 16,
+            "offsety": 16,
+            "opacity": 1,
+            "properties": { "role": "background" },
+            "propertytypes": { "role": "string" },
+            "type": "imagelayer",
+            "visible": true,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "image": "clouds.png",
+            "name": "BackgroundClouds",
+            "offsetx": 16,
+            "offsety": 16,
+            "opacity": 1,
+            "properties": { "role": "background" },
+            "propertytypes": { "role": "string" },
+            "type": "imagelayer",
+            "visible": true,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "draworder": "topdown",
+            "name": "Player-Spawn",
+            "objects": [
+                {
+                    "gid": 135,
+                    "height": 16,
+                    "id": 1,
+                    "name": "Player-Spawn",
+                    "rotation": 0,
+                    "type": "",
+                    "visible": true,
+                    "width": 16,
+                    "x": 128,
+                    "y": 320
+                }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "draworder": "topdown",
+            "name": "Door-Spawn",
+            "objects": [
+                {
+                    "gid": 137,
+                    "height": 16,
+                    "id": 5,
+                    "name": "",
+                    "rotation": 0,
+                    "type": "",
+                    "visible": true,
+                    "width": 16,
+                    "x": 19.3333,
+                    "y": 316.667
+                },
+                {
+                    "gid": 138,
+                    "height": 16,
+                    "id": 6,
+                    "name": "",
+                    "rotation": 0,
+                    "type": "",
+                    "visible": true,
+                    "width": 16,
+                    "x": 1021.33,
+                    "y": 144
+                }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+        },
+        {
             "data": [
                 0,
                 0,
@@ -6805,7 +6902,7 @@
             "tileheight": 16,
             "tilewidth": 16,
             "type": "tileset",
-            "firstgid": 1
+            "firstgid": 129
         }
     ],
     "tilewidth": 16,
