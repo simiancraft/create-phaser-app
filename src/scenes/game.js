@@ -87,6 +87,10 @@ export default class Game extends Phaser.Scene {
       this.backgroundImages.backgroundClouds.tilePositionX + 0.2,
       0
     );
+    this.backgroundImages.backgroundClouds2.setTilePosition(
+      this.backgroundImages.backgroundClouds2.tilePositionX + 0.05,
+      0
+    );
   }
 
   preloadBackground() {
@@ -134,15 +138,11 @@ export default class Game extends Phaser.Scene {
       );
     });
 
-    console.log(SCALE);
     _.each(backgroundLayers, layer => {
-      console.log(layer);
       let layerName = _.camelCase(layer.name);
       let scrollx = 0;
       let scrolly = 0;
       this.backgroundImages = this.backgroundImages || {};
-
-      console.log(layerName);
 
       if (layer.properties.scrollFactorX) {
         scrollx = layer.properties.scrollFactorX;
@@ -153,26 +153,30 @@ export default class Game extends Phaser.Scene {
       }
 
       if (layer.properties.fixed) {
-        let offsetx = layer.offsetx * 0.5;
-        let offsety = layer.offsety * 0.5;
+        let offsetx = layer.offsetx * 0.5 * SCALE;
+        let offsety = layer.offsety * 0.5 * SCALE;
 
         this.backgroundImages[layerName] = this.add
-          .image(
-            (center.width + offsetx) * SCALE,
-            (center.height + offsety) * SCALE,
+          .image(center.width + offsetx, center.height + offsety, layerName)
+          .setScale(SCALE)
+          .setAlpha(layer.opacity)
+          .setScrollFactor(scrollx, scrolly);
+      } else {
+        let offsetx = layer.offsetx * SCALE;
+        let offsety = layer.offsety * SCALE;
+        this.backgroundImages[layerName] = this.add
+          .tileSprite(
+            center.width + offsetx,
+            center.height + offsety,
+            WIDTH,
+            HEIGHT,
             layerName
           )
           .setScale(SCALE)
-          .setScrollFactor(scrollx, scrolly);
-      } else {
-        this.backgroundImages[layerName] = this.add
-          .tileSprite(center.width, center.height, WIDTH, HEIGHT, layerName)
-          .setScale(SCALE)
+          .setAlpha(layer.opacity)
           .setScrollFactor(scrollx, scrolly);
       }
     });
-
-    console.log(this);
   }
 
   handleDebugging() {
