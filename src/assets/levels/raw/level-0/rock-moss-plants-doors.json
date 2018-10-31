@@ -1,0 +1,12 @@
+{ "columns":8,
+ "image":"rock-moss-plants-doors.png",
+ "imageheight":256,
+ "imagewidth":128,
+ "margin":0,
+ "name":"rock-moss-plants-doors",
+ "spacing":0,
+ "tilecount":128,
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset"
+}

@@ -52,7 +52,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     const { scene } = this;
     scene.physics.world.enable(this);
 
-    this.body.setSize(23, 45);
+    this.body.setSize(26, 45);
     this.setOrigin(0.5, 0.64);
 
     this.body.setGravityY(325);
@@ -67,11 +67,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
 
     this.vulcanMuzzle = this.defineVulcanMuzzle();
-
-    // window.thruster = this.thruster;
-    // window.behaviors = this.behaviors;
-    // window.entity = this;
-    // window.scene = this.scene;
   }
 
   defineVulcanMuzzle() {

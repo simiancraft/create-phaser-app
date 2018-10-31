@@ -21,10 +21,7 @@ const config = {
       debug: false
     }
   },
-  scene: [
-    //  StartScene,
-    GameScene
-  ],
+  scene: [StartScene, GameScene],
   pixelArt: true,
   antialias: false,
   callbacks: {
@@ -35,4 +32,5 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
 window.game = game;
