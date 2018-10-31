@@ -43,29 +43,6 @@
         },
         {
             "draworder": "topdown",
-            "name": "Player-Spawn",
-            "objects": [
-                {
-                    "gid": 135,
-                    "height": 16,
-                    "id": 1,
-                    "name": "Player-Spawn",
-                    "rotation": 0,
-                    "type": "",
-                    "visible": true,
-                    "width": 16,
-                    "x": 128,
-                    "y": 320
-                }
-            ],
-            "opacity": 1,
-            "type": "objectgroup",
-            "visible": true,
-            "x": 0,
-            "y": 0
-        },
-        {
-            "draworder": "topdown",
             "name": "Door-Spawn",
             "objects": [
                 {
@@ -6866,6 +6843,29 @@
             "type": "tilelayer",
             "visible": true,
             "width": 66,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "draworder": "topdown",
+            "name": "Player-Spawn",
+            "objects": [
+                {
+                    "gid": 135,
+                    "height": 45,
+                    "id": 1,
+                    "name": "Player-Spawn",
+                    "rotation": 0,
+                    "type": "",
+                    "visible": true,
+                    "width": 26,
+                    "x": 72.5,
+                    "y": 319
+                }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
             "x": 0,
             "y": 0
         }

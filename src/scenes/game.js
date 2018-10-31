@@ -22,41 +22,53 @@ export default class Game extends Phaser.Scene {
 
     this.load.tilemapTiledJSON('level-0', level);
 
-    console.log(level);
+    let playerSpawnLayer = _.find(level.layers, layer => {
+      return layer.name === 'Player-Spawn';
+    });
+
+    if (playerSpawnLayer) {
+      playerSpawnLayer = playerSpawnLayer.objects[0];
+    }
 
     //create playerd
     this.player = new Player({
       scene: this,
-      x: 200,
-      y: 400 //this needs to be the spawn player position
+      x: playerSpawnLayer.x || 200,
+      y: playerSpawnLayer.y - playerSpawnLayer.height * 0.5 || 400 //this needs to be the spawn player position
     });
 
     this.player.preload();
   }
 
-  create() {
-    this.createBackground(SCALE);
-    //create Level
+  createStaticLayers() {
     this.map = this.make.tilemap({ key: 'level-0' });
     const tiles = this.map.addTilesetImage('rock-moss-plants-doors', 'tiles');
 
-    this.mapLayerBackground = this.map.createStaticLayer(
-      'Rock-Background',
-      tiles,
-      0,
-      0
-    );
+    const tilemapLayers = _.filter(level.layers, layer => {
+      return layer.type === 'tilelayer';
+    });
 
-    this.mapLayerRockFloor = this.map.createStaticLayer(
-      'Rock-Foreground',
-      tiles,
-      0,
-      0
-    );
+    this.tilemapLayers = {};
 
-    this.mapLayerMoss = this.map.createStaticLayer('RockMoss', tiles, 0, 0);
+    _.each(tilemapLayers, tilemapLayer => {
+      this.tilemapLayers[
+        _.camelCase(tilemapLayer.name)
+      ] = this.map.createStaticLayer(tilemapLayer.name, tiles, 0, 0);
 
-    this.mapLayerRockFloor.setCollisionBetween(1, 999);
+      if (tilemapLayer.properties) {
+      }
+    });
+
+    console.log(this);
+  }
+
+  create() {
+    this.createBackground(SCALE);
+    //create Level
+
+    this.createStaticLayers();
+
+    this.tilemapLayers.setCollisionBetween(1, 999);
 
     this.physics.add.collider(this.player, this.mapLayerRockFloor);
 
@@ -87,7 +99,6 @@ export default class Game extends Phaser.Scene {
     });
 
     _.each(backgroundLayers, layer => {
-      console.log(layer);
       this.load.image(layer.name, levelImages[layer.name]);
     });
   }
