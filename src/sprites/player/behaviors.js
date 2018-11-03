@@ -12,7 +12,7 @@ const shakeIntensityScale = linearScale([225, 900], [0, 0.03]);
 const shakeDurationScale = linearScale([225, 900], [0, 200]);
 
 class Directions extends machina.Fsm {
-  constructor({ scene, entity }) {
+  constructor({ scene, entity, startDirection }) {
     const _aDelta = 35;
     const boosterOpts = {
       left: {
@@ -42,7 +42,7 @@ class Directions extends machina.Fsm {
 
     const directionalFsm = {
       namespace: 'player-directions',
-      initialState: 'left',
+      initialState: startDirection || 'left',
       states: {
         left: {
           _onEnter: function() {
@@ -116,8 +116,8 @@ class Aims extends machina.Fsm {
 }
 
 export default class Behaviors extends machina.Fsm {
-  constructor({ scene, entity }) {
-    const directions = new Directions({ scene, entity });
+  constructor({ scene, entity, startDirection }) {
+    const directions = new Directions({ scene, entity, startDirection });
 
     const aims = new Aims({ scene, entity });
 
