@@ -4,10 +4,15 @@ import flaresJSON from '../../assets/particles/flares.json';
 import flaresPNG from '../../assets/particles/flares.png';
 import Behaviors from './behaviors';
 
+const PLAYER_HEIGHT = 42;
+const PLAYER_WIDTH = 26;
+
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor({ scene, x, y }) {
-    super(scene, x, y, 'player');
-    this.direction = 'left';
+  constructor({ scene, x, y, direction }) {
+    let posX = x + PLAYER_WIDTH / 2;
+    let posY = y - PLAYER_HEIGHT;
+    super(scene, posX, posY, 'player');
+    this.direction = direction || 'left';
     this.movementState = 'idle';
     this.scene = scene;
   }
@@ -51,16 +56,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   create() {
     const { scene } = this;
     scene.physics.world.enable(this);
-
-    this.body.setSize(26, 45);
-    this.setOrigin(0.5, 0.64);
-
+    console.log(this.body);
+    this.body.setSize(PLAYER_WIDTH, PLAYER_HEIGHT);
+    this.body.setOffset(PLAYER_WIDTH * 0.75, PLAYER_HEIGHT * 0.5);
     this.body.setGravityY(325);
 
     this.behaviors = new Behaviors({
       scene: scene,
-      entity: this
+      entity: this,
+      startDirection: this.direction
     });
+
     this.thruster = this.definePrimaryThruster();
     this.footThruster = this.defineFootThruster();
 

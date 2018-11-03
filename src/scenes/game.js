@@ -34,7 +34,8 @@ export default class Game extends Phaser.Scene {
     this.player = new Player({
       scene: this,
       x: playerSpawnLayer.x || 200,
-      y: playerSpawnLayer.y - playerSpawnLayer.height * 0.5 || 400 //this needs to be the spawn player position
+      y: playerSpawnLayer.y || 400,
+      direction: 'right' //this needs to be the spawn player position
     });
 
     this.player.preload();
