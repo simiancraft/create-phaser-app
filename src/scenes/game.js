@@ -1,10 +1,8 @@
 import _ from 'lodash';
 import Phaser from 'phaser';
 
-import BackgroundGradient from '../assets/levels/processed/level-0/background-with-planets.png';
 import levelImages from '../assets/levels/processed/level-0/images.js';
 import level from '../assets/levels/processed/level-0/level-0.json';
-import rockTilemap from '../assets/levels/processed/level-0/rock-moss-plants-doors.png';
 import constants from '../config/constants';
 import Player from '../sprites/player';
 
