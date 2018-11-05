@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const { nodeModules } = require('./paths');
+const { phaser, phaserModule, nodeModules, dist, dev } = require('./paths');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 
@@ -24,7 +24,8 @@ const browserSyncPlugin = new BrowserSyncPlugin(
     host: process.env.IP || 'localhost',
     port: process.env.PORT || 3000,
     proxy: 'http://localhost:8080/'
-  }
+  },
+  { reload: false } // stop BrowserSync reloading page, leave it to Webpack Dev Server
 );
 
 // https://www.npmjs.com/package/webpack-bundle-analyzer
@@ -36,6 +37,12 @@ module.exports = (env, options) => {
       host: '0.0.0.0' // allows external access to host (e.g. for testing on mobile)
     },
     mode: 'development', // dictates webpack defaults (development = faster build, production = smaller filesize)
+    output: {
+      path: dist,
+      filename: '[name].bundle.js',
+      chunkFilename: '[name].bundle.js',
+      publicPath: '/'
+    },
     optimization: {
       splitChunks: {
         chunks: 'all' // separates vendor bundles from main
