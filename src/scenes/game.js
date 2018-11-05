@@ -61,9 +61,17 @@ export default class Game extends Phaser.Scene {
 
       //set props
       if (tilemapLayer.properties) {
+        let _thisLayer = this.tilemapLayers[layerName];
+
         if (tilemapLayer.properties.collision) {
-          this.tilemapLayers[layerName].setCollisionBetween(0, 999);
-          this.physics.add.collider(this.player, this.tilemapLayers[layerName]);
+          _thisLayer.setCollisionBetween(0, 999);
+          this.physics.add.collider(this.player, _thisLayer);
+        }
+
+        if (tilemapLayer.properties.blocksLight) {
+          this.lightrays.createPolygonsFromTilemapLayer({
+            tilemapLayer: _thisLayer
+          });
         }
       }
     });

@@ -184,10 +184,12 @@
          "opacity":1,
          "properties":
             {
+             "blocksLight":true,
              "collision":true
             },
          "propertytypes":
             {
+             "blocksLight":"bool",
              "collision":"bool"
             },
          "type":"tilelayer",

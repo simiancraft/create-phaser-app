@@ -228,6 +228,7 @@
  </layer>
  <layer name="Rock-Foreground" width="66" height="34">
   <properties>
+   <property name="blocksLight" type="bool" value="true"/>
    <property name="collision" type="bool" value="true"/>
   </properties>
   <data encoding="csv">
