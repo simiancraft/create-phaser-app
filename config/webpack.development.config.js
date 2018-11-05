@@ -87,6 +87,11 @@ module.exports = (env, options) => {
           ]
         }
       ]
+    },
+    node: {
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty'
     }
   };
 };
