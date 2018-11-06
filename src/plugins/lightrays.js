@@ -1,4 +1,7 @@
 import Phaser from 'phaser/src/phaser.js';
+import polygonClipping from 'polygon-clipping';
+
+import calculateClusters from './clumpy';
 
 export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   constructor(scene) {
@@ -24,18 +27,36 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     console.log(this);
   }
 
-  polygonFromTile(_t) {
+  polygonFromTile(tile) {
+    const {
+      pixelX,
+      pixelY,
+      height,
+      width,
+      faceBottom,
+      faceTop,
+      faceRight,
+      faceLeft
+    } = tile;
+
+    console.log({
+      faceTop,
+      faceRight,
+      faceBottom,
+      faceLeft
+    });
+
+    let pointList = [];
+
+    if (faceTop) {
+    }
+
     return [
-      _t.pixelX,
-      _t.pixelY,
-      _t.pixelX,
-      _t.pixelY + _t.height,
-      _t.pixelX + _t.width,
-      _t.pixelY + _t.height,
-      _t.pixelX + _t.width,
-      _t.pixelY,
-      _t.pixelX,
-      _t.pixelY
+      [pixelX, pixelY],
+      [pixelX, pixelY + height],
+      [pixelX + width, pixelY + height],
+      [pixelX + width, pixelY]
+      //  [pixelX, pixelY]
     ];
   }
 
@@ -49,14 +70,10 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
           return { ...acc, ...tileset };
         }, {});
     }
-
     let specialPoly = this.specialTiles[tile.index - 1];
-
     if (!specialPoly) {
       return false;
     }
-
-    console.log(tile.index);
     let ptList =
       specialPoly.objectgroup.objects.reduce((acc, obj) => {
         return (
@@ -65,30 +82,27 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
             obj.polygon.map(pt => {
               let _x = Math.round(pt.x + tile.pixelX);
               let _y = Math.round(pt.y + tile.pixelY);
-
               if (tile.faceLeft) {
                 _x = _x + tile.width;
               }
-
               let XY = [_x, _y];
-              console.log(tile.faceLeft, XY);
               return XY;
             })) ||
           acc
         );
       }, null) || [];
 
-    ptList = ptList.flat();
-    console.log(ptList);
+    ptList = ptList;
     return ptList;
   }
 
-  drawPolygon(polygon) {
+  drawPolygon(thisPolygon) {
+    var polygon = new Phaser.Geom.Polygon(thisPolygon);
     if (!this._polygonGraphics) {
       this._polygonGraphics = this.scene.add.graphics({ x: 0, y: 0 });
     }
 
-    this._polygonGraphics.lineStyle(2, 0x00aa00);
+    this._polygonGraphics.lineStyle(1, 0x00aa00);
     this._polygonGraphics.beginPath();
     this._polygonGraphics.moveTo(polygon.points[0].x, polygon.points[0].y);
     for (var i = 1; i < polygon.points.length; i++) {
@@ -103,27 +117,31 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
     let { tilesets } = level;
 
-    console.log(level);
+    let clusters = calculateClusters(tilemapLayer);
 
-    let polygonClusters = [];
+    console.log(clusters);
+
+    let polygonTiles = [];
     let ri, ci, colLength;
     let rowLength = data.length;
     for (ri = 0; ri < rowLength; ri++) {
       colLength = data[ri].length;
       for (ci = 0; ci < colLength; ci++) {
         let _t = data[ri][ci];
-
         if (_t.index > -1) {
-          console.log(_t);
-
           let thisPolygon =
             this.polygonFromTilesets(_t, tilesets) || this.polygonFromTile(_t);
 
-          var polygon = new Phaser.Geom.Polygon(thisPolygon);
-          this.drawPolygon(polygon);
+          polygonTiles.push({
+            tile: _t,
+            polygon: thisPolygon
+          });
+        } else {
         }
       }
     }
+
+    console.log(polygonTiles);
 
     this.createcircle();
   }
