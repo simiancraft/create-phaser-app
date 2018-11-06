@@ -1,7 +1,7 @@
 import Phaser from 'phaser/src/phaser.js';
 import polygonClipping from 'polygon-clipping';
 
-import calculateClusters from './clumpy';
+import tilemapLayerToTileClumps from './clumpy';
 
 export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   constructor(scene) {
@@ -117,7 +117,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
     let { tilesets } = level;
 
-    let clusters = calculateClusters(tilemapLayer);
+    let clusters = tilemapLayerToTileClumps(tilemapLayer);
 
     console.log(clusters);
 

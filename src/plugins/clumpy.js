@@ -1,4 +1,4 @@
-function calcualteTileClumps(tilemapLayer) {
+function tilemapLayerToTileClumps(tilemapLayer) {
   const clumps = [];
 
   for (let x = 0; x < tilemapLayer.width; x++) {
@@ -61,4 +61,4 @@ function clumpThatHasTile(tile, clumps) {
   return null;
 }
 
-export default calcualteTileClumps;
+export default tilemapLayerToTileClumps;
