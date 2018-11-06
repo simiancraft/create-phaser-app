@@ -24,12 +24,88 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     console.log(this);
   }
 
+  polygonFromTile(_t) {
+    return [
+      _t.pixelX,
+      _t.pixelY,
+      _t.pixelX,
+      _t.pixelY + _t.height,
+      _t.pixelX + _t.width,
+      _t.pixelY + _t.height,
+      _t.pixelX + _t.width,
+      _t.pixelY,
+      _t.pixelX,
+      _t.pixelY
+    ];
+  }
+
+  specialTiles = null;
+
+  polygonFromTilesets(tile, tilesets) {
+    if (!this.specialTiles) {
+      this.specialTiles = tilesets
+        .map(tileset => tileset.tiles)
+        .reduce((acc, tileset) => {
+          return { ...acc, ...tileset };
+        }, {});
+    }
+
+    let specialPoly = this.specialTiles[tile.index - 1];
+
+    if (!specialPoly) {
+      return false;
+    }
+
+    console.log(tile.index);
+    let ptList =
+      specialPoly.objectgroup.objects.reduce((acc, obj) => {
+        return (
+          (obj &&
+            obj.polygon &&
+            obj.polygon.map(pt => {
+              let _x = Math.round(pt.x + tile.pixelX);
+              let _y = Math.round(pt.y + tile.pixelY);
+
+              if (tile.faceLeft) {
+                _x = _x + tile.width;
+              }
+
+              let XY = [_x, _y];
+              console.log(tile.faceLeft, XY);
+              return XY;
+            })) ||
+          acc
+        );
+      }, null) || [];
+
+    ptList = ptList.flat();
+    console.log(ptList);
+    return ptList;
+  }
+
+  drawPolygon(polygon) {
+    if (!this._polygonGraphics) {
+      this._polygonGraphics = this.scene.add.graphics({ x: 0, y: 0 });
+    }
+
+    this._polygonGraphics.lineStyle(2, 0x00aa00);
+    this._polygonGraphics.beginPath();
+    this._polygonGraphics.moveTo(polygon.points[0].x, polygon.points[0].y);
+    for (var i = 1; i < polygon.points.length; i++) {
+      this._polygonGraphics.lineTo(polygon.points[i].x, polygon.points[i].y);
+    }
+    this._polygonGraphics.closePath();
+    this._polygonGraphics.strokePath();
+  }
+
   createPolygonLayerFromTilemapLayer({ tilemapLayer, level }) {
     let { tileHeight, tileWidth, data } = tilemapLayer.layer;
-    var graphics = this.scene.add.graphics({ x: 0, y: 0 });
-    graphics.lineStyle(2, 0x00aa00);
 
-    let polyList = [];
+    let { tilesets } = level;
+
+    console.log(level);
+
+    let polygonClusters = [];
     let ri, ci, colLength;
     let rowLength = data.length;
     for (ri = 0; ri < rowLength; ri++) {
@@ -40,27 +116,11 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
         if (_t.index > -1) {
           console.log(_t);
 
-          var polygon = new Phaser.Geom.Polygon([
-            _t.pixelX,
-            _t.pixelY,
-            _t.pixelX,
-            _t.pixelY + _t.height,
-            _t.pixelX + _t.width,
-            _t.pixelY + _t.height,
-            _t.pixelX + _t.width,
-            _t.pixelY
-          ]);
+          let thisPolygon =
+            this.polygonFromTilesets(_t, tilesets) || this.polygonFromTile(_t);
 
-          graphics.beginPath();
-
-          graphics.moveTo(polygon.points[0].x, polygon.points[0].y);
-
-          for (var i = 1; i < polygon.points.length; i++) {
-            graphics.lineTo(polygon.points[i].x, polygon.points[i].y);
-          }
-
-          graphics.closePath();
-          graphics.strokePath();
+          var polygon = new Phaser.Geom.Polygon(thisPolygon);
+          this.drawPolygon(polygon);
         }
       }
     }
