@@ -2,6 +2,7 @@ import Phaser from 'phaser/src/phaser.js';
 import polygonClipping from 'polygon-clipping';
 
 import tilemapLayerToTileClumps from './clumpy';
+import { polygonFromTile } from './poly';
 
 export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   constructor(scene) {
@@ -25,39 +26,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
   load({ name }) {
     console.log(this);
-  }
-
-  polygonFromTile(tile) {
-    const {
-      pixelX,
-      pixelY,
-      height,
-      width,
-      faceBottom,
-      faceTop,
-      faceRight,
-      faceLeft
-    } = tile;
-
-    console.log({
-      faceTop,
-      faceRight,
-      faceBottom,
-      faceLeft
-    });
-
-    let pointList = [];
-
-    if (faceTop) {
-    }
-
-    return [
-      [pixelX, pixelY],
-      [pixelX, pixelY + height],
-      [pixelX + width, pixelY + height],
-      [pixelX + width, pixelY]
-      //  [pixelX, pixelY]
-    ];
   }
 
   specialTiles = null;
@@ -130,7 +98,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
         let _t = data[ri][ci];
         if (_t.index > -1) {
           let thisPolygon =
-            this.polygonFromTilesets(_t, tilesets) || this.polygonFromTile(_t);
+            this.polygonFromTilesets(_t, tilesets) || polygonFromTile(_t);
 
           polygonTiles.push({
             tile: _t,
