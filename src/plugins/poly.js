@@ -11,7 +11,7 @@ function polygonFromTile(tile) {
 
 let specialTiles = null;
 
-function getSpecialTiles() {
+function getSpecialTiles(tilesets) {
   if (!specialTiles) {
     specialTiles = tilesets
       .map(tileset => tileset.tiles)
@@ -24,7 +24,7 @@ function getSpecialTiles() {
 }
 
 function getSpecialPoly(tile, tilesets) {
-  return getSpecialTiles()[tile.index - 1];
+  return getSpecialTiles(tilesets)[tile.index - 1];
 }
 
 function polygonFromTilesets(tile, tilesets) {
@@ -59,4 +59,9 @@ function polygonFromTilesets(tile, tilesets) {
   return ptList;
 }
 
+function tileToPolygon(tile, tilesets) {
+  return polygonFromTilesets(tile, tilesets) || polygonFromTile(tile);
+}
+
+export default tileToPolygon;
 export { polygonFromTile, polygonFromTilesets };

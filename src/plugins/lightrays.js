@@ -2,7 +2,7 @@ import Phaser from 'phaser/src/phaser.js';
 import polygonClipping from 'polygon-clipping';
 
 import tilemapLayerToTileClumps from './clumpy';
-import { polygonFromTile } from './poly';
+import tileToPolygon from './poly';
 
 export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   constructor(scene) {
@@ -26,42 +26,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
   load({ name }) {
     console.log(this);
-  }
-
-  specialTiles = null;
-
-  polygonFromTilesets(tile, tilesets) {
-    if (!this.specialTiles) {
-      this.specialTiles = tilesets
-        .map(tileset => tileset.tiles)
-        .reduce((acc, tileset) => {
-          return { ...acc, ...tileset };
-        }, {});
-    }
-    let specialPoly = this.specialTiles[tile.index - 1];
-    if (!specialPoly) {
-      return false;
-    }
-    let ptList =
-      specialPoly.objectgroup.objects.reduce((acc, obj) => {
-        return (
-          (obj &&
-            obj.polygon &&
-            obj.polygon.map(pt => {
-              let _x = Math.round(pt.x + tile.pixelX);
-              let _y = Math.round(pt.y + tile.pixelY);
-              if (tile.faceLeft) {
-                _x = _x + tile.width;
-              }
-              let XY = [_x, _y];
-              return XY;
-            })) ||
-          acc
-        );
-      }, null) || [];
-
-    ptList = ptList;
-    return ptList;
   }
 
   drawPolygon(thisPolygon) {
@@ -97,8 +61,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       for (ci = 0; ci < colLength; ci++) {
         let _t = data[ri][ci];
         if (_t.index > -1) {
-          let thisPolygon =
-            this.polygonFromTilesets(_t, tilesets) || polygonFromTile(_t);
+          let thisPolygon = tileToPolygon(_t, tilesets);
 
           polygonTiles.push({
             tile: _t,
