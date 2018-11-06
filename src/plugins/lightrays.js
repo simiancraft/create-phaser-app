@@ -24,49 +24,72 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     console.log(this);
   }
 
-  createPolygonLayerFromTilemapLayer({ tilemapLayer, scene }) {
+  createPolygonLayerFromTilemapLayer({ tilemapLayer, level }) {
     let { tileHeight, tileWidth, data } = tilemapLayer.layer;
-
-    console.log(data);
-
-    var polygon = new Phaser.Geom.Polygon([
-      0,
-      143,
-      0,
-      92,
-      110,
-      40,
-      244,
-      4,
-      330,
-      0,
-      458,
-      12,
-      574,
-      18,
-      600,
-      79,
-      594,
-      153,
-      332,
-      152,
-      107,
-      157
-    ]);
-
-    var graphics = scene.add.graphics({ x: 100, y: 200 });
-
+    var graphics = this.scene.add.graphics({ x: 0, y: 0 });
     graphics.lineStyle(2, 0x00aa00);
 
-    graphics.beginPath();
+    let polyList = [];
+    let ri, ci, colLength;
+    let rowLength = data.length;
+    for (ri = 0; ri < rowLength; ri++) {
+      colLength = data[ri].length;
+      for (ci = 0; ci < colLength; ci++) {
+        let _t = data[ri][ci];
 
-    graphics.moveTo(polygon.points[0].x, polygon.points[0].y);
+        if (_t.index > -1) {
+          console.log(_t);
 
-    for (var i = 1; i < polygon.points.length; i++) {
-      graphics.lineTo(polygon.points[i].x, polygon.points[i].y);
+          var polygon = new Phaser.Geom.Polygon([
+            _t.pixelX,
+            _t.pixelY,
+            _t.pixelX,
+            _t.pixelY + _t.height,
+            _t.pixelX + _t.width,
+            _t.pixelY + _t.height,
+            _t.pixelX + _t.width,
+            _t.pixelY
+          ]);
+
+          graphics.beginPath();
+
+          graphics.moveTo(polygon.points[0].x, polygon.points[0].y);
+
+          for (var i = 1; i < polygon.points.length; i++) {
+            graphics.lineTo(polygon.points[i].x, polygon.points[i].y);
+          }
+
+          graphics.closePath();
+          graphics.strokePath();
+        }
+      }
     }
 
-    graphics.closePath();
-    graphics.strokePath();
+    this.createcircle();
+  }
+
+  createcircle() {
+    this._lightsource =
+      this._lightsource || new Phaser.Geom.Circle(200, 300, 4);
+
+    this._lightCircleGraphics =
+      this._lightCircleGraphics ||
+      this.scene.add.graphics({
+        lineStyle: { color: 0xff0000 }
+      });
+
+    const game = this.scene.game;
+
+    //  only move when you click
+    const { worldX, worldY } = game.input.mousePointer;
+    this._lightsource.setPosition(worldX, worldY);
+    if (game.input.mousePointer.isDown) {
+      this._lightCircleGraphics.clear();
+      this._lightCircleGraphics.strokeCircleShape(this._lightsource);
+    }
+  }
+
+  lightFollowMouse() {
+    this.createcircle();
   }
 }

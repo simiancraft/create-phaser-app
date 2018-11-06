@@ -71,7 +71,7 @@ export default class Game extends Phaser.Scene {
         if (tilemapLayer.properties.blocksLight) {
           this.lightrays.createPolygonLayerFromTilemapLayer({
             tilemapLayer: _thisLayer,
-            scene: this
+            level: level
           });
         }
       }
@@ -91,6 +91,7 @@ export default class Game extends Phaser.Scene {
 
   update() {
     this.player.update();
+    this.lightrays.lightFollowMouse();
     this.backgroundImages.backgroundClouds.setTilePosition(
       this.backgroundImages.backgroundClouds.tilePositionX + 0.2,
       0
