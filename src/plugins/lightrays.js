@@ -1,5 +1,5 @@
 import Phaser from 'phaser/src/phaser.js';
-import polygonClipping from 'polygon-clipping';
+import PolyBool from 'polybooljs';
 
 import tilemapLayerToTileClumps from './clumpy';
 import tileToPolygon from './poly';
@@ -28,13 +28,13 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     console.log(this);
   }
 
-  drawPolygon(thisPolygon) {
+  drawPolygon(thisPolygon, lineStyle) {
     var polygon = new Phaser.Geom.Polygon(thisPolygon);
     if (!this._polygonGraphics) {
       this._polygonGraphics = this.scene.add.graphics({ x: 0, y: 0 });
     }
 
-    this._polygonGraphics.lineStyle(1, 0x00aa00);
+    this._polygonGraphics.lineStyle(1, lineStyle || 0x00aa00);
     this._polygonGraphics.beginPath();
     this._polygonGraphics.moveTo(polygon.points[0].x, polygon.points[0].y);
     for (var i = 1; i < polygon.points.length; i++) {
@@ -44,6 +44,34 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     this._polygonGraphics.strokePath();
   }
 
+  clusterToRegions(r) {
+    return {
+      regions: [r],
+      inverted: false
+    };
+  }
+
+  regionsToCombinedRegion(acc, next) {
+    return acc ? PolyBool.union(acc, next) : next;
+  }
+
+  regionsToFlatPolys(r) {
+    return r.regions.flat();
+  }
+
+  polygonClusterToCombinedRegion = cluster => {
+    return cluster
+      .map(this.clusterToRegions)
+      .reduce(this.regionsToCombinedRegion);
+  };
+
+  clustersToPolygonClusters = tilesets => cluster => {
+    function tileToPolygonTile(tile) {
+      return tileToPolygon(tile, tilesets);
+    }
+    return cluster.slice(0, 220).map(tileToPolygonTile);
+  };
+
   createPolygonLayerFromTilemapLayer({ tilemapLayer, level }) {
     let { tileHeight, tileWidth, data } = tilemapLayer.layer;
 
@@ -51,28 +79,16 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
     let clusters = tilemapLayerToTileClumps(tilemapLayer);
 
-    console.log(clusters);
+    this.occlusionPolygons = clusters
+      .map(this.clustersToPolygonClusters(tilesets))
+      .map(this.polygonClusterToCombinedRegion)
+      .map(this.regionsToFlatPolys);
 
-    let polygonTiles = [];
-    let ri, ci, colLength;
-    let rowLength = data.length;
-    for (ri = 0; ri < rowLength; ri++) {
-      colLength = data[ri].length;
-      for (ci = 0; ci < colLength; ci++) {
-        let _t = data[ri][ci];
-        if (_t.index > -1) {
-          let thisPolygon = tileToPolygon(_t, tilesets);
+    this.occlusionPolygons.forEach(pcluster => {
+      this.drawPolygon(pcluster);
+    });
 
-          polygonTiles.push({
-            tile: _t,
-            polygon: thisPolygon
-          });
-        } else {
-        }
-      }
-    }
-
-    console.log(polygonTiles);
+    console.log(this.occlusionPolygons);
 
     this.createcircle();
   }
@@ -98,7 +114,40 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     }
   }
 
+  drawRay(x, y) {
+    var line = new Phaser.Geom.Line(
+      this._lightsource.x,
+      this._lightsource.y,
+      x,
+      y
+    );
+
+    this.lineGraphics.strokeLineShape(line);
+  }
+
+  castRays() {
+    if (!this.occlusionPolygons || !this._lightsource) {
+      return;
+    }
+
+    if (!this.lineGraphics) {
+      this.lineGraphics = this.scene.add.graphics({
+        lineStyle: { width: 1, color: 0xaa00aa }
+      });
+    }
+
+    this.lineGraphics.clear();
+    this.occlusionPolygons.forEach(polygon => {
+      polygon.forEach(cord => {
+        this.drawRay(cord[0], cord[1]);
+      });
+    });
+
+    //console.log(this._lightsource);
+  }
+
   lightFollowMouse() {
+    this.castRays();
     this.createcircle();
   }
 }

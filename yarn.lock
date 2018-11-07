@@ -6091,6 +6091,10 @@ pngjs@^3.0.0:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.3.3.tgz#85173703bde3edac8998757b96e5821d0966a21b"
 
+polybooljs@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/polybooljs/-/polybooljs-1.2.0.tgz#b4390c2e079d4c262d3b2504c6288d95ba7a4758"
+
 polygon-clipping@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/polygon-clipping/-/polygon-clipping-0.9.0.tgz#0392bbbda236b3f2100aaf648391ddc3cc84934a"

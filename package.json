@@ -67,6 +67,7 @@
         "machina": "^2.0.2",
         "phaser": "3.15.1",
         "phaser-animated-tiles": "2.0.2",
+        "polybooljs": "^1.2.0",
         "polygon-clipping": "^0.9.0",
         "prettier": "1.13.5",
         "prettier-eslint": "8.8.1",

@@ -5,7 +5,8 @@ function polygonFromTile(tile) {
     [pixelX, pixelY],
     [pixelX, pixelY + height],
     [pixelX + width, pixelY + height],
-    [pixelX + width, pixelY]
+    [pixelX + width, pixelY],
+    [pixelX, pixelY]
   ];
 }
 
@@ -40,8 +41,8 @@ function polygonFromTilesets(tile, tilesets) {
         (obj &&
           obj.polygon &&
           obj.polygon.map(pt => {
-            let _x = Math.round(pt.x + tile.pixelX);
-            let _y = Math.round(pt.y + tile.pixelY);
+            let _x = Math.round(pt.x) + tile.pixelX;
+            let _y = Math.round(pt.y) + tile.pixelY;
             //this is some weird deal with the poly appearing in the wrong spot?
             // so I correct it here.
             // only affect the left ones though!
