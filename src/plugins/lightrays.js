@@ -72,6 +72,62 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     return cluster.slice(0, 220).map(tileToPolygonTile);
   };
 
+  occlusionPolygonToOcclusionSegments(occlusionPolygon) {
+    let polygonSegments = [];
+    let polygonPointsLength = occlusionPolygon.length;
+
+    for (let pti = 0; pti < polygonPointsLength; pti++) {
+      let currentPoint = occlusionPolygon[pti];
+      let nextPoint = occlusionPolygon[pti + 1];
+      //console.log(currentPoint, nextPoint);
+      if (nextPoint) {
+        let segment = {
+          a: { x: currentPoint[0], y: currentPoint[1] },
+          b: { x: nextPoint[0], y: nextPoint[1] }
+        };
+
+        //console.log(segment);
+        polygonSegments.push(segment);
+      }
+    }
+    return polygonSegments;
+  }
+
+  //kind of voodoo here.
+  getRaySegmentIntersection(ray, segment) {
+    let r_px = ray.a.x;
+    let r_py = ray.a.y;
+    let r_dx = ray.b.x - ray.a.x;
+    let r_dy = ray.b.y - ray.a.y;
+    let s_px = segment.a.x;
+    let s_py = segment.a.y;
+    let s_dx = segment.b.x - segment.a.x;
+    let s_dy = segment.b.y - segment.a.y;
+    let r_mag = Math.sqrt(r_dx * r_dx + r_dy * r_dy);
+    let s_mag = Math.sqrt(s_dx * s_dx + s_dy * s_dy);
+    if (r_dx / r_mag == s_dx / s_mag && r_dy / r_mag == s_dy / s_mag) {
+      return null;
+    }
+
+    let T2 =
+      (r_dx * (s_py - r_py) + r_dy * (r_px - s_px)) /
+      (s_dx * r_dy - s_dy * r_dx);
+    let T1 = (s_px + s_dx * T2 - r_px) / r_dx;
+
+    if (T1 < 0) {
+      return null;
+    }
+    if (T2 < 0 || T2 > 1) {
+      return null;
+    }
+
+    return {
+      x: r_px + r_dx * T1,
+      y: r_py + r_dy * T1,
+      param: T1
+    };
+  }
+
   createPolygonLayerFromTilemapLayer({ tilemapLayer, level }) {
     let { tileHeight, tileWidth, data } = tilemapLayer.layer;
 
@@ -88,7 +144,11 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       this.drawPolygon(pcluster);
     });
 
-    console.log(this.occlusionPolygons);
+    this.occlusionSegments = this.occlusionPolygons.map(
+      this.occlusionPolygonToOcclusionSegments
+    );
+
+    console.log(this.occlusionSegments);
 
     this.createcircle();
   }
@@ -142,8 +202,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
         this.drawRay(cord[0], cord[1]);
       });
     });
-
-    //console.log(this._lightsource);
   }
 
   lightFollowMouse() {
