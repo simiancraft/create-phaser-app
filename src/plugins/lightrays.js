@@ -69,8 +69,8 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     function tileToPolygonTile(tile) {
       return tileToPolygon(tile, tilesets);
     }
+    ///return cluster.slice(0, 300).map(tileToPolygonTile);
     return cluster.map(tileToPolygonTile);
-    //return cluster.map(tileToPolygonTile);
   };
 
   occlusionPolygonToOcclusionSegments(occlusionPolygon) {
@@ -154,7 +154,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     let allPts = this.segmentsToPoints(this.occlusionSegments);
     this.occlusionPoints = this.pointsToUniquePoints(allPts);
 
-    this.bindLightToMouse();
+    //this.bindLightToMouse();
   }
 
   bindLightToMouse() {
@@ -256,9 +256,9 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       return;
     }
 
-    const { worldX, worldY } = this.scene.game.input.mousePointer;
+    //const { worldX, worldY } = this.scene.game.input.mousePointer;
     //console.log(worldX, worldY);
-    //const { worldX, worldY } = this.sun;
+    const { worldX, worldY } = this.sun;
 
     if (!this.lineGraphics) {
       this.lineGraphics = this.scene.add.graphics({
@@ -309,14 +309,26 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     });
   }
 
-  lightFollowMouse() {
+  drawBakedLights() {
     if (!this.casted) {
       this.casted = this.castRays();
     }
-    console.log({
-      x: this.scene.game.input.mousePointer.worldX,
-      y: this.scene.game.input.mousePointer.worldY
+
+    this.scene.input.on('pointerdown', pointer => {
+      console.log(pointer);
+      this.sun = {
+        worldX: pointer.worldX,
+        worldY: pointer.worldY
+      };
+      this.casted = this.castRays();
     });
+  }
+
+  lightFollowMouse() {
+    // console.log({
+    //   x: this.scene.game.input.mousePointer.worldX,
+    //   y: this.scene.game.input.mousePointer.worldY
+    // });
     //this.createcircle();
   }
 }

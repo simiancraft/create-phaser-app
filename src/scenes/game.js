@@ -87,6 +87,7 @@ export default class Game extends Phaser.Scene {
     this.createCamera();
     this.handleDebugging();
     this.player.create();
+    this.lightrays.drawBakedLights();
   }
 
   update() {
