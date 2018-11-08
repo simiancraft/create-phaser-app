@@ -276,7 +276,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     let beams = [beam];
     var fuzzyRadius = 8;
     var p2 = Math.PI * 2;
-    var incrementByAngle = p2 / 3;
+    var incrementByAngle = p2 / 2;
     for (var angle = 0; angle < p2; angle += incrementByAngle) {
       var dx = Math.cos(angle) * fuzzyRadius;
       var dy = Math.sin(angle) * fuzzyRadius;
