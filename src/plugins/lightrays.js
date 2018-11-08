@@ -247,19 +247,19 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   }
 
   sun = {
-    worldX: 500,
-    worldY: 145
+    worldX: 555,
+    worldY: 49
   };
 
-  castRays() {
+  castRays(mode) {
     if (!this.occlusionPoints) {
       return;
     }
 
     //const { worldX, worldY } = this.scene.game.input.mousePointer;
-    //console.log(worldX, worldY);
-    const { worldX, worldY } = this.sun;
 
+    const { worldX, worldY } = this.sun;
+    console.log(worldX, worldY);
     if (!this.lineGraphics) {
       this.lineGraphics = this.scene.add.graphics({
         lineStyle: { width: 1, color: 0xaa00aa }
@@ -290,11 +290,12 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       beams.push(sympatheticBeam);
     }
 
-    this.drawLights(beams);
+    this.drawLights(beams, mode);
     return true;
   }
 
-  drawLights(beams) {
+  drawLights(beams, mode) {
+    console.log(mode);
     if (!this.lightGraphics) {
       this.lightGraphics = this.scene.add.graphics();
       this.lightGraphics.setAlpha(0.2);
@@ -306,6 +307,9 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       let thisBeam = new Phaser.Geom.Polygon(points);
       this.lightGraphics.fillStyle(0xffffff);
       this.lightGraphics.fillPoints(thisBeam.points, true);
+      this.lightGraphics.setBlendMode(mode || Phaser.BlendModes.SCREEN);
+      window.lightGraphics = this.lightGraphics;
+      window.Phaser = Phaser;
     });
   }
 
@@ -322,7 +326,13 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       };
       this.casted = this.castRays();
     });
+    window.redrawLights = this.redrawLights;
   }
+
+  redrawLights = mode => {
+    if (!mode) return;
+    this.castRays(mode);
+  };
 
   lightFollowMouse() {
     // console.log({
@@ -332,3 +342,14 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     //this.createcircle();
   }
 }
+
+/*
+window.keyz = _.keys(Phaser.BlendModes);
+window.key_ind = 0;
+window.dankdank = setInterval(() => {
+	if(key_ind > keyz.length - 1){ key_ind = 0} else {key_ind++}
+  let nextMode = keyz[key_ind]
+  console.log(nextMode)
+  redrawLights(Phaser.BlendModes[nextMode])
+}, 2000)
+*/
