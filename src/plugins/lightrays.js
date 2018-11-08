@@ -128,6 +128,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     };
   }
 
+  //TODO: simplify this so there's less mapping
   createPolygonLayerFromTilemapLayer({ tilemapLayer, level }) {
     let { tileHeight, tileWidth, data } = tilemapLayer.layer;
 
@@ -140,36 +141,29 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       .map(this.polygonClusterToCombinedRegion)
       .map(this.regionsToFlatPolys);
 
-    this.occlusionPolygons.forEach(pcluster => {
-      this.drawPolygon(pcluster);
-    });
+    // this.occlusionPolygons.forEach(pcluster => {
+    //   this.drawPolygon(pcluster);
+    // });
 
     this.occlusionSegments = this.occlusionPolygons
       .map(this.occlusionPolygonToOcclusionSegments)
       .flat();
 
-    this.createcircle();
+    let allPts = this.segmentsToPoints(this.occlusionSegments);
+    this.occlusionPoints = this.pointsToUniquePoints(allPts);
+
+    this.bindLightToMouse();
   }
 
-  createcircle() {
+  bindLightToMouse() {
     this._lightsource =
       this._lightsource || new Phaser.Geom.Circle(200, 300, 4);
-
-    this._lightCircleGraphics =
-      this._lightCircleGraphics ||
-      this.scene.add.graphics({
-        lineStyle: { color: 0xff0000 }
-      });
 
     const game = this.scene.game;
 
     //  only move when you click
     const { worldX, worldY } = game.input.mousePointer;
     this._lightsource.setPosition(worldX, worldY);
-    if (game.input.mousePointer.isDown) {
-      this._lightCircleGraphics.clear();
-      this._lightCircleGraphics.strokeCircleShape(this._lightsource);
-    }
   }
 
   drawRay({ a, b }) {
@@ -178,8 +172,29 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     this.lineGraphics.strokeLineShape(line);
   }
 
+  segmentsToPoints(segments) {
+    let segToPts = AB => {
+      return [AB.a, AB.b];
+    };
+
+    return segments.map(segToPts).flat();
+  }
+
+  pointsToUniquePoints(points) {
+    var set = {};
+    function toUniq(p) {
+      var key = `${p.x}-${p.y}`;
+      if (key in set) {
+        return false;
+      }
+      set[key] = true;
+      return true;
+    }
+    return points.filter(toUniq);
+  }
+
   castRays() {
-    if (!this.occlusionPolygons || !this._lightsource) {
+    if (!this.occlusionPoints || !this._lightsource) {
       return;
     }
 
@@ -199,8 +214,23 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     let segmentsLength = segments.length;
 
     const { worldX, worldY } = game.input.mousePointer;
+
+    //this.occlusionPoints
+
+    var uniqueAngles = [];
+    var uniquePoints = this.occlusionPoints;
+    let tolerance = 0.00001;
+    var len = uniquePoints.length;
+    for (var j = 0; j < len; j++) {
+      var uniquePoint = uniquePoints[j];
+      var angle = Math.atan2(uniquePoint.y - worldY, uniquePoint.x - worldX);
+      uniquePoint.angle = angle;
+      uniqueAngles.push(angle - tolerance, angle, angle + tolerance);
+    }
+
     let intersects = [];
-    for (var angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / 50) {
+    for (var j = 0; j < uniqueAngles.length; j++) {
+      var angle = uniqueAngles[j];
       // Calculate dx & dy from angle
       var dx = Math.cos(angle);
       var dy = Math.sin(angle);
@@ -211,29 +241,53 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       };
       // Find CLOSEST intersection
       var closestIntersect = null;
-      for (var i = 0; i < segmentsLength; i++) {
+      for (var i = 0; i < segments.length; i++) {
         var intersect = this.getRaySegmentIntersection(ray, segments[i]);
         if (!intersect) continue;
         if (!closestIntersect || intersect.param < closestIntersect.param) {
           closestIntersect = intersect;
         }
       }
+      // Intersect angle
+      if (!closestIntersect) {
+        continue;
+      }
+      closestIntersect.angle = angle;
       // Add to list of intersects
       intersects.push(closestIntersect);
     }
 
-    intersects.forEach(intersection => {
-      if (intersection) {
-        this.drawRay({
-          a: { x: worldX, y: worldY },
-          b: intersection
-        });
-      }
+    intersects = intersects.sort((a, b) => {
+      return a.angle - b.angle;
     });
+
+    this.drawLight(intersects);
+
+    // Add to list of intersects
+    // intersects.forEach(intersection => {
+    //   if (intersection) {
+    //     this.drawRay({
+    //       a: { x: worldX, y: worldY },
+    //       b: intersection
+    //     });
+    //   }
+    // });
+  }
+
+  drawLight(intersects) {
+    let points = intersects.map(i => [i.x, i.y]).flat();
+    let lightPolygon = new Phaser.Geom.Polygon(points);
+    if (!this.lightGraphics) {
+      this.lightGraphics = this.scene.add.graphics();
+      this.lightGraphics.setAlpha(0.5);
+    }
+    this.lightGraphics.clear();
+    this.lightGraphics.fillStyle(0xffffff);
+    this.lightGraphics.fillPoints(lightPolygon.points, true);
   }
 
   lightFollowMouse() {
     this.castRays();
-    this.createcircle();
+    //this.createcircle();
   }
 }
