@@ -69,6 +69,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     function tileToPolygonTile(tile) {
       return tileToPolygon(tile, tilesets);
     }
+    //return cluster.slice(0, 250).map(tileToPolygonTile);
     return cluster.map(tileToPolygonTile);
   };
 
@@ -193,51 +194,31 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     return points.filter(toUniq);
   }
 
-  castRays() {
-    if (!this.occlusionPoints || !this._lightsource) {
-      return;
-    }
+  uniquePointsToIntersects(uniquePoints, { x, y }) {
+    let intersects = [];
 
-    if (!this.lineGraphics) {
-      this.lineGraphics = this.scene.add.graphics({
-        lineStyle: { width: 1, color: 0xaa00aa }
-      });
-    }
-
-    let origin = {
-      x: 325,
-      y: 225
-    };
-
-    this.lineGraphics.clear();
     let segments = this.occlusionSegments;
-    let segmentsLength = segments.length;
-
-    const { worldX, worldY } = game.input.mousePointer;
-
-    //this.occlusionPoints
-
-    var uniqueAngles = [];
-    var uniquePoints = this.occlusionPoints;
     let tolerance = 0.00001;
     var len = uniquePoints.length;
+
+    var uniqueAngles = [];
     for (var j = 0; j < len; j++) {
       var uniquePoint = uniquePoints[j];
-      var angle = Math.atan2(uniquePoint.y - worldY, uniquePoint.x - worldX);
+      var angle = Math.atan2(uniquePoint.y - y, uniquePoint.x - x);
       uniquePoint.angle = angle;
       uniqueAngles.push(angle - tolerance, angle, angle + tolerance);
     }
 
-    let intersects = [];
-    for (var j = 0; j < uniqueAngles.length; j++) {
+    var anglesLength = uniqueAngles.length;
+    for (var j = 0; j < anglesLength; j++) {
       var angle = uniqueAngles[j];
       // Calculate dx & dy from angle
       var dx = Math.cos(angle);
       var dy = Math.sin(angle);
       // Ray from center of screen to mouse
       var ray = {
-        a: { x: worldX, y: worldY },
-        b: { x: worldX + dx, y: worldY + dy }
+        a: { x: x, y: y },
+        b: { x: x + dx, y: y + dy }
       };
       // Find CLOSEST intersection
       var closestIntersect = null;
@@ -261,33 +242,80 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       return a.angle - b.angle;
     });
 
-    this.drawLight(intersects);
-
-    // Add to list of intersects
-    // intersects.forEach(intersection => {
-    //   if (intersection) {
-    //     this.drawRay({
-    //       a: { x: worldX, y: worldY },
-    //       b: intersection
-    //     });
-    //   }
-    // });
+    return intersects;
   }
 
-  drawLight(intersects) {
-    let points = intersects.map(i => [i.x, i.y]).flat();
-    let lightPolygon = new Phaser.Geom.Polygon(points);
+  sun = {
+    worldX: 483,
+    worldY: 123
+  };
+
+  castRays() {
+    if (!this.occlusionPoints) {
+      return;
+    }
+
+    //const { worldX, worldY } = this.scene.game.input.mousePointer;
+    //console.log(worldX, worldY);
+    const { worldX, worldY } = this.sun;
+
+    if (!this.lineGraphics) {
+      this.lineGraphics = this.scene.add.graphics({
+        lineStyle: { width: 1, color: 0xaa00aa }
+      });
+    }
+
+    this.lineGraphics.clear();
+
+    let beam = this.uniquePointsToIntersects(this.occlusionPoints, {
+      x: worldX,
+      y: worldY
+    });
+
+    let beams = [beam];
+    var fuzzyRadius = 16;
+    var p2 = Math.PI * 2;
+    var incrementByAngle = p2 / 4;
+    for (var angle = 0; angle < p2; angle += incrementByAngle) {
+      var dx = Math.cos(angle) * fuzzyRadius;
+      var dy = Math.sin(angle) * fuzzyRadius;
+      let sympatheticBeam = this.uniquePointsToIntersects(
+        this.occlusionPoints,
+        {
+          x: worldX + dx,
+          y: worldY + dy
+        }
+      );
+      beams.push(sympatheticBeam);
+    }
+
+    this.drawLights(beams);
+    return true;
+  }
+
+  drawLights(beams) {
     if (!this.lightGraphics) {
       this.lightGraphics = this.scene.add.graphics();
-      this.lightGraphics.setAlpha(0.5);
+      this.lightGraphics.setAlpha(0.15);
     }
+
     this.lightGraphics.clear();
-    this.lightGraphics.fillStyle(0xffffff);
-    this.lightGraphics.fillPoints(lightPolygon.points, true);
+    beams.forEach(b => {
+      let points = b.map(i => [i.x, i.y]).flat();
+      let thisBeam = new Phaser.Geom.Polygon(points);
+      this.lightGraphics.fillStyle(0xffffff);
+      this.lightGraphics.fillPoints(thisBeam.points, true);
+    });
   }
 
   lightFollowMouse() {
-    this.castRays();
+    if (!this.casted) {
+      this.casted = this.castRays();
+    }
+    console.log({
+      x: this.scene.game.input.mousePointer.worldX,
+      y: this.scene.game.input.mousePointer.worldY
+    });
     //this.createcircle();
   }
 }
