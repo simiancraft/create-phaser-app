@@ -69,7 +69,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     function tileToPolygonTile(tile) {
       return tileToPolygon(tile, tilesets);
     }
-    return cluster.slice(0, 220).map(tileToPolygonTile);
+    return cluster.map(tileToPolygonTile);
   };
 
   occlusionPolygonToOcclusionSegments(occlusionPolygon) {
@@ -144,11 +144,9 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       this.drawPolygon(pcluster);
     });
 
-    this.occlusionSegments = this.occlusionPolygons.map(
-      this.occlusionPolygonToOcclusionSegments
-    );
-
-    console.log(this.occlusionSegments);
+    this.occlusionSegments = this.occlusionPolygons
+      .map(this.occlusionPolygonToOcclusionSegments)
+      .flat();
 
     this.createcircle();
   }
@@ -174,13 +172,8 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     }
   }
 
-  drawRay(x, y) {
-    var line = new Phaser.Geom.Line(
-      this._lightsource.x,
-      this._lightsource.y,
-      x,
-      y
-    );
+  drawRay({ a, b }) {
+    var line = new Phaser.Geom.Line(a.x, a.y, b.x, b.y);
 
     this.lineGraphics.strokeLineShape(line);
   }
@@ -196,11 +189,46 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       });
     }
 
+    let origin = {
+      x: 325,
+      y: 225
+    };
+
     this.lineGraphics.clear();
-    this.occlusionPolygons.forEach(polygon => {
-      polygon.forEach(cord => {
-        this.drawRay(cord[0], cord[1]);
-      });
+    let segments = this.occlusionSegments;
+    let segmentsLength = segments.length;
+
+    const { worldX, worldY } = game.input.mousePointer;
+    let intersects = [];
+    for (var angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / 50) {
+      // Calculate dx & dy from angle
+      var dx = Math.cos(angle);
+      var dy = Math.sin(angle);
+      // Ray from center of screen to mouse
+      var ray = {
+        a: { x: worldX, y: worldY },
+        b: { x: worldX + dx, y: worldY + dy }
+      };
+      // Find CLOSEST intersection
+      var closestIntersect = null;
+      for (var i = 0; i < segmentsLength; i++) {
+        var intersect = this.getRaySegmentIntersection(ray, segments[i]);
+        if (!intersect) continue;
+        if (!closestIntersect || intersect.param < closestIntersect.param) {
+          closestIntersect = intersect;
+        }
+      }
+      // Add to list of intersects
+      intersects.push(closestIntersect);
+    }
+
+    intersects.forEach(intersection => {
+      if (intersection) {
+        this.drawRay({
+          a: { x: worldX, y: worldY },
+          b: intersection
+        });
+      }
     });
   }
 
