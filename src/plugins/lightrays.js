@@ -69,12 +69,13 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     function tileToPolygonTile(tile) {
       return tileToPolygon(tile, tilesets);
     }
-    //return cluster.slice(0, 250).map(tileToPolygonTile);
     return cluster.map(tileToPolygonTile);
+    //return cluster.map(tileToPolygonTile);
   };
 
   occlusionPolygonToOcclusionSegments(occlusionPolygon) {
     let polygonSegments = [];
+
     let polygonPointsLength = occlusionPolygon.length;
 
     for (let pti = 0; pti < polygonPointsLength; pti++) {
@@ -246,8 +247,8 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   }
 
   sun = {
-    worldX: 483,
-    worldY: 123
+    worldX: 500,
+    worldY: 145
   };
 
   castRays() {
@@ -255,9 +256,9 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       return;
     }
 
-    //const { worldX, worldY } = this.scene.game.input.mousePointer;
+    const { worldX, worldY } = this.scene.game.input.mousePointer;
     //console.log(worldX, worldY);
-    const { worldX, worldY } = this.sun;
+    //const { worldX, worldY } = this.sun;
 
     if (!this.lineGraphics) {
       this.lineGraphics = this.scene.add.graphics({
@@ -273,9 +274,9 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     });
 
     let beams = [beam];
-    var fuzzyRadius = 16;
+    var fuzzyRadius = 8;
     var p2 = Math.PI * 2;
-    var incrementByAngle = p2 / 4;
+    var incrementByAngle = p2 / 3;
     for (var angle = 0; angle < p2; angle += incrementByAngle) {
       var dx = Math.cos(angle) * fuzzyRadius;
       var dy = Math.sin(angle) * fuzzyRadius;
@@ -296,7 +297,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   drawLights(beams) {
     if (!this.lightGraphics) {
       this.lightGraphics = this.scene.add.graphics();
-      this.lightGraphics.setAlpha(0.15);
+      this.lightGraphics.setAlpha(0.2);
     }
 
     this.lightGraphics.clear();
