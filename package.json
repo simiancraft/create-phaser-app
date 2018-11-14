@@ -16,7 +16,7 @@
         "coverage": "yarn test_base --coverage",
         "pretty": "npx eslint --fix \"src/**/*.js\"",
         "precommit": "yarn pretty",
-        "process-levels": "node ./level-processor"
+        "process-levels": "node ./level-processor/index.js"
     },
     "keywords": [
         "Phaser",
