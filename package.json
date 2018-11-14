@@ -30,12 +30,6 @@
         "game jam"
     ],
     "license": "MIT",
-    "dependencies": {
-        "lodash": "^4.17.10",
-        "machina": "^4.0.2",
-        "phaser": "3.15.1",
-        "phaser-animated-tiles": "2.0.2"
-    },
     "babel": {
         "presets": [
             "@babel/preset-env",
@@ -60,6 +54,12 @@
             "parser": "typescript",
             "style": "module"
         }
+    },
+    "dependencies": {
+        "lodash": "^4.17.10",
+        "machina": "^4.0.2",
+        "phaser": "3.15.1",
+        "phaser-animated-tiles": "2.0.2"
     },
     "devDependencies": {
         "@babel/core": "7.1.6",
