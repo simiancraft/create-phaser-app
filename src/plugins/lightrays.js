@@ -18,12 +18,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     console.log(this);
   }
 
-  test() {
-    console.log('HI EVERYONE');
-  }
-
-  entities = [];
-
   load({ name }) {
     console.log(this);
   }
@@ -132,7 +126,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
   //TODO: simplify this so there's less mapping
   createPolygonLayerFromTilemapLayer({ tilemapLayer, level }) {
-    let { tileHeight, tileWidth, data } = tilemapLayer.layer;
 
     let { tilesets } = level;
 
@@ -143,18 +136,12 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       .map(this.polygonClusterToCombinedRegion)
       .map(this.regionsToFlatPolys);
 
-    // this.occlusionPolygons.forEach(pcluster => {
-    //   this.drawPolygon(pcluster);
-    // });
-
     this.occlusionSegments = this.occlusionPolygons
       .map(this.occlusionPolygonToOcclusionSegments)
       .flat();
 
     let allPts = this.segmentsToPoints(this.occlusionSegments);
     this.occlusionPoints = this.pointsToUniquePoints(allPts);
-
-    //this.bindLightToMouse();
   }
 
   bindLightToMouse() {
@@ -343,6 +330,8 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   }
 }
 
+
+//Testing blend modes.
 /*
 window.keyz = _.keys(Phaser.BlendModes);
 window.key_ind = 0;

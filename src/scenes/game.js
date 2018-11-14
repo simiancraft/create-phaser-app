@@ -69,10 +69,10 @@ export default class Game extends Phaser.Scene {
         }
 
         if (tilemapLayer.properties.blocksLight) {
-          this.lightrays.createPolygonLayerFromTilemapLayer({
-            tilemapLayer: _thisLayer,
-            level: level
-          });
+          // this.lightrays.createPolygonLayerFromTilemapLayer({
+          //   tilemapLayer: _thisLayer,
+          //   level: level
+          // });
         }
       }
     });

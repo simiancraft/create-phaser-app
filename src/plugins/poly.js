@@ -28,6 +28,23 @@ function getSpecialPoly(tile, tilesets) {
   return getSpecialTiles(tilesets)[tile.index - 1];
 }
 
+function objToPolygon(tile, obj) {
+  function toFlatPts(pt) {
+    let _x = Math.round(pt.x) + tile.pixelX;
+    let _y = Math.round(pt.y) + tile.pixelY;
+    //this is some weird deal with the poly appearing in the wrong spot?
+    // so I correct it here.
+    // only affect the left ones though!
+    if (tile.faceLeft) {
+      _x = _x + tile.width;
+    }
+    let XY = [_x, _y];
+    return XY;
+  }
+
+  return obj && obj.polygon && obj.polygon.map(toFlatPts);
+}
+
 function polygonFromTilesets(tile, tilesets) {
   const specialPoly = getSpecialPoly(tile, tilesets);
 
@@ -35,29 +52,11 @@ function polygonFromTilesets(tile, tilesets) {
     return false;
   }
 
-  let ptList =
-    specialPoly.objectgroup.objects.reduce((acc, obj) => {
-      return (
-        (obj &&
-          obj.polygon &&
-          obj.polygon.map(pt => {
-            let _x = Math.round(pt.x) + tile.pixelX;
-            let _y = Math.round(pt.y) + tile.pixelY;
-            //this is some weird deal with the poly appearing in the wrong spot?
-            // so I correct it here.
-            // only affect the left ones though!
-            if (tile.faceLeft) {
-              _x = _x + tile.width;
-            }
-            let XY = [_x, _y];
-            return XY;
-          })) ||
-        acc
-      );
-    }, null) || [];
+  function objectGroupsToPoly(acc, obj) {
+    return objToPolygon(tile, obj) || acc;
+  }
 
-  ptList = ptList;
-  return ptList;
+  return specialPoly.objectgroup.objects.reduce(objectGroupsToPoly, null) || [];
 }
 
 function tileToPolygon(tile, tilesets) {
