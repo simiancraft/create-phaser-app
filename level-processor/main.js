@@ -19,7 +19,10 @@ import chalk from 'chalk';
 import globby from 'globby';
 import tileExtruder from 'tile-extruder';
 
-const log = console.log;
+import {
+  moveLayerImages,
+  templateImageImportFile
+} from './level-image-processing';
 
 const BASE_WIDTH = 16;
 const BASE_HEIGHT = 16;
@@ -30,18 +33,10 @@ const RAW_FOLDER = 'raw';
 const PROCESSED_FOLDER = 'processed';
 const INPUT_ONLY_PROP = 'InputOnly';
 
-const IMAGES_INPUT_PATH = path.resolve(
-  __dirname,
-  `../src/assets/levels/${RAW_FOLDER}/**/*.png`
-);
 const LEVELS_INPUT_PATH = path.resolve(
   __dirname,
   `../src/assets/levels/${RAW_FOLDER}/**/*.json`
 );
-
-async function getImagesPaths() {
-  return await globby([IMAGES_INPUT_PATH]);
-}
 
 async function getLevelsPaths() {
   return await globby([LEVELS_INPUT_PATH]);
@@ -60,7 +55,7 @@ function extrudeTileset({ input, output, width, height, spacing, margin }) {
       output
     );
   } catch (err) {
-    log(err);
+    console.log(err);
   }
 }
 
@@ -85,25 +80,27 @@ async function rewriteLevel(inputPath, index) {
 
   let gid = 1;
 
+  function tileSetToFullyEmbeddedTileset(tileset) {
+    //the user embedded the tilemap, so just.. give it back!
+    if (!tileset.source) {
+      return tileset;
+    }
+
+    // the user has NOT embedded the tileset, so we are
+    // going to go get it and the 'output'
+    // in the processed folder, that shall be embedded
+    let _jsonSource = tileset.source.replace('.tsx', '.json');
+
+    let externalTileset = fs.readFileSync(
+      path.resolve(__dirname, thisDir, _jsonSource)
+    );
+
+    return JSON.parse(externalTileset);
+  }
+
   const updatedTilesets = tilesets
-    //tilesets To fully embedded tilesets
-    .map(tileset => {
-      //the user embedded the tilemap, so just.. give it back!
-      if (!tileset.source) {
-        return tileset;
-      }
+    .map(tileSetToFullyEmbeddedTileset)
 
-      // the user has NOT embedded the tileset, so we are
-      // going to go get it and the 'output'
-      // in the processed folder, that shall be embedded
-      let _jsonSource = tileset.source.replace('.tsx', '.json');
-
-      let externalTileset = fs.readFileSync(
-        path.resolve(__dirname, thisDir, _jsonSource)
-      );
-
-      return JSON.parse(externalTileset);
-    })
     //tilesets to 'fixed' tilesets
     .map((tileset, index) => {
       console.log('tileset');
@@ -174,97 +171,18 @@ async function rewriteLevel(inputPath, index) {
     }
   };
 
-  moveLayerImages(newLevel, thisDir);
-  templateImageImportFile(newLevel, thisDir);
+  moveLayerImages(newLevel, thisDir, getOutputPath(thisDir));
+  templateImageImportFile(newLevel, thisDir, getOutputPath(thisDir));
 
   //write the completed Json!
   const newLevelFileContents = JSON.stringify(newLevel);
   return fs.writeFileSync(outputPath, newLevelFileContents);
 }
 
-function moveLayerImages(embeddedLevel, thisDir) {
-  const outputPath = getOutputPath(thisDir);
-
-  function moveImageToProcessedFolder(img) {
-    log(chalk.green(`➡️ ${img}`));
-    var inStr = fs.createReadStream(`${thisDir}/${img}`);
-    var outStr = fs.createWriteStream(`${outputPath}/${img}`);
-    inStr.pipe(outStr);
-  }
-
-  const { layers } = embeddedLevel;
-  const layersWithimages = layers
-    .filter(layer => {
-      return layer.image;
-    })
-    .map(x => x.image);
-
-  layersWithimages.forEach(moveImageToProcessedFolder);
-}
-
-function kebabToCamel(name) {
-  return name.replace(/-([a-z])/g, function(g) {
-    return g[1].toUpperCase();
-  });
-}
-
-function templateImageImportFile(embeddedLevel, thisDir) {
-  const { layers, tilesets } = embeddedLevel;
-  const outputPath = `${getOutputPath(thisDir)}/images.js`;
-
-  const templateImgImport = (file, name) => {
-    let cleanName = kebabToCamel(name);
-    return `import ${cleanName} from './${file}';`;
-  };
-
-  const layersWithimages = layers.filter(layer => {
-    return layer.image;
-  });
-
-  const tileSetsWithImages = tilesets.filter(tileset => {
-    return tileset.image;
-  });
-
-  const layerImageImports = layersWithimages
-    .map(({ image, name }) => templateImgImport(image, name))
-    .join(`\n`);
-
-  const tilesetImageImports = tileSetsWithImages
-    .map(({ image, name }) => templateImgImport(image, name))
-    .join(`\n`);
-
-  const layerImageExportNames = layersWithimages
-    .map(({ name }) => {
-      let cleanName = kebabToCamel(name);
-      return `'${name}':${cleanName}`;
-    })
-    .join(',\n');
-
-  const tilesetImageExportNames = tileSetsWithImages
-    .map(({ name }) => {
-      let cleanName = kebabToCamel(name);
-      return `'${name}':${cleanName}`;
-    })
-    .join(',\n');
-
-  const fileTemplate = `
-\n
-${layerImageImports}
-\n
-${tilesetImageImports}
-export default {
-  \n${layerImageExportNames},
-  \n${tilesetImageExportNames}
-};
-`;
-
-  return fs.writeFileSync(outputPath, fileTemplate);
-}
-
 function logProcess(input, output) {
-  log(chalk.white('\n'));
-  log('IN ', chalk.yellow(input));
-  log('OUT', chalk.magenta(output));
+  console.log(chalk.white('\n'));
+  console.log('IN ', chalk.yellow(input));
+  console.log('OUT', chalk.magenta(output));
 }
 
 async function processLevels(data) {
@@ -295,5 +213,5 @@ function prepOutputDirectory() {
 prepOutputDirectory();
 
 processLevels().then(() => {
-  log(chalk.green('All Levels Processed'));
+  console.log(chalk.green('All Levels Processed'));
 });
