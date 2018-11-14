@@ -65,6 +65,18 @@ function getOutputPath(inputPath) {
   );
 }
 
+function withoutInputLayers(layer) {
+  if (
+    layer.properties &&
+    layer.properties[INPUT_ONLY_PROP] &&
+    layer.properties[INPUT_ONLY_PROP] === true
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
 async function rewriteLevel(inputPath, index) {
   inputPath = path.resolve(inputPath);
   const outputPath = getOutputPath(inputPath);
@@ -80,88 +92,67 @@ async function rewriteLevel(inputPath, index) {
 
   let gid = 1;
 
-  function tileSetToFullyEmbeddedTileset(tileset) {
+  function tileSetToFullyEmbeddedTileset(tileset, index) {
     //the user embedded the tilemap, so just.. give it back!
     if (!tileset.source) {
       return tileset;
     }
-
     // the user has NOT embedded the tileset, so we are
     // going to go get it and the 'output'
     // in the processed folder, that shall be embedded
     let _jsonSource = tileset.source.replace('.tsx', '.json');
-
     let externalTileset = fs.readFileSync(
       path.resolve(__dirname, thisDir, _jsonSource)
     );
-
     return JSON.parse(externalTileset);
+  }
+
+  function tilesetToCorrectedTileset(tileset, index) {
+    console.log('tileset');
+    const {
+      image,
+      tileheight,
+      tilewidth,
+      spacing,
+      margin,
+      columns,
+      imageheight,
+      imagewidth,
+      type
+    } = tileset;
+    console.log('type', type);
+    console.log('dir', thisDir);
+    console.log('img', image);
+    const levelImageInputPath = path.resolve(__dirname, thisDir, image);
+    const levelImageOutputPath = getOutputPath(levelImageInputPath);
+    extrudeTileset({
+      input: levelImageInputPath,
+      output: levelImageOutputPath,
+      width: tilewidth,
+      height: tileheight,
+      spacing: spacing,
+      margin: margin
+    });
+    const rows = Math.round(imageheight / (tileheight + spacing));
+    const currentGid = gid;
+    gid = gid + tileset.tilecount;
+    return {
+      ...tileset,
+      ...{
+        margin: margin + 1,
+        spacing: spacing + 2,
+        imageheight: rows * (tileheight + spacing + 2),
+        imagewidth: columns * (tilewidth + spacing + 2),
+        firstgid: currentGid
+      }
+    };
   }
 
   const updatedTilesets = tilesets
     .map(tileSetToFullyEmbeddedTileset)
+    .map(tilesetToCorrectedTileset);
 
-    //tilesets to 'fixed' tilesets
-    .map((tileset, index) => {
-      console.log('tileset');
-      //console.log(tileset);
-
-      const {
-        image,
-        tileheight,
-        tilewidth,
-        spacing,
-        margin,
-        columns,
-        imageheight,
-        imagewidth,
-        type
-      } = tileset;
-
-      console.log('type', type);
-      console.log('dir', thisDir);
-      console.log('img', image);
-
-      const levelImageInputPath = path.resolve(__dirname, thisDir, image);
-      const levelImageOutputPath = getOutputPath(levelImageInputPath);
-
-      extrudeTileset({
-        input: levelImageInputPath,
-        output: levelImageOutputPath,
-        width: tilewidth,
-        height: tileheight,
-        spacing: spacing,
-        margin: margin
-      });
-
-      const rows = Math.round(imageheight / (tileheight + spacing));
-
-      const currentGid = gid;
-      gid = gid + tileset.tilecount;
-
-      return {
-        ...tileset,
-        ...{
-          margin: margin + 1,
-          spacing: spacing + 2,
-          imageheight: rows * (tileheight + spacing + 2),
-          imagewidth: columns * (tilewidth + spacing + 2),
-          firstgid: currentGid
-        }
-      };
-    });
-
-  const updatedLayers = layers.filter(layer => {
-    if (
-      layer.properties &&
-      layer.properties[INPUT_ONLY_PROP] &&
-      layer.properties[INPUT_ONLY_PROP] === true
-    ) {
-      return false;
-    }
-
-    return true;
-  });
+  const updatedLayers = layers.filter(withoutInputLayers);
 
   const newLevel = {
     ...level,
