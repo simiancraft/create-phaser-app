@@ -12,7 +12,8 @@
         "prettier/prettier": [
             "warn",
             {
-                "singleQuote": true
+                "singleQuote": true,
+                "endOfLine": "lf"
             }
         ],
         "no-unused-vars": [

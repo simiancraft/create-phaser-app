@@ -2,35 +2,38 @@ import tilemapLayerToTileClumps from './clumpy';
 import tileToPolygon from './tile-to-polygon';
 
 const clustersToPolygonClusters = tilesets => cluster => {
-  function tileToPolygonTile(tile) {
-    return tileToPolygon(tile, tilesets);
-  }
-  ///return cluster.slice(0, 300).map(tileToPolygonTile);
-  return cluster.map(tileToPolygonTile);
+    function tileToPolygonTile(tile) {
+        return tileToPolygon(tile, tilesets);
+    }
+    ///return cluster.slice(0, 300).map(tileToPolygonTile);
+    return cluster.map(tileToPolygonTile);
 };
 
 function polygonClusterToCombinedRegion(cluster) {
-  return cluster
-    .map(this.clusterToRegions)
-    .reduce(this.regionsToCombinedRegion);
+    return cluster
+        .map(this.clusterToRegions)
+        .reduce(this.regionsToCombinedRegion);
 }
 
 function regionsToFlatPolys(r) {
-  return r.regions.flat();
+    return r.regions.flat();
+}
+
+function tilemapLayerToPolygons({ tilemapLayer, level }) {
+    let { tilesets } = level;
+    let clusters = tilemapLayerToTileClumps(tilemapLayer);
+
+    let polygonLayer = clusters
+        .map(clustersToPolygonClusters(tilesets))
+        .map(polygonClusterToCombinedRegion);
+
+    console.log(polygonLayer);
+
+    return polygonLayer;
 }
 
 function tilemapLayerToPolygonLayer({ tilemapLayer, level }) {
-  let { tilesets } = level;
-  let clusters = tilemapLayerToTileClumps(tilemapLayer);
-
-  let polygonLayer = clusters
-    .map(clustersToPolygonClusters(tilesets))
-    .map(polygonClusterToCombinedRegion)
-    .map(regionsToFlatPolys);
-
-  console.log(polygonLayer);
-
-  return polygonLayer;
+    const layerPolygons = tilemapLayerToPolygons({ tilemapLayer, level });
 }
 
 export default tilemapLayerToPolygonLayer;
