@@ -37,7 +37,6 @@ function tilemapLayerToPolygonLayer({ tilemapLayer, level }) {
 }
 
 export default tilemapLayerToPolygonLayer;
-
 /*
 {
 "draworder":"topdown",
@@ -51,11 +50,11 @@ export default tilemapLayerToPolygonLayer;
             {
                 "x":0,
                 "y":0
-            }, 
+            },
             {
                 "x":22,
                 "y":78.3333333333333
-            }, 
+            },
             {
                 "x":113,
                 "y":78.6666666666667
@@ -66,7 +65,7 @@ export default tilemapLayerToPolygonLayer;
         "width":0,
         "x":388.666666666667,
         "y":251.333333333333
-    }, 
+    },
     {
         "height":0,
         "id":23,
@@ -75,15 +74,15 @@ export default tilemapLayerToPolygonLayer;
             {
                 "x":0,
                 "y":0
-            }, 
+            },
             {
                 "x":36,
                 "y":0.333333333333371
-            }, 
+            },
             {
                 "x":39,
                 "y":27.6666666666667
-            }, 
+            },
             {
                 "x":-5,
                 "y":28.6666666666667
