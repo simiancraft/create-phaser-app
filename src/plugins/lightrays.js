@@ -126,7 +126,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
   //TODO: simplify this so there's less mapping
   createPolygonLayerFromTilemapLayer({ tilemapLayer, level }) {
-
     let { tilesets } = level;
 
     let clusters = tilemapLayerToTileClumps(tilemapLayer);
@@ -329,7 +328,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     //this.createcircle();
   }
 }
-
 
 //Testing blend modes.
 /*
