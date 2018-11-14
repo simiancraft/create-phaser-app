@@ -12,36 +12,36 @@ import StartScene from './scenes/start';
 window.Phaser = Phaser;
 
 const config = {
-  type: Phaser.AUTO,
-  width: constants.WIDTH,
-  height: constants.HEIGHT,
-  plugins: {
+    type: Phaser.AUTO,
+    width: constants.WIDTH,
+    height: constants.HEIGHT,
+    plugins: {
+        scene: [
+            {
+                key: 'LightraysPlugin',
+                plugin: LightraysPlugin,
+                mapping: 'lightrays'
+            }
+        ]
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 400 },
+            debug: false
+        }
+    },
     scene: [
-      {
-        key: 'LightraysPlugin',
-        plugin: LightraysPlugin,
-        mapping: 'lightrays'
-      }
-    ]
-  },
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 400 },
-      debug: false
+        //StartScene,
+        GameScene
+    ],
+    pixelArt: true,
+    antialias: false,
+    callbacks: {
+        postBoot: game => {
+            game.renderer.addPipeline('Custom', new CustomPipeline(game));
+        }
     }
-  },
-  scene: [
-    //StartScene,
-    GameScene
-  ],
-  pixelArt: true,
-  antialias: false,
-  callbacks: {
-    postBoot: game => {
-      game.renderer.addPipeline('Custom', new CustomPipeline(game));
-    }
-  }
 };
 
 const game = new Phaser.Game(config);
