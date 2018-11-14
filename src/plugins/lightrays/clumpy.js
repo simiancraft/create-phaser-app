@@ -1,3 +1,8 @@
+/* 
+This file is a set of functions whose purpose is to find 'islands' or 'clumps'
+Of tiles in a tilemap with a simple recursive flodfill
+*/
+
 function tilemapLayerToTileClumps(tilemapLayer) {
   const clumps = [];
 

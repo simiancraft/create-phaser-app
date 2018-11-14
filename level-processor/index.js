@@ -28,6 +28,8 @@ const INPUT_ONLY_PROP = 'InputOnly';
 
 const globby = require('globby');
 
+const tilemapToPolygonLayer = require('./');
+
 const IMAGES_INPUT_PATH = path.resolve(
   __dirname,
   `../src/assets/levels/${RAW_FOLDER}/**/*.png`

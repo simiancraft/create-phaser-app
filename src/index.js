@@ -3,7 +3,7 @@ import './font-loader';
 
 import Phaser from 'phaser';
 
-import LightraysPlugin from '../src/plugins/lightrays';
+import LightraysPlugin from '../src/plugins/lightrays/index.js';
 import constants from './config/constants';
 import CustomPipeline from './rendering-pipelines/CustomPipeline';
 import GameScene from './scenes/game';

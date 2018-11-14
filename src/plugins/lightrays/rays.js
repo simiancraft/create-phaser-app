@@ -32,7 +32,7 @@ function getRaySegmentIntersection(ray, segment) {
   };
 }
 
-function uniquePointsToIntersects(uniquePoints, segments, { x, y }) {
+function calulateRaycastPolygon(uniquePoints, segments, { x, y }) {
   let intersects = [];
   let tolerance = 0.00001;
   var len = uniquePoints.length;
@@ -82,4 +82,6 @@ function uniquePointsToIntersects(uniquePoints, segments, { x, y }) {
   return intersects;
 }
 
-export { getRaySegmentIntersection, uniquePointsToIntersects };
+export default calulateRaycastPolygon;
+
+export { getRaySegmentIntersection, calulateRaycastPolygon };

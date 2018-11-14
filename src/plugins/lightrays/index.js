@@ -2,8 +2,8 @@ import Phaser from 'phaser/src/phaser.js';
 import PolyBool from 'polybooljs';
 
 import tilemapLayerToTileClumps from './clumpy';
-import tileToPolygon from './poly';
-import { getRaySegmentIntersection } from './rays';
+import calulateRaycastPolygon from './rays';
+import tileToPolygon from './tile-to-polygon';
 
 export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   constructor(scene) {
@@ -47,24 +47,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     return acc ? PolyBool.union(acc, next) : next;
   }
 
-  regionsToFlatPolys(r) {
-    return r.regions.flat();
-  }
-
-  polygonClusterToCombinedRegion = cluster => {
-    return cluster
-      .map(this.clusterToRegions)
-      .reduce(this.regionsToCombinedRegion);
-  };
-
-  clustersToPolygonClusters = tilesets => cluster => {
-    function tileToPolygonTile(tile) {
-      return tileToPolygon(tile, tilesets);
-    }
-    ///return cluster.slice(0, 300).map(tileToPolygonTile);
-    return cluster.map(tileToPolygonTile);
-  };
-
   occlusionPolygonToOcclusionSegments(occlusionPolygon) {
     let polygonSegments = [];
 
@@ -88,15 +70,11 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   }
 
   //TODO: simplify this so there's less mapping
-  createPolygonLayerFromTilemapLayer({ tilemapLayer, level }) {
-    let { tilesets } = level;
-
-    let clusters = tilemapLayerToTileClumps(tilemapLayer);
-
-    this.occlusionPolygons = clusters
-      .map(this.clustersToPolygonClusters(tilesets))
-      .map(this.polygonClusterToCombinedRegion)
-      .map(this.regionsToFlatPolys);
+  createOcclusionLayer({ tilemapLayer, level }) {
+    this.occlusionPolygons = tilemapLayerToPolygonLayer({
+      tilemapLayer,
+      level
+    });
 
     this.occlusionSegments = this.occlusionPolygons
       .map(this.occlusionPolygonToOcclusionSegments)
@@ -104,12 +82,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
     let allPts = this.segmentsToPoints(this.occlusionSegments);
     this.occlusionPoints = this.pointsToUniquePoints(allPts);
-  }
-
-  drawRay({ a, b }) {
-    var line = new Phaser.Geom.Line(a.x, a.y, b.x, b.y);
-
-    this.lineGraphics.strokeLineShape(line);
   }
 
   segmentsToPoints(segments) {
@@ -155,7 +127,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
     this.lineGraphics.clear();
 
-    let beam = uniquePointsToIntersects(
+    let beam = calulateRaycastPolygon(
       this.occlusionPoints,
       this.occlusionSegments,
       {
@@ -171,7 +143,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     for (var angle = 0; angle < p2; angle += incrementByAngle) {
       var dx = Math.cos(angle) * fuzzyRadius;
       var dy = Math.sin(angle) * fuzzyRadius;
-      let sympatheticBeam = uniquePointsToIntersects(
+      let sympatheticBeam = calulateRaycastPolygon(
         this.occlusionPoints,
         this.occlusionSegments,
         {
