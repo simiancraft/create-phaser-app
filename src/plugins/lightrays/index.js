@@ -18,7 +18,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     console.log(this);
   }
 
-  drawPolygon(thisPolygon, lineStyle) {
+  drawPolygon = (thisPolygon, lineStyle) => {
     var polygon = new Phaser.Geom.Polygon(thisPolygon);
     if (!this._polygonGraphics) {
       this._polygonGraphics = this.scene.add.graphics({ x: 0, y: 0 });
@@ -32,7 +32,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     }
     this._polygonGraphics.closePath();
     this._polygonGraphics.strokePath();
-  }
+  };
 
   occlusionPolygonToOcclusionSegments(occlusionPolygon) {
     let polygonSegments = [];
@@ -68,7 +68,11 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   createOcclusionLayer({ layer, level }) {
     this.occlusionPolygons = layer.objects.map(this.layerObjToOcclusionPolygon);
 
-    this.drawPolygon(this.occlusionPolygons);
+    console.log(this.occlusionPolygons);
+
+    this.occlusionPolygons.forEach(pGon => {
+      this.drawPolygon(pGon);
+    });
 
     this.occlusionSegments = this.occlusionPolygons
       .map(this.occlusionPolygonToOcclusionSegments)
@@ -76,6 +80,14 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
 
     let allPts = this.segmentsToPoints(this.occlusionSegments);
     this.occlusionPoints = this.pointsToUniquePoints(allPts);
+
+    this.occlusionLayer = {
+      occlusionPolygons: this.occlusionPolygons,
+      occlusionSegments: this.occlusionSegments,
+      occlusionPoints: this.occlusionPoints
+    };
+
+    return this.occlusionLayer;
   }
 
   segmentsToPoints(segments) {
@@ -176,14 +188,14 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       this.casted = this.castRays();
     }
 
-    this.scene.input.on('pointerdown', pointer => {
-      console.log(pointer);
-      this.sun = {
-        worldX: pointer.worldX,
-        worldY: pointer.worldY
-      };
-      this.casted = this.castRays();
-    });
+    // this.scene.input.on('pointerdown', pointer => {
+    //   console.log(pointer);
+    //   this.sun = {
+    //     worldX: pointer.worldX,
+    //     worldY: pointer.worldY
+    //   };
+    //   this.casted = this.castRays();
+    // });
     window.redrawLights = this.redrawLights;
   }
 

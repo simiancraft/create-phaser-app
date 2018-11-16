@@ -56,19 +56,21 @@ function layerDataTo2d(layer, level) {
     let tile = {
       id: t,
       index: data[t] - 1,
-      pixelX: x,
-      pixelY: y,
+      x: x,
+      y: y,
+      pixelX: x * tilewidth,
+      pixelY: y * tileheight,
       width: tilewidth,
       height: tileheight
     };
 
     row.push(tile);
-    y++;
+    x++;
 
-    if (y === width) {
+    if (x === width) {
       tiles.push(row);
-      y = 0;
-      x++;
+      x = 0;
+      y++;
       row = [];
     }
   }

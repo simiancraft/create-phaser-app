@@ -31,14 +31,22 @@ function objToPolygon(tile, obj) {
   function toFlatPts(pt) {
     let _x = Math.round(pt.x) + tile.pixelX;
     let _y = Math.round(pt.y) + tile.pixelY;
-    //this is some weird deal with the poly appearing in the wrong spot?
-    // so I correct it here.
-    // only affect the left ones though!
+
     let XY = [_x, _y];
     return XY;
   }
 
-  return obj && obj.polygon && obj.polygon.map(toFlatPts);
+  function clockwise(a, b) {
+    return a.x - b.x || a.y - b.y;
+  }
+
+  let poly = null;
+
+  if (obj && obj.polygon) {
+    poly = obj.polygon.map(toFlatPts);
+  }
+
+  return poly;
 }
 
 function polygonFromTilesets(tile, tilesets) {

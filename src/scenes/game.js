@@ -40,7 +40,6 @@ export default class Game extends Phaser.Scene {
   }
 
   isOcclusionPolygonLayer(layer) {
-    console.log(layer);
     return (
       layer.type == 'objectgroup' &&
       layer.properties &&
@@ -50,8 +49,8 @@ export default class Game extends Phaser.Scene {
   }
 
   processLayer = layer => {
+    let layerName = _.camelCase(layer.name);
     if (layer.type === 'tilelayer') {
-      let layerName = _.camelCase(layer.name);
       this.tilemapLayers[layerName] = this.map.createStaticLayer(
         layer.name,
         this.tilesetImages.tiles,
@@ -69,11 +68,13 @@ export default class Game extends Phaser.Scene {
       }
     }
     if (this.isOcclusionPolygonLayer(layer)) {
-      this.lightrays.createOcclusionLayer({
+      this.occlusionLayers[layerName] = this.lightrays.createOcclusionLayer({
         layer: layer,
         level: level
       });
     }
+
+    console.log(this);
   };
 
   processTiledLayers() {
@@ -83,6 +84,7 @@ export default class Game extends Phaser.Scene {
       tiles: this.map.addTilesetImage('rock-moss-plants-doors', 'tiles')
     };
     this.tilemapLayers = {};
+    this.occlusionLayers = {};
     _.each(level.layers, this.processLayer);
   }
 
