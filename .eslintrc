@@ -12,7 +12,9 @@
         "prettier/prettier": [
             "warn",
             {
-                "singleQuote": true
+                "singleQuote": true,
+                "endOfLine": "lf",
+                "tabWidth": 2
             }
         ],
         "no-unused-vars": [

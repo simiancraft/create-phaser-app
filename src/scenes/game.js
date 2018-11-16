@@ -1,10 +1,8 @@
 import _ from 'lodash';
 import Phaser from 'phaser';
 
-import BackgroundGradient from '../assets/levels/processed/level-0/background-with-planets.png';
 import levelImages from '../assets/levels/processed/level-0/images.js';
 import level from '../assets/levels/processed/level-0/level-0.json';
-import rockTilemap from '../assets/levels/processed/level-0/rock-moss-plants-doors.png';
 import constants from '../config/constants';
 import Player from '../sprites/player';
 
@@ -22,68 +20,87 @@ export default class Game extends Phaser.Scene {
 
     this.load.tilemapTiledJSON('level-0', level);
 
-    let playerSpawnLayer = _.find(level.layers, layer => {
-      return layer.name === 'Player-Spawn';
-    });
+    let playerSpawnLayer = _.find(level.layers, { name: 'Player-Spawn' });
 
     if (playerSpawnLayer) {
       playerSpawnLayer = playerSpawnLayer.objects[0];
     }
+    let { x, y } = playerSpawnLayer;
+    console.log({ x, y });
 
     //create playerd
     this.player = new Player({
       scene: this,
-      x: playerSpawnLayer.x || 200,
-      y: playerSpawnLayer.y || 400,
+      x: x || 200,
+      y: y || 400,
       direction: 'right' //this needs to be the spawn player position
     });
 
     this.player.preload();
   }
 
-  createStaticLayers() {
-    this.map = this.make.tilemap({ key: 'level-0' });
-    const tiles = this.map.addTilesetImage('rock-moss-plants-doors', 'tiles');
+  isOcclusionPolygonLayer(layer) {
+    return (
+      layer.type == 'objectgroup' &&
+      layer.properties &&
+      _.find(layer.properties, { name: 'occlusion-enabled' }) &&
+      _.find(layer.properties, { name: 'occlusion-group' }).value > 0
+    );
+  }
 
-    const tilemapLayers = _.filter(level.layers, layer => {
-      return layer.type === 'tilelayer';
-    });
-
-    this.tilemapLayers = {};
-
-    _.each(tilemapLayers, tilemapLayer => {
-      let layerName = _.camelCase(tilemapLayer.name);
-
+  processLayer = layer => {
+    let layerName = _.camelCase(layer.name);
+    if (layer.type === 'tilelayer') {
       this.tilemapLayers[layerName] = this.map.createStaticLayer(
-        tilemapLayer.name,
-        tiles,
+        layer.name,
+        this.tilesetImages.tiles,
         0,
         0
       );
 
       //set props
-      if (tilemapLayer.properties) {
-        if (tilemapLayer.properties.collision) {
-          this.tilemapLayers[layerName].setCollisionBetween(0, 999);
-          this.physics.add.collider(this.player, this.tilemapLayers[layerName]);
+      if (layer.properties && layer.properties.length) {
+        let _thisLayer = this.tilemapLayers[layerName];
+        if (_.find(layer.properties, { name: 'collision' }).value) {
+          _thisLayer.setCollisionBetween(0, 999);
+          this.physics.add.collider(this.player, _thisLayer);
         }
       }
-    });
+    }
+    if (this.isOcclusionPolygonLayer(layer)) {
+      this.occlusionLayers[layerName] = this.lightrays.createOcclusionLayer({
+        layer: layer,
+        level: level
+      });
+    }
+  };
+
+  processTiledLayers() {
+    this.map = this.make.tilemap({ key: 'level-0' });
+    //Find a way to make this automatic
+    this.tilesetImages = {
+      tiles: this.map.addTilesetImage('rock-moss-plants-doors', 'tiles')
+    };
+    this.tilemapLayers = {};
+    this.occlusionLayers = {};
+    _.each(level.layers, this.processLayer);
   }
 
   create() {
     this.createBackgrounds(SCALE);
     //create Level
 
-    this.createStaticLayers();
+    this.processTiledLayers();
 
     this.createCamera();
     this.handleDebugging();
     this.player.create();
+    this.lightrays.drawBakedLights();
   }
 
   update() {
     this.player.update();
+    this.lightrays.lightFollowMouse();
     this.backgroundImages.backgroundClouds.setTilePosition(
       this.backgroundImages.backgroundClouds.tilePositionX + 0.2,
       0
@@ -96,7 +113,7 @@ export default class Game extends Phaser.Scene {
       if (
         layer.image &&
         layer.properties &&
-        layer.properties.role === 'background'
+        _.find(layer.properties, { name: 'role' }).value === 'background'
       ) {
         return layer;
       } else {
@@ -131,15 +148,16 @@ export default class Game extends Phaser.Scene {
         layer.visible &&
         layer.type === 'imagelayer' &&
         layer.properties &&
-        layer.properties.role === 'background'
+        _.find(layer.properties, { name: 'role' }).value === 'background'
       );
     });
+
+    this.backgroundImages = this.backgroundImages || {};
 
     _.each(backgroundLayers, layer => {
       let layerName = _.camelCase(layer.name);
       let scrollx = 0;
       let scrolly = 0;
-      this.backgroundImages = this.backgroundImages || {};
 
       if (layer.properties.scrollFactorX) {
         scrollx = layer.properties.scrollFactorX;

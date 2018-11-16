@@ -3,6 +3,7 @@ import './font-loader';
 
 import Phaser from 'phaser';
 
+import LightraysPlugin from '../src/plugins/lightrays/index.js';
 import constants from './config/constants';
 import CustomPipeline from './rendering-pipelines/CustomPipeline';
 import GameScene from './scenes/game';
@@ -14,6 +15,15 @@ const config = {
   type: Phaser.AUTO,
   width: constants.WIDTH,
   height: constants.HEIGHT,
+  plugins: {
+    scene: [
+      {
+        key: 'LightraysPlugin',
+        plugin: LightraysPlugin,
+        mapping: 'lightrays'
+      }
+    ]
+  },
   physics: {
     default: 'arcade',
     arcade: {
@@ -21,7 +31,10 @@ const config = {
       debug: false
     }
   },
-  scene: [StartScene, GameScene],
+  scene: [
+    //StartScene,
+    GameScene
+  ],
   pixelArt: true,
   antialias: false,
   callbacks: {
