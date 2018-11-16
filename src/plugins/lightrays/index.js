@@ -56,12 +56,19 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     return polygonSegments;
   }
 
+  ptToFlatPt(pt) {
+    return [pt.x, pt.y];
+  }
+
+  layerObjToOcclusionPolygon(obj) {
+    return obj.polygon.map(this.ptsToFlatPts);
+  }
+
   //TODO: simplify this so there's less mapping
-  createOcclusionLayer({ tilemapLayer, level }) {
-    this.occlusionPolygons = tilemapLayerToPolygonLayer({
-      tilemapLayer,
-      level
-    });
+  createOcclusionLayer({ layer, level }) {
+    this.occlusionPolygons = layer.objects.map(this.layerObjToOcclusionPolygon);
+
+    this.drawPolygon(this.occlusionPolygons);
 
     this.occlusionSegments = this.occlusionPolygons
       .map(this.occlusionPolygonToOcclusionSegments)

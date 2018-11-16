@@ -24,14 +24,26 @@ function regionsToCombinedRegion(acc, next) {
   return acc ? PolyBool.union(acc, next) : next;
 }
 
+// This returns a region like:
+/*
+  {
+    regions: [[[x,y], [x,y]], [...]],
+    inverted: false
+  }
+*/
+//That's because that's what Polybool consumes/returns
 function polygonClusterToCombinedRegion(cluster) {
   return cluster.map(clusterToRegions).reduce(regionsToCombinedRegion);
 }
 
+//turn the Polybool output into
+//[[x,y], [x,y]]
 function regionsToFlatPolys(r) {
   return flatten(r.regions);
 }
 
+// This turns the arrya from tiled
+// into a 2d array that the floodfill can use
 function layerDataTo2d(layer, level) {
   let { data, width, height } = layer;
   let { tilewidth, tileheight } = level;
@@ -67,6 +79,8 @@ function layerDataTo2d(layer, level) {
   };
 }
 
+// Data coming in from tiled is
+// not nested array
 function ensureLayerDatais2D(layer, level) {
   if (layer.width < layer.data.length) {
     return layerDataTo2d(layer, level);

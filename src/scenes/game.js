@@ -39,6 +39,15 @@ export default class Game extends Phaser.Scene {
     this.player.preload();
   }
 
+  isOcclusionPolygonLayer(layer) {
+    return (
+      layer.type == 'objectgroup' &&
+      layer.properties &&
+      layer.properties['occlusion-enabled'] &&
+      layer.properties['occlusion-group'] > 0
+    );
+  }
+
   createStaticLayers() {
     this.map = this.make.tilemap({ key: 'level-0' });
     const tiles = this.map.addTilesetImage('rock-moss-plants-doors', 'tiles');
@@ -68,11 +77,11 @@ export default class Game extends Phaser.Scene {
           this.physics.add.collider(this.player, _thisLayer);
         }
 
-        if (tilemapLayer.properties.blocksLight) {
-          // this.lightrays.createPolygonLayerFromTilemapLayer({
-          //   tilemapLayer: _thisLayer,
-          //   level: level
-          // });
+        if (this.isOcclusionPolygonLayer(_thisLayer)) {
+          this.lightrays.createPolygonLayerFromTilemapLayer({
+            layer: _thisLayer,
+            level: level
+          });
         }
       }
     });
