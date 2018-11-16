@@ -21,7 +21,11 @@ function clusterToRegions(r) {
 
 //Unify all regions into a megaregion.
 function regionsToCombinedRegion(acc, next) {
-  return acc ? PolyBool.union(acc, next) : next;
+  if (!acc) {
+    return next;
+  }
+
+  return PolyBool.union(acc, next);
 }
 
 // This returns a region like:
