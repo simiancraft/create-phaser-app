@@ -40,6 +40,7 @@ export default class Game extends Phaser.Scene {
   }
 
   isOcclusionPolygonLayer(layer) {
+    console.log(layer);
     return (
       layer.type == 'objectgroup' &&
       layer.properties &&
@@ -48,50 +49,48 @@ export default class Game extends Phaser.Scene {
     );
   }
 
-  createStaticLayers() {
-    this.map = this.make.tilemap({ key: 'level-0' });
-    const tiles = this.map.addTilesetImage('rock-moss-plants-doors', 'tiles');
-
-    const tilemapLayers = _.filter(level.layers, layer => {
-      return layer.type === 'tilelayer';
-    });
-
-    this.tilemapLayers = {};
-
-    _.each(tilemapLayers, tilemapLayer => {
-      let layerName = _.camelCase(tilemapLayer.name);
-
+  processLayer = layer => {
+    if (layer.type === 'tilelayer') {
+      let layerName = _.camelCase(layer.name);
       this.tilemapLayers[layerName] = this.map.createStaticLayer(
-        tilemapLayer.name,
-        tiles,
+        layer.name,
+        this.tilesetImages.tiles,
         0,
         0
       );
 
       //set props
-      if (tilemapLayer.properties) {
+      if (layer.properties) {
         let _thisLayer = this.tilemapLayers[layerName];
-
-        if (tilemapLayer.properties.collision) {
+        if (layer.properties.collision) {
           _thisLayer.setCollisionBetween(0, 999);
           this.physics.add.collider(this.player, _thisLayer);
         }
-
-        if (this.isOcclusionPolygonLayer(_thisLayer)) {
-          this.lightrays.createPolygonLayerFromTilemapLayer({
-            layer: _thisLayer,
-            level: level
-          });
-        }
       }
-    });
+    }
+    if (this.isOcclusionPolygonLayer(layer)) {
+      this.lightrays.createOcclusionLayer({
+        layer: layer,
+        level: level
+      });
+    }
+  };
+
+  processTiledLayers() {
+    this.map = this.make.tilemap({ key: 'level-0' });
+    //Find a way to make this automatic
+    this.tilesetImages = {
+      tiles: this.map.addTilesetImage('rock-moss-plants-doors', 'tiles')
+    };
+    this.tilemapLayers = {};
+    _.each(level.layers, this.processLayer);
   }
 
   create() {
     this.createBackgrounds(SCALE);
     //create Level
 
-    this.createStaticLayers();
+    this.processTiledLayers();
 
     this.createCamera();
     this.handleDebugging();
