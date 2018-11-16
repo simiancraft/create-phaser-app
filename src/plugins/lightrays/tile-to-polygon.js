@@ -29,14 +29,6 @@ function getSpecialTiles(tilesets) {
           ...tilesetObj
         };
       }, {});
-
-    if (specialTiles[0]) {
-      console.log(specialTiles[0].objects[0].polygon);
-    }
-
-    if (specialTiles[3]) {
-      console.log(specialTiles[3].objects[0].polygon);
-    }
   }
 
   return specialTiles;
