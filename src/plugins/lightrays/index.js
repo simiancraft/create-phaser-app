@@ -1,9 +1,7 @@
 import Phaser from 'phaser/src/phaser.js';
-import PolyBool from 'polybooljs';
 
-import tilemapLayerToTileClumps from './clumpy';
 import calulateRaycastPolygon from './rays';
-import tileToPolygon from './tile-to-polygon';
+import { polygonLayerToOcclusionPolygons } from './tilemap-to-polygon';
 
 export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   constructor(scene) {
@@ -34,17 +32,6 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     }
     this._polygonGraphics.closePath();
     this._polygonGraphics.strokePath();
-  }
-
-  clusterToRegions(r) {
-    return {
-      regions: [r],
-      inverted: false
-    };
-  }
-
-  regionsToCombinedRegion(acc, next) {
-    return acc ? PolyBool.union(acc, next) : next;
   }
 
   occlusionPolygonToOcclusionSegments(occlusionPolygon) {

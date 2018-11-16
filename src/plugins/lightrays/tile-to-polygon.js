@@ -1,6 +1,5 @@
 function polygonFromTile(tile) {
   const { pixelX, pixelY, height, width } = tile;
-
   return [
     [pixelX, pixelY],
     [pixelX, pixelY + height],
@@ -25,7 +24,7 @@ function getSpecialTiles(tilesets) {
 }
 
 function getSpecialPoly(tile, tilesets) {
-  return getSpecialTiles(tilesets)[tile.index - 1];
+  return getSpecialTiles(tilesets)[tile.index];
 }
 
 function objToPolygon(tile, obj) {
@@ -35,9 +34,6 @@ function objToPolygon(tile, obj) {
     //this is some weird deal with the poly appearing in the wrong spot?
     // so I correct it here.
     // only affect the left ones though!
-    if (tile.faceLeft) {
-      _x = _x + tile.width;
-    }
     let XY = [_x, _y];
     return XY;
   }

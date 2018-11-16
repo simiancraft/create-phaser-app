@@ -19,6 +19,7 @@ import chalk from 'chalk';
 import globby from 'globby';
 import tileExtruder from 'tile-extruder';
 
+import addOcclusionLayers from './add-occlusion-layers';
 import {
   BASE_HEIGHT,
   BASE_WIDTH,
@@ -155,7 +156,7 @@ async function rewriteLevel(inputPath, index) {
 
   const updatedLayers = layers.filter(withoutInputLayers);
 
-  const newLevel = {
+  let processedLevel = {
     ...level,
     ...{
       layers: updatedLayers,
@@ -163,11 +164,15 @@ async function rewriteLevel(inputPath, index) {
     }
   };
 
-  moveLayerImages(newLevel, thisDir, getOutputPath(thisDir));
-  templateImageImportFile(newLevel, thisDir, getOutputPath(thisDir));
+  //Build occlusion layers.
+  processedLevel = addOcclusionLayers(processedLevel);
+
+  //Move images to build folder and template images.js
+  moveLayerImages(processedLevel, thisDir, getOutputPath(thisDir));
+  templateImageImportFile(processedLevel, thisDir, getOutputPath(thisDir));
 
   //write the completed Json!
-  const newLevelFileContents = JSON.stringify(newLevel);
+  const newLevelFileContents = JSON.stringify(processedLevel);
   return fs.writeFileSync(outputPath, newLevelFileContents);
 }
 
