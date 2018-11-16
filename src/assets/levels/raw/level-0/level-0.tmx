@@ -276,7 +276,7 @@
   </properties>
  </objectgroup>
  <objectgroup id="12" name="Player-Spawn">
-  <object id="1" name="Player-Spawn" gid="135" x="279.167" y="156" width="26" height="45"/>
+  <object id="1" name="Player-Spawn" gid="135" x="82.5" y="320" width="26" height="45"/>
  </objectgroup>
  <objectgroup id="13" name="Lights">
   <properties>

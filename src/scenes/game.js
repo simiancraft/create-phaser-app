@@ -20,19 +20,19 @@ export default class Game extends Phaser.Scene {
 
     this.load.tilemapTiledJSON('level-0', level);
 
-    let playerSpawnLayer = _.find(level.layers, layer => {
-      return layer.name === 'Player-Spawn';
-    });
+    let playerSpawnLayer = _.find(level.layers, { name: 'Player-Spawn' });
 
     if (playerSpawnLayer) {
       playerSpawnLayer = playerSpawnLayer.objects[0];
     }
+    let { x, y } = playerSpawnLayer;
+    console.log({ x, y });
 
     //create playerd
     this.player = new Player({
       scene: this,
-      x: playerSpawnLayer.x || 200,
-      y: playerSpawnLayer.y || 400,
+      x: x || 200,
+      y: y || 400,
       direction: 'right' //this needs to be the spawn player position
     });
 
@@ -73,8 +73,6 @@ export default class Game extends Phaser.Scene {
         level: level
       });
     }
-
-    console.log(this);
   };
 
   processTiledLayers() {

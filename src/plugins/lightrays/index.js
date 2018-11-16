@@ -68,11 +68,11 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
   createOcclusionLayer({ layer, level }) {
     this.occlusionPolygons = layer.objects.map(this.layerObjToOcclusionPolygon);
 
-    console.log(this.occlusionPolygons);
+    //console.log(this.occlusionPolygons);
 
-    this.occlusionPolygons.forEach(pGon => {
-      this.drawPolygon(pGon);
-    });
+    // this.occlusionPolygons.forEach(pGon => {
+    //   this.drawPolygon(pGon);
+    // });
 
     this.occlusionSegments = this.occlusionPolygons
       .map(this.occlusionPolygonToOcclusionSegments)
@@ -145,7 +145,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     let beams = [beam];
     var fuzzyRadius = 8;
     var p2 = Math.PI * 2;
-    var incrementByAngle = p2 / 2;
+    var incrementByAngle = p2 / 3;
     for (var angle = 0; angle < p2; angle += incrementByAngle) {
       var dx = Math.cos(angle) * fuzzyRadius;
       var dy = Math.sin(angle) * fuzzyRadius;
@@ -168,7 +168,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
     console.log(mode);
     if (!this.lightGraphics) {
       this.lightGraphics = this.scene.add.graphics();
-      this.lightGraphics.setAlpha(0.2);
+      this.lightGraphics.setAlpha(0.15);
     }
 
     this.lightGraphics.clear();
@@ -177,7 +177,7 @@ export default class LightraysPlugin extends Phaser.Plugins.BasePlugin {
       let thisBeam = new Phaser.Geom.Polygon(points);
       this.lightGraphics.fillStyle(0xffffff);
       this.lightGraphics.fillPoints(thisBeam.points, true);
-      this.lightGraphics.setBlendMode(mode || Phaser.BlendModes.SCREEN);
+      //this.lightGraphics.setBlendMode(mode || Phaser.BlendModes.MULTIPLY);
       window.lightGraphics = this.lightGraphics;
       window.Phaser = Phaser;
     });
