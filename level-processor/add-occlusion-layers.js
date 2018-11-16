@@ -34,12 +34,18 @@ function getOtherLayer(name, layers) {
 }
 
 const layertoOccludingLayer = ({ layers, level }) => (layer, layerIndex) => {
-  if (!layer.properties || !layer.properties[OCCLUSION_ENABLED]) {
+  if (
+    !layer.properties ||
+    !_.find(layer.properties, { name: OCCLUSION_INPUT })
+  ) {
     return layer;
   }
 
   const occlusionInputLayer = {
-    ...getOtherLayer(layer.properties[OCCLUSION_INPUT], layers)
+    ...getOtherLayer(
+      _.find(layer.properties, { name: OCCLUSION_INPUT }).value,
+      layers
+    )
   };
 
   if (!occlusionInputLayer) {

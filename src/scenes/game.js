@@ -43,8 +43,8 @@ export default class Game extends Phaser.Scene {
     return (
       layer.type == 'objectgroup' &&
       layer.properties &&
-      layer.properties['occlusion-enabled'] &&
-      layer.properties['occlusion-group'] > 0
+      _.find(layer.properties, { name: 'occlusion-enabled' }) &&
+      _.find(layer.properties, { name: 'occlusion-group' }).value > 0
     );
   }
 
@@ -59,9 +59,9 @@ export default class Game extends Phaser.Scene {
       );
 
       //set props
-      if (layer.properties) {
+      if (layer.properties && layer.properties.length) {
         let _thisLayer = this.tilemapLayers[layerName];
-        if (layer.properties.collision) {
+        if (_.find(layer.properties, { name: 'collision' }).value) {
           _thisLayer.setCollisionBetween(0, 999);
           this.physics.add.collider(this.player, _thisLayer);
         }
@@ -115,7 +115,7 @@ export default class Game extends Phaser.Scene {
       if (
         layer.image &&
         layer.properties &&
-        layer.properties.role === 'background'
+        _.find(layer.properties, { name: 'role' }).value === 'background'
       ) {
         return layer;
       } else {
@@ -150,15 +150,16 @@ export default class Game extends Phaser.Scene {
         layer.visible &&
         layer.type === 'imagelayer' &&
         layer.properties &&
-        layer.properties.role === 'background'
+        _.find(layer.properties, { name: 'role' }).value === 'background'
       );
     });
+
+    this.backgroundImages = this.backgroundImages || {};
 
     _.each(backgroundLayers, layer => {
       let layerName = _.camelCase(layer.name);
       let scrollx = 0;
       let scrolly = 0;
-      this.backgroundImages = this.backgroundImages || {};
 
       if (layer.properties.scrollFactorX) {
         scrollx = layer.properties.scrollFactorX;

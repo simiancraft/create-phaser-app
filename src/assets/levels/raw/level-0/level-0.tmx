@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="66" height="34" tilewidth="16" tileheight="16" infinite="0" nextobjectid="24">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="66" height="34" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="24">
  <tileset firstgid="1" source="rock-moss-plants-doors.tsx"/>
  <tileset firstgid="129" source="input-tiles.tsx"/>
- <imagelayer name="BackgroundGradient" offsetx="16" offsety="16">
+ <imagelayer id="1" name="BackgroundGradient" offsetx="16" offsety="16">
   <image source="background-with-planets.png" width="768" height="320"/>
   <properties>
    <property name="fixed" type="bool" value="true"/>
    <property name="role" value="background"/>
   </properties>
  </imagelayer>
- <imagelayer name="BackgroundSea" offsetx="-205.5" offsety="-26.5">
+ <imagelayer id="2" name="BackgroundSea" offsetx="-205.5" offsety="-26.5">
   <image source="mountain_and_sea.png" width="768" height="320"/>
   <properties>
    <property name="fixed" type="bool" value="true"/>
@@ -17,13 +17,13 @@
    <property name="scrollFactorX" type="float" value="-0.0007"/>
   </properties>
  </imagelayer>
- <imagelayer name="BackgroundClouds" offsetx="0" offsety="26">
+ <imagelayer id="3" name="BackgroundClouds" offsetx="0" offsety="26">
   <image source="clouds.png" width="1050" height="288"/>
   <properties>
    <property name="role" value="background"/>
   </properties>
  </imagelayer>
- <layer name="raw-rock-background" width="66" height="34" visible="0" opacity="0.6">
+ <layer id="4" name="raw-rock-background" width="66" height="34" visible="0" opacity="0.6">
   <properties>
    <property name="InputOnly" type="bool" value="true"/>
   </properties>
@@ -64,7 +64,7 @@
 134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134
 </data>
  </layer>
- <layer name="raw-collision" width="66" height="34" visible="0" opacity="0.63">
+ <layer id="5" name="raw-collision" width="66" height="34" visible="0" opacity="0.63">
   <properties>
    <property name="InputOnly" type="bool" value="true"/>
   </properties>
@@ -105,7 +105,7 @@
 133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133,133
 </data>
  </layer>
- <layer name="raw-moss" width="66" height="34" visible="0">
+ <layer id="6" name="raw-moss" width="66" height="34" visible="0">
   <properties>
    <property name="InputOnly" type="bool" value="true"/>
   </properties>
@@ -146,11 +146,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Door-Spawn">
+ <objectgroup id="7" name="Door-Spawn">
   <object id="5" gid="137" x="19.3333" y="316.667" width="16" height="16"/>
   <object id="6" gid="138" x="1021.33" y="144" width="16" height="16"/>
  </objectgroup>
- <layer name="BORDERCOVER" width="66" height="34">
+ <layer id="8" name="BORDERCOVER" width="66" height="34">
   <data encoding="csv">
 37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,
 37,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37,
@@ -188,7 +188,7 @@
 37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37
 </data>
  </layer>
- <layer name="Rock-Background" width="66" height="34">
+ <layer id="9" name="Rock-Background" width="66" height="34">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,14,15,14,15,14,15,14,15,14,15,14,15,22,14,15,14,30,31,30,31,14,22,14,15,14,30,31,14,15,14,22,14,15,22,14,15,30,14,15,14,15,14,15,30,31,30,31,30,31,30,14,15,22,14,22,14,15,14,22,14,15,14,15,14,0,
@@ -226,7 +226,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="Rock-Foreground" width="66" height="34">
+ <layer id="10" name="Rock-Foreground" width="66" height="34">
   <properties>
    <property name="collision" type="bool" value="true"/>
    <property name="occlusion-output" value="Rock-Foreground-Occlusion"/>
@@ -268,23 +268,23 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Rock-Foreground-Occlusion">
+ <objectgroup id="11" name="Rock-Foreground-Occlusion">
   <properties>
    <property name="occlusion-enabled" type="bool" value="true"/>
    <property name="occlusion-group" type="int" value="1"/>
    <property name="occlusion-input" value="Rock-Foreground"/>
   </properties>
  </objectgroup>
- <objectgroup name="Player-Spawn">
+ <objectgroup id="12" name="Player-Spawn">
   <object id="1" name="Player-Spawn" gid="135" x="279.167" y="156" width="26" height="45"/>
  </objectgroup>
- <objectgroup name="Lights">
+ <objectgroup id="13" name="Lights">
   <properties>
    <property name="isLight" type="bool" value="true"/>
   </properties>
   <object id="14" name="Light-Source-1" gid="139" x="352" y="143.667" width="16" height="16"/>
  </objectgroup>
- <layer name="RockMoss" width="66" height="34">
+ <layer id="14" name="RockMoss" width="66" height="34">
   <properties>
    <property name="collision" type="bool" value="false"/>
   </properties>

@@ -17,6 +17,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 import globby from 'globby';
+import _ from 'lodash';
 import tileExtruder from 'tile-extruder';
 
 import addOcclusionLayers from './add-occlusion-layers';
@@ -70,8 +71,8 @@ function getOutputPath(inputPath) {
 function withoutInputLayers(layer) {
   if (
     layer.properties &&
-    layer.properties[INPUT_ONLY_PROP] &&
-    layer.properties[INPUT_ONLY_PROP] === true
+    _.find(layer.properties, { name: INPUT_ONLY_PROP }) &&
+    _.find(layer.properties, { name: INPUT_ONLY_PROP }).value === true
   ) {
     return false;
   }

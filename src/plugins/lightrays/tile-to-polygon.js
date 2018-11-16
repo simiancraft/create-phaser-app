@@ -1,11 +1,13 @@
+import _ from 'lodash';
+
 function polygonFromTile(tile) {
   const { pixelX, pixelY, height, width } = tile;
   return [
     [pixelX, pixelY],
     [pixelX, pixelY + height],
     [pixelX + width, pixelY + height],
-    [pixelX + width, pixelY],
-    [pixelX, pixelY]
+    [pixelX + width, pixelY]
+    //[pixelX, pixelY]
   ];
 }
 
@@ -16,8 +18,25 @@ function getSpecialTiles(tilesets) {
     specialTiles = tilesets
       .map(tileset => tileset.tiles)
       .reduce((acc, tileset) => {
-        return { ...acc, ...tileset };
+        if (!_.isArray(tileset)) {
+          return acc;
+        }
+        let tilesetObj = tileset.reduce((tAcc, tilesetTile) => {
+          return { ...tAcc, [tilesetTile.id]: tilesetTile.objectgroup };
+        }, {});
+        return {
+          ...acc,
+          ...tilesetObj
+        };
       }, {});
+
+    if (specialTiles[0]) {
+      console.log(specialTiles[0].objects[0].polygon);
+    }
+
+    if (specialTiles[3]) {
+      console.log(specialTiles[3].objects[0].polygon);
+    }
   }
 
   return specialTiles;
@@ -28,9 +47,11 @@ function getSpecialPoly(tile, tilesets) {
 }
 
 function objToPolygon(tile, obj) {
+  let { x, y } = obj;
+
   function toFlatPts(pt) {
-    let _x = Math.round(pt.x) + tile.pixelX;
-    let _y = Math.round(pt.y) + tile.pixelY;
+    let _x = Math.round(pt.x) + tile.pixelX + x;
+    let _y = Math.round(pt.y) + tile.pixelY + y;
 
     let XY = [_x, _y];
     return XY;
@@ -60,7 +81,7 @@ function polygonFromTilesets(tile, tilesets) {
     return objToPolygon(tile, obj) || acc;
   }
 
-  return specialPoly.objectgroup.objects.reduce(objectGroupsToPoly, null) || [];
+  return specialPoly.objects.reduce(objectGroupsToPoly, null) || [];
 }
 
 function tileToPolygon(tile, tilesets) {
