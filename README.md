@@ -36,7 +36,7 @@ This project can be used right now as a boilerplate, even without the eventual s
 2.  `yarn install`
 3.  `yarn start`
 
-#Play the Demo!
+# Play the Demo!
 
 The work in progress is here:
 🕹️[Working Example Of Create Phaser App](https://simiancraft.github.io/create-phaser-app/)
