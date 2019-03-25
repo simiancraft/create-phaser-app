@@ -38,7 +38,7 @@ export default class AnimationSequencer {
   sequence(name) {
     return new Promise((resolve, reject) => {
       this.entity.anims.play(name, true);
-      this.entity.on(
+      this.entity.once(
         'animationcomplete',
         (animation, frame) => {
           resolve(name);
