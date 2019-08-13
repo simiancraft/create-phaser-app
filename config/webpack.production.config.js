@@ -1,6 +1,13 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { phaser, phaserModule, nodeModules, dist, ghpages } = require('./paths');
+const {
+  phaser,
+  phaserModule,
+  nodeModules,
+  dist,
+  ghpages,
+  ghPagesAppName
+} = require('./paths');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const definePlugin = new webpack.DefinePlugin({
@@ -29,7 +36,7 @@ module.exports = (env, options) => {
       path: env.ghpages ? ghpages : dist,
       filename: '[name].bundle.js',
       chunkFilename: '[name].bundle.js',
-      publicPath: env.ghpages ? '/create-phaser-app/' : '/'
+      publicPath: env.ghpages ? `/${ghPagesAppName}/` : '/'
     },
     optimization: {
       splitChunks: {
@@ -68,9 +75,8 @@ module.exports = (env, options) => {
               options: {
                 modules: true,
                 importLoaders: 1,
-                localIdentName: '[name]_[local]_[hash:base64]',
-                sourceMap: true,
-                minimize: true
+                localsConvention: 'dashes',
+                sourceMap: true
               }
             }
           ]
