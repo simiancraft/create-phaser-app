@@ -11,10 +11,10 @@ import rockMossPlantsDoors from './rock-moss-plants-doors.png';
 import inputTiles from './input-tiles.png';
 
 export default {
-	'BackgroundGradient':BackgroundGradient,
-	'BackgroundSea':BackgroundSea,
-	'BackgroundClouds':BackgroundClouds,
+  BackgroundGradient: BackgroundGradient,
+  BackgroundSea: BackgroundSea,
+  BackgroundClouds: BackgroundClouds,
 
-	'rock-moss-plants-doors':rockMossPlantsDoors,
-	'input-tiles':inputTiles
+  'rock-moss-plants-doors': rockMossPlantsDoors,
+  'input-tiles': inputTiles
 };
