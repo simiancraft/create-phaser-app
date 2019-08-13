@@ -1,5 +1,10 @@
 # Change Log
 
+
+0.0.17
+
+- Update all dependencies
+
 0.0.15
 
 -   BIG UPDATE
