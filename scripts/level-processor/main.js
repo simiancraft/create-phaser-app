@@ -20,6 +20,7 @@ import globby from 'globby';
 import _ from 'lodash';
 import tileExtruder from 'tile-extruder';
 
+import { ROOT_PATH } from '../paths';
 import addOcclusionLayers from './add-occlusion-layers';
 import {
   BASE_HEIGHT,
@@ -29,26 +30,42 @@ import {
   MARGIN,
   PROCESSED_FOLDER,
   RAW_FOLDER,
-  SPACING
+  SPACING,
+  TEMP_FOLDER
 } from './consts';
 import {
   moveLayerImages,
   templateImageImportFile
 } from './level-image-processing';
 
-const LEVELS_INPUT_PATH = path.resolve(
-  __dirname,
-  `../src/assets/levels/${RAW_FOLDER}/**/*.json`
-);
+const LEVELS_INPUT_PATH = path.posix
+  .resolve(__dirname, `../../src/assets/levels/${RAW_FOLDER}/**/*.json`)
+  .replace(/\\/g, '/');
 
 async function getLevelsPaths() {
-  return await globby([LEVELS_INPUT_PATH]);
+  let t = await globby(LEVELS_INPUT_PATH);
+  return t;
 }
 
-function extrudeTileset({ input, output, width, height, spacing, margin }) {
-  logProcess(input, output);
+async function extrudeTileset({
+  input,
+  output,
+  width,
+  height,
+  spacing,
+  margin
+}) {
+  console.table({
+    input,
+    output,
+    width: width || BASE_WIDTH,
+    height: height || BASE_HEIGHT,
+    margin: margin || MARGIN,
+    spacing: spacing || SPACING
+  });
+  let extrudedTileset;
   try {
-    tileExtruder(
+    extrudedTileset = await tileExtruder(
       width || BASE_WIDTH,
       height || BASE_HEIGHT,
       margin || MARGIN,
@@ -58,8 +75,10 @@ function extrudeTileset({ input, output, width, height, spacing, margin }) {
       output
     );
   } catch (err) {
-    console.log(err);
+    console.log(chalk.red(`Error extruding: ${input}`));
+    console.log(chalk.red(err));
   }
+  return extrudedTileset;
 }
 
 function getOutputPath(inputPath) {
@@ -107,11 +126,11 @@ async function rewriteLevel(inputPath, index) {
     let externalTileset = fs.readFileSync(
       path.resolve(__dirname, thisDir, _jsonSource)
     );
+
     return JSON.parse(externalTileset);
   }
 
   function tilesetToCorrectedTileset(tileset, index) {
-    console.log('tileset');
     const {
       image,
       tileheight,
@@ -123,12 +142,14 @@ async function rewriteLevel(inputPath, index) {
       imagewidth,
       type
     } = tileset;
-    console.log('type', type);
-    console.log('dir', thisDir);
-    console.log('img', image);
+
     const levelImageInputPath = path.resolve(__dirname, thisDir, image);
     const levelImageOutputPath = getOutputPath(levelImageInputPath);
-    extrudeTileset({
+
+    // TODO: the underplaying tileset extruder is NOT async!
+    // if I want to do minification and things like that
+    // I'll likely need to fix this.
+    let extrudedTileset = extrudeTileset({
       input: levelImageInputPath,
       output: levelImageOutputPath,
       width: tilewidth,
@@ -136,9 +157,11 @@ async function rewriteLevel(inputPath, index) {
       spacing: spacing,
       margin: margin
     });
+
     const rows = Math.round(imageheight / (tileheight + spacing));
     const currentGid = gid;
     gid = gid + tileset.tilecount;
+
     return {
       ...tileset,
       ...{
@@ -151,17 +174,17 @@ async function rewriteLevel(inputPath, index) {
     };
   }
 
-  const updatedTilesets = tilesets
-    .map(tileSetToFullyEmbeddedTileset)
-    .map(tilesetToCorrectedTileset);
-
+  const fullyEmbeddedTilesets = tilesets.map(tileSetToFullyEmbeddedTileset);
+  const correctedTilesets = fullyEmbeddedTilesets.map(
+    tilesetToCorrectedTileset
+  );
   const updatedLayers = layers.filter(withoutInputLayers);
 
   let processedLevel = {
     ...level,
     ...{
       layers: updatedLayers,
-      tilesets: updatedTilesets
+      tilesets: correctedTilesets
     }
   };
 
@@ -169,22 +192,26 @@ async function rewriteLevel(inputPath, index) {
   processedLevel = addOcclusionLayers(processedLevel);
 
   //Move images to build folder and template images.js
-  moveLayerImages(processedLevel, thisDir, getOutputPath(thisDir));
+  // TODO: maybe move all the images at one time by putting them in a queue?
+  let movedImages = await moveLayerImages(
+    processedLevel,
+    thisDir,
+    getOutputPath(thisDir)
+  );
   templateImageImportFile(processedLevel, thisDir, getOutputPath(thisDir));
 
   //write the completed Json!
   const newLevelFileContents = JSON.stringify(processedLevel);
-  return fs.writeFileSync(outputPath, newLevelFileContents);
-}
-
-function logProcess(input, output) {
-  console.log(chalk.white('\n'));
-  console.log('IN ', chalk.yellow(input));
-  console.log('OUT', chalk.magenta(output));
+  let rewrittenLevel = fs.writeFileSync(outputPath, newLevelFileContents);
+  return await Promise.all([movedImages, rewrittenLevel]);
 }
 
 async function processLevels(data) {
   var levelPaths = await getLevelsPaths();
+  console.log(chalk.green(`Found levels:`));
+  levelPaths.forEach(l => {
+    console.log(chalk.white(`📁 ${l}`));
+  });
   return levelPaths.map(rewriteLevel);
 }
 
@@ -197,7 +224,7 @@ function getDirectories(srcpath) {
 
 function prepOutputDirectory() {
   const rawDirectories = getDirectories(
-    path.resolve(__dirname, `../src/assets/levels/${RAW_FOLDER}`)
+    path.resolve(__dirname, `../../src/assets/levels/${RAW_FOLDER}`)
   );
 
   rawDirectories.forEach(dir => {

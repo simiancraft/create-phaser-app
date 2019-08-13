@@ -23,7 +23,7 @@ The purpose of 'targeting' a polygon group and not simply 'injecting' a polygon 
 
 import _ from 'lodash';
 
-import { tilemapLayerToPolygons } from '../src/plugins/lightrays/tilemap-to-polygon';
+import { tilemapLayerToPolygons } from '../../src/plugins/lightrays/tilemap-to-polygon';
 
 const OCCLUSION_ENABLED = 'occlusion-enabled';
 const OCCLUSION_GROUP = 'occlusion-group';
