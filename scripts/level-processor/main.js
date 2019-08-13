@@ -20,6 +20,7 @@ import globby from 'globby';
 import _ from 'lodash';
 import tileExtruder from 'tile-extruder';
 
+import { ROOT_PATH } from '../paths';
 import addOcclusionLayers from './add-occlusion-layers';
 import {
   BASE_HEIGHT,
@@ -38,7 +39,7 @@ import {
 } from './level-image-processing';
 
 const LEVELS_INPUT_PATH = path.posix
-  .resolve(__dirname, `../src/assets/levels/${RAW_FOLDER}/**/*.json`)
+  .resolve(__dirname, `../../src/assets/levels/${RAW_FOLDER}/**/*.json`)
   .replace(/\\/g, '/');
 
 async function getLevelsPaths() {
@@ -233,7 +234,7 @@ function getDirectories(srcpath) {
 
 function prepOutputDirectory() {
   const rawDirectories = getDirectories(
-    path.resolve(__dirname, `../src/assets/levels/${RAW_FOLDER}`)
+    path.resolve(__dirname, `../../src/assets/levels/${RAW_FOLDER}`)
   );
 
   rawDirectories.forEach(dir => {

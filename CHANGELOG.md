@@ -11,7 +11,8 @@
 - moves all utilities into the scripts folder
 - started on the utilities (renamer and sprite atlas) for sprit eprocessing. Assumes Texturepacker, currently
 - Made headway on level triggers, will be integrated soon.
-- animation sequencer is greatly improved and more reuseable, can take more robust configuration, see the /lib folder
+- animation sequencer is greatly improved and more reuseable, can take more robust configuration, see the /lib folder"
+- got started on a better abstraction for controls, that can be passed around scenes
 
 0.0.15
 
