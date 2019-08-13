@@ -87,15 +87,6 @@ function getOutputPath(inputPath) {
   );
 }
 
-function getTempPethFromInputPath(inputPath) {
-  let _outputPath = inputPath.replace(
-    `${RAW_FOLDER}`,
-    `${PROCESSED_FOLDER}/${TEMP_FOLDER}`
-  );
-
-  return path.resolve(_outputPath);
-}
-
 function withoutInputLayers(layer) {
   if (
     layer.properties &&
@@ -135,10 +126,11 @@ async function rewriteLevel(inputPath, index) {
     let externalTileset = fs.readFileSync(
       path.resolve(__dirname, thisDir, _jsonSource)
     );
+
     return JSON.parse(externalTileset);
   }
 
-  async function tilesetToCorrectedTileset(tileset, index) {
+  function tilesetToCorrectedTileset(tileset, index) {
     const {
       image,
       tileheight,
@@ -157,7 +149,7 @@ async function rewriteLevel(inputPath, index) {
     // TODO: the underplaying tileset extruder is NOT async!
     // if I want to do minification and things like that
     // I'll likely need to fix this.
-    let extrudedTileset = await extrudeTileset({
+    let extrudedTileset = extrudeTileset({
       input: levelImageInputPath,
       output: levelImageOutputPath,
       width: tilewidth,
@@ -182,17 +174,17 @@ async function rewriteLevel(inputPath, index) {
     };
   }
 
-  const updatedTilesets = tilesets
-    .map(tileSetToFullyEmbeddedTileset)
-    .map(tilesetToCorrectedTileset);
-
+  const fullyEmbeddedTilesets = tilesets.map(tileSetToFullyEmbeddedTileset);
+  const correctedTilesets = fullyEmbeddedTilesets.map(
+    tilesetToCorrectedTileset
+  );
   const updatedLayers = layers.filter(withoutInputLayers);
 
   let processedLevel = {
     ...level,
     ...{
       layers: updatedLayers,
-      tilesets: updatedTilesets
+      tilesets: correctedTilesets
     }
   };
 
@@ -210,9 +202,7 @@ async function rewriteLevel(inputPath, index) {
 
   //write the completed Json!
   const newLevelFileContents = JSON.stringify(processedLevel);
-
   let rewrittenLevel = fs.writeFileSync(outputPath, newLevelFileContents);
-
   return await Promise.all([movedImages, rewrittenLevel]);
 }
 

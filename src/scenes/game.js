@@ -18,6 +18,8 @@ export default class Game extends Phaser.Scene {
     //map
     this.load.image('tiles', levelImages['rock-moss-plants-doors']);
 
+    console.log(level);
+
     this.load.tilemapTiledJSON('level-0', level);
 
     let playerSpawnLayer = _.find(level.layers, { name: 'Player-Spawn' });
@@ -26,7 +28,6 @@ export default class Game extends Phaser.Scene {
       playerSpawnLayer = playerSpawnLayer.objects[0];
     }
     let { x, y } = playerSpawnLayer;
-    console.log({ x, y });
 
     //create playerd
     this.player = new Player({
@@ -76,7 +77,9 @@ export default class Game extends Phaser.Scene {
   };
 
   processTiledLayers() {
+    console.log('makig Tilemap');
     this.map = this.make.tilemap({ key: 'level-0' });
+    console.log('tilemap made', this.map);
     //Find a way to make this automatic
     this.tilesetImages = {
       tiles: this.map.addTilesetImage('rock-moss-plants-doors', 'tiles')
