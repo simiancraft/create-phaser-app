@@ -13,6 +13,8 @@
 - Made headway on level triggers, will be integrated soon.
 - animation sequencer is greatly improved and more reuseable, can take more robust configuration, see the /lib folder"
 - got started on a better abstraction for controls, that can be passed around scenes
+- fixes the deploy script, that pushes to gh-pages
+- fixed a problem in the level processor, where the template for the 'images' file wasn't quite right
 
 0.0.15
 

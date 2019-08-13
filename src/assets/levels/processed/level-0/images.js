@@ -7,11 +7,8 @@ import BackgroundGradient from './background-with-planets.png';
 import BackgroundSea from './mountain_and_sea.png';
 import BackgroundClouds from './clouds.png';
 
-
 export default {
-	'BackgroundGradient':BackgroundGradient,
-	'BackgroundSea':BackgroundSea,
-	'BackgroundClouds':BackgroundClouds,
-
-
+  BackgroundGradient: BackgroundGradient,
+  BackgroundSea: BackgroundSea,
+  BackgroundClouds: BackgroundClouds
 };
