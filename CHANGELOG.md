@@ -1,5 +1,18 @@
 # Change Log
-
+0.0.18
+- dependency updates
+  - phaser              3.18.1  →   3.19.0
+ -  babel-jest          ^24.8.0  →  ^24.9.0
+ -  css-loader            3.1.0  →    3.2.0
+ -  file-loader           4.1.0  →    4.2.0
+ -  gh-pages              2.0.1  →    2.1.1
+ -  husky                ^3.0.2  →   ^3.0.3
+ -  jest                ^24.8.0  →  ^24.9.0
+ -  style-loader         0.23.1  →    1.0.0
+ -  tile-extruder        ^1.1.0  →   ^2.0.1
+ -  webpack              4.38.0  →   4.39.2
+ -  webpack-dev-server    3.7.2  →    3.8.0
+- changes the tile extruder to that it may later compress tilemaps when levels are processed
 
 0.0.17
 
