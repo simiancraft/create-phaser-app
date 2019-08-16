@@ -2,7 +2,7 @@ console.log('Processing Levels');
 
 //TODO:
 /*
-- Squish images
+- Squish images (50% there)
 
 - update the processor to ignore layerr that are 'raw input'
 by allowing the user to mark them as irrelevant in Tiled
@@ -18,7 +18,7 @@ import path from 'path';
 import chalk from 'chalk';
 import globby from 'globby';
 import _ from 'lodash';
-import tileExtruder from 'tile-extruder';
+import { extrudeTilesetToImage } from 'tile-extruder';
 
 import { ROOT_PATH } from '../paths';
 import addOcclusionLayers from './add-occlusion-layers';
@@ -65,14 +65,16 @@ async function extrudeTileset({
   });
   let extrudedTileset;
   try {
-    extrudedTileset = await tileExtruder(
+    extrudedTileset = await extrudeTilesetToImage(
       width || BASE_WIDTH,
       height || BASE_HEIGHT,
-      margin || MARGIN,
-      spacing || SPACING,
-      COLOR,
       input,
-      output
+      output,
+      {
+        margin: margin || MARGIN,
+        spacing: spacing || SPACING,
+        color: COLOR
+      }
     );
   } catch (err) {
     console.log(chalk.red(`Error extruding: ${input}`));
