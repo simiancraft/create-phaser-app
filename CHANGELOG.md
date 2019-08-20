@@ -4,6 +4,7 @@
   - switch to Terser from Uglify Js for better production builds
   - Add Howler!
   - Add Inquirer and Yargs to begin refactoring scripts
+  - Put some sound effects in the game
 
 0.0.18
 - dependency updates

@@ -29,7 +29,8 @@
         "boilerplate",
         "scaffold",
         "prettier",
-        "game jam"
+        "game jam",
+        "Howler 2"
     ],
     "license": "MIT",
     "babel": {

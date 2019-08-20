@@ -50,10 +50,10 @@ export default class Start extends Phaser.Scene {
     this.load.image('cloud-2', cloud2);
     this.load.image('ground', ground);
     this.load.image('player-still', playerStill);
-    this.load.image(
-      'knighthawks',
-      'http://labs.phaser.io/assets/fonts/retro/knight3.png'
-    );
+    // this.load.image(
+    //   'knighthawks',
+    //   'http://labs.phaser.io/assets/fonts/retro/knight3.png'
+    // );
   }
   create() {
     this.createBackground(assetScale);
@@ -63,10 +63,6 @@ export default class Start extends Phaser.Scene {
       .image(center.width, center.height * 1.3, 'player-still')
       .setScale(assetScale);
     this.makeText();
-
-    this.time.delayedCall(2000, () => {
-      this.exampleSound.play();
-    });
 
     this.input.on('pointerdown', this.startGame, this);
   }
