@@ -1,4 +1,10 @@
 # Change Log
+
+0.0.19
+  - switch to Terser from Uglify Js for better production builds
+  - Add Howler!
+  - Add Inquirer and Yargs to begin refactoring scripts
+
 0.0.18
 - dependency updates
   - phaser              3.18.1  →   3.19.0

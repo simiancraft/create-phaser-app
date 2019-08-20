@@ -4,9 +4,13 @@ var _ = require('lodash');
 
 let inArg = 'input=';
 let outArg = 'output=';
+let delimiterArg = 'delimiter=';
 
 let input = null;
 let output = null;
+//the string fragment that separates animation
+// names from frame numbers.
+let delimiter = '_';
 
 let { ROOT_PATH } = require('../paths');
 
@@ -14,6 +18,7 @@ for (let j = 0; j < process.argv.length; j++) {
   let _arg = process.argv[j];
   let inIndex = _arg.indexOf(inArg);
   let outIndex = _arg.indexOf(outArg);
+  let delimiterIndex = _arg.indexOf(delimiterArg);
 
   if (inIndex > -1) {
     input = _arg.substring(inIndex + inArg.length).toString();
@@ -26,6 +31,10 @@ for (let j = 0; j < process.argv.length; j++) {
 
   if (outIndex > -1) {
     output = _arg.substr(outIndex + outArg.length).toString();
+  }
+
+  if (delimiterIndex > -1) {
+    delimiter = _arg.substr(delimiterIndex + delimiterArg.length).toString();
   }
 }
 
@@ -60,7 +69,7 @@ function buildAnimationsFromAtlas() {
   const filenames = frames.map(t => t.filename);
 
   //TODO this isn't really reuseable yet
-  let suffixDelimiter = '-image_';
+  let suffixDelimiter = delimiter; //default is _
   let fileEnding = '.png';
 
   let animationListMap = filenames.reduce((acc, item, index) => {
