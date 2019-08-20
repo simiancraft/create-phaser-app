@@ -71,6 +71,7 @@
         "@babel/preset-react": "7.0.0",
         "@babel/runtime": "7.5.5",
         "add": "2.0.6",
+        "audiosprite": "^0.7.1",
         "babel-eslint": "10.0.2",
         "babel-jest": "^24.9.0",
         "babel-loader": "8.0.6",
@@ -90,6 +91,7 @@
         "eslint-plugin-react": "7.14.3",
         "esm": "^3.2.25",
         "expose-loader": "0.7.5",
+        "ffmpeg": "^0.0.4",
         "file-loader": "4.2.0",
         "gh-pages": "2.1.1",
         "globby": "^10.0.1",
@@ -99,6 +101,7 @@
         "imagemin-jpegtran": "^6.0.0",
         "imagemin-pngquant": "^8.0.0",
         "import-sort-style-module": "6.0.0",
+        "inquirer": "^6.5.1",
         "jest": "^24.9.0",
         "json-loader": "0.5.7",
         "lodash-webpack-plugin": "^0.11.5",
@@ -111,7 +114,9 @@
         "prettier-eslint": "9.0.0",
         "raw-loader": "3.1.0",
         "regenerator-runtime": "^0.13.3",
+        "sox": "^0.1.0",
         "style-loader": "1.0.0",
+        "terser-webpack-plugin": "^1.4.1",
         "tile-extruder": "^2.0.1",
         "uglifyjs-webpack-plugin": "^2.2.0",
         "url-loader": "2.1.0",
@@ -119,6 +124,7 @@
         "webpack-bundle-analyzer": "3.4.1",
         "webpack-cli": "3.3.7",
         "webpack-dev-server": "3.8.0",
+        "yargs": "^14.0.0",
         "yarn": "1.17.3"
     }
 }
