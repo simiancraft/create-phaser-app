@@ -92,13 +92,26 @@ export default class Start extends Phaser.Scene {
       }
     });
 
+    let dropshadow = 2;
+
+    var backPlateText = this.make.text({
+      x: WIDTH / 2 - dropshadow,
+      y: HEIGHT * 0.9 + dropshadow,
+      text: 'Click to start',
+      style: {
+        font: `${23 * SCALE}px Rajdhani`,
+        fill: '#000000'
+      }
+    });
+    backPlateText.setOrigin(0.5, 0.5);
+
     var startText = this.make.text({
       x: WIDTH / 2,
       y: HEIGHT * 0.9,
       text: 'Click to start',
       style: {
         font: `${23 * SCALE}px Rajdhani`,
-        fill: '#000000'
+        fill: '#ffffff'
       }
     });
     startText.setOrigin(0.5, 0.5);
