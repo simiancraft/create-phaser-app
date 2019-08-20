@@ -1,11 +1,11 @@
 import machina from 'machina';
 
+import sounds from '../../assets/sounds/processed';
+import linearScale from '../../lib/linear-scale';
 import AnimationSequencer from './animation-sequencer';
 import animationList from './player-animation-list';
 import playerJSON from './player.json';
 import playerPNG from './player.png';
-
-import linearScale from '../../lib/linear-scale';
 
 const shakeForceScale = linearScale([225, 900], [0, 0.03]);
 const shakeIntensityScale = linearScale([225, 900], [0, 0.03]);
@@ -151,6 +151,37 @@ export default class Behaviors extends machina.Fsm {
       return settings[direction][aim];
     }
 
+    let _walkingSoundId = 0;
+    let _shootingSoundId = 0;
+
+    /*TODO: can I move these */
+    function startShootingSound() {
+      stopShootingSound();
+
+      _shootingSoundId = sounds.play('Bullet');
+      sounds.loop(true, _shootingSoundId);
+      sounds.rate(3, _shootingSoundId);
+      sounds.volume(0.4, _shootingSoundId);
+    }
+    function stopShootingSound() {
+      sounds.loop(false, _shootingSoundId);
+      sounds.stop('Bullet');
+    }
+
+    function startWalkingSound() {
+      stopWalkingSound();
+
+      _walkingSoundId = sounds.play('Step');
+      sounds.loop(true, _walkingSoundId);
+      sounds.rate(0.22, _walkingSoundId);
+      sounds.volume(0.4, _walkingSoundId);
+    }
+
+    function stopWalkingSound() {
+      sounds.loop(false, _walkingSoundId);
+      sounds.stop('Step');
+    }
+
     const behaviorFsm = {
       namespace: 'player-behaviors',
       initialState: 'idling',
@@ -159,8 +190,11 @@ export default class Behaviors extends machina.Fsm {
           _child: directions,
           _onEnter: function() {
             entity.setVelocityX(0);
+            stopWalkingSound();
+            stopShootingSound();
             as.sequence(`${directions.state}-idle`);
           },
+          _onExit: function() {},
           walk: function(data) {
             this.transition('walking');
           },
@@ -183,9 +217,15 @@ export default class Behaviors extends machina.Fsm {
           _child: directions,
           _onEnter: function() {
             as.sequence(`${directions.state}-walk`);
+            startWalkingSound();
+          },
+          _onExit: function() {
+            stopWalkingSound();
+            stopShootingSound();
           },
           idle: function(data) {
-            //console.log('idle called in walking', data);
+            stopWalkingSound();
+            stopShootingSound();
             this.transition('idling');
           },
           walk: function(data) {
@@ -199,23 +239,29 @@ export default class Behaviors extends machina.Fsm {
             //console.log('walk called in walking', data);
           },
           turn: function() {
+            stopWalkingSound();
             this.transition('turning');
           },
           crouch: function() {
             entity.setVelocityX(0);
+            stopWalkingSound();
             this.transition('crouchingDown');
           },
           jump: function(data) {
+            stopWalkingSound();
             this.transition('jumping');
           },
           unland: function() {
+            stopWalkingSound();
             this.transition('flying');
           },
           shootMissiles: 'missilesLaunch',
           boost: function({ velocities }) {
+            stopWalkingSound();
             this.transition('sliding');
           },
           shoot: function(data) {
+            stopWalkingSound();
             this.transition('walkshooting');
           }
         },
@@ -228,7 +274,7 @@ export default class Behaviors extends machina.Fsm {
             directions.transition(turnDirection);
             const face = Math.round(Math.random()) ? 'front' : 'back';
             const animation = `${directions.state}-walkturn-${face}`;
-
+            stopWalkingSound();
             as.sequence(animation).then(() => {
               const dir = turnDirection === 'left2right' ? 'right' : 'left';
               directions.transition(dir);
@@ -491,6 +537,8 @@ export default class Behaviors extends machina.Fsm {
               slideBursting = -slideBursting;
             }
             entity.setVelocityX(slideBursting);
+            stopWalkingSound();
+            stopShootingSound();
             as.sequence(`${directions.state}-slide-stand2slide`).then(() => {
               entity.setVelocityX(sliding);
               this.emit('footbooster', { on: false });
@@ -560,9 +608,11 @@ export default class Behaviors extends machina.Fsm {
               on: true,
               ...getvulcanMuzzleSettings()
             });
+
             as.sequence(`${directions.state}-firecannon-${aims.state}`).then(
               () => {}
             );
+            startShootingSound();
           },
           _onExit: function() {
             this.emit('vulcanmuzzle', { on: false });
@@ -574,12 +624,21 @@ export default class Behaviors extends machina.Fsm {
             }
           },
           changeaim: function() {
+            stopShootingSound();
             this.transition('aiming');
           },
-          idle: 'idling',
-          jump: 'jumping',
+          idle: function() {
+            this.emit('vulcanmuzzle', { on: false });
+            stopShootingSound();
+            this.transition('idling');
+          },
+          jump: function() {
+            stopShootingSound();
+            this.transition('jumping');
+          },
           unshoot: function() {
             this.emit('vulcanmuzzle', { on: false });
+            stopShootingSound();
             this.transition('idling');
           }
         },
@@ -622,9 +681,13 @@ export default class Behaviors extends machina.Fsm {
               on: true,
               ...getvulcanMuzzleSettings()
             });
+            startWalkingSound();
+            startShootingSound();
             as.sequence(`${directions.state}-firecannonwalk-${aims.state}`);
           },
           _onExit() {
+            stopShootingSound();
+            stopWalkingSound();
             this.emit('vulcanmuzzle', { on: false });
           },
           aim: function({ aim, direction, velocities }) {
