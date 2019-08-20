@@ -546,9 +546,11 @@ export default class Behaviors extends machina.Fsm {
             entity.setVelocityX(slideBursting);
             stopWalkingSound();
             stopShootingSound();
+            sounds.play('Scree');
             as.sequence(`${directions.state}-slide-stand2slide`).then(() => {
               entity.setVelocityX(sliding);
               this.emit('footbooster', { on: false });
+
               this.timer = setTimeout(
                 function() {
                   this.handle('unboost');
