@@ -161,7 +161,7 @@ export default class Behaviors extends machina.Fsm {
       _shootingSoundId = sounds.play('Bullet');
       sounds.loop(true, _shootingSoundId);
       sounds.rate(3, _shootingSoundId);
-      sounds.volume(0.4, _shootingSoundId);
+      sounds.volume(0.5, _shootingSoundId);
     }
     function stopShootingSound() {
       sounds.loop(false, _shootingSoundId);
@@ -174,7 +174,7 @@ export default class Behaviors extends machina.Fsm {
       _walkingSoundId = sounds.play('Step');
       sounds.loop(true, _walkingSoundId);
       sounds.rate(0.22, _walkingSoundId);
-      sounds.volume(0.4, _walkingSoundId);
+      sounds.volume(0.5, _walkingSoundId);
     }
 
     function stopWalkingSound() {
@@ -344,10 +344,11 @@ export default class Behaviors extends machina.Fsm {
         highJumping: {
           _child: directions,
           _onEnter: function() {
-            sounds.play('Boop');
-
+            let _id = sounds.play('Boop');
+            sounds.volume(0.6, _id);
             as.sequence(`${directions.state}-aerial`).then(() => {
-              sounds.play('SmallJump_1');
+              let _id = sounds.play('SmallJump_1');
+              sounds.volume(0.3, _id);
               return this.transition('flying');
             });
           },
@@ -364,7 +365,8 @@ export default class Behaviors extends machina.Fsm {
         jumping: {
           _child: directions,
           _onEnter: function() {
-            sounds.play('SmallJump');
+            let _id = sounds.play('SmallJump');
+            sounds.volume(0.6, _id);
             as.sequence(`${directions.state}-aerial`).then(() =>
               this.transition('flying')
             );
@@ -486,7 +488,8 @@ export default class Behaviors extends machina.Fsm {
         landing: {
           _child: directions,
           _onEnter: function() {
-            sounds.play('Land');
+            let _id = sounds.play('Land');
+            sounds.volume(0.7, _id);
             as.sequence(`${directions.state}-crouch-up2dwn`)
               .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
               .then(() => {
@@ -517,8 +520,9 @@ export default class Behaviors extends machina.Fsm {
             }
             entity.setVelocityX(speed);
             this.emit('booster', { on: false });
-            sounds.play('Land');
-            console.log('LLLLLAND');
+            let _id = sounds.play('Land');
+            sounds.volume(0.5, _id);
+
             as.sequence(`${directions.state}-crouch-up2dwn`)
               .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
               .then(() => {
@@ -546,7 +550,8 @@ export default class Behaviors extends machina.Fsm {
             entity.setVelocityX(slideBursting);
             stopWalkingSound();
             stopShootingSound();
-            sounds.play('Scree');
+
+            sounds.volume(0.6, sounds.play('Scree'));
             as.sequence(`${directions.state}-slide-stand2slide`).then(() => {
               entity.setVelocityX(sliding);
               this.emit('footbooster', { on: false });
