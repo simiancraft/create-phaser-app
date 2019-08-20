@@ -18,7 +18,9 @@
         "pretty": "npx eslint --fix \"src/**/*.js\"",
         "precommit": "yarn pretty",
         "process-levels": "node ./scripts/level-processor/index.js",
-        "animation-list-from-atlas": "node ./scripts/animation-processor/sprite-atlas-to-animation-list.js"
+        "animation-list-from-atlas": "node ./scripts/animation-processor/sprite-atlas-to-animation-list.js",
+        "behaviors-template-from-atlas": "node ./scripts/animation-processor/sprite-atlas-to-behaviors-template.js",
+        "process-sounds": "node ./scripts/sound-processor/index.js"
     },
     "keywords": [
         "Phaser",
