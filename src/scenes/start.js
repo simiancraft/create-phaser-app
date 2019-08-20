@@ -50,18 +50,16 @@ export default class Start extends Phaser.Scene {
     this.load.image('cloud-2', cloud2);
     this.load.image('ground', ground);
     this.load.image('player-still', playerStill);
-    // this.load.image(
-    //   'knighthawks',
-    //   'http://labs.phaser.io/assets/fonts/retro/knight3.png'
-    // );
   }
   create() {
     this.createBackground(assetScale);
     this.addClouds();
-    this.add.image(center.width, center.height, 'ground').setScale(assetScale);
+    this.add
+      .image(center.width, center.height, 'ground')
+      .setScale(assetScale * 0.7);
     this.add
       .image(center.width, center.height * 1.3, 'player-still')
-      .setScale(assetScale);
+      .setScale(assetScale * 0.8);
     this.makeText();
 
     this.input.on('pointerdown', this.startGame, this);
@@ -93,6 +91,17 @@ export default class Start extends Phaser.Scene {
         duration: 4000
       }
     });
+
+    var startText = this.make.text({
+      x: WIDTH / 2,
+      y: HEIGHT * 0.9,
+      text: 'Click to start',
+      style: {
+        font: `${23 * SCALE}px Rajdhani`,
+        fill: '#000000'
+      }
+    });
+    startText.setOrigin(0.5, 0.5);
   }
 
   addClouds() {
