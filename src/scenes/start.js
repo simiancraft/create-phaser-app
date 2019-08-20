@@ -7,7 +7,6 @@ import ground from '../assets/backgrounds/start/ground.png';
 import moonTitle from '../assets/backgrounds/start/moon.png';
 import seaTitle from '../assets/backgrounds/start/sea.png';
 import playerStill from '../assets/player-image.png';
-import exampleSoundOgg from '../assets/sounds/example_sound.ogg';
 import constants from '../config/constants';
 import { linearScale } from '../utils';
 
@@ -55,8 +54,6 @@ export default class Start extends Phaser.Scene {
       'knighthawks',
       'http://labs.phaser.io/assets/fonts/retro/knight3.png'
     );
-
-    this.load.audio('example_sound', [exampleSoundOgg]);
   }
   create() {
     this.createBackground(assetScale);
@@ -67,7 +64,6 @@ export default class Start extends Phaser.Scene {
       .setScale(assetScale);
     this.makeText();
 
-    this.exampleSound = this.sound.add('example_sound');
     this.time.delayedCall(2000, () => {
       this.exampleSound.play();
     });
