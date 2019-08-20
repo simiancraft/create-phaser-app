@@ -344,9 +344,12 @@ export default class Behaviors extends machina.Fsm {
         highJumping: {
           _child: directions,
           _onEnter: function() {
-            as.sequence(`${directions.state}-aerial`).then(() =>
-              this.transition('flying')
-            );
+            sounds.play('Boop');
+
+            as.sequence(`${directions.state}-aerial`).then(() => {
+              sounds.play('SmallJump_1');
+              return this.transition('flying');
+            });
           },
           idle: function() {
             this.transition('idling');
@@ -361,6 +364,7 @@ export default class Behaviors extends machina.Fsm {
         jumping: {
           _child: directions,
           _onEnter: function() {
+            sounds.play('SmallJump');
             as.sequence(`${directions.state}-aerial`).then(() =>
               this.transition('flying')
             );
@@ -482,6 +486,7 @@ export default class Behaviors extends machina.Fsm {
         landing: {
           _child: directions,
           _onEnter: function() {
+            sounds.play('Land');
             as.sequence(`${directions.state}-crouch-up2dwn`)
               .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
               .then(() => {
@@ -512,6 +517,8 @@ export default class Behaviors extends machina.Fsm {
             }
             entity.setVelocityX(speed);
             this.emit('booster', { on: false });
+            sounds.play('Land');
+            console.log('LLLLLAND');
             as.sequence(`${directions.state}-crouch-up2dwn`)
               .then(() => as.sequence(`${directions.state}-crouch-dwn2up`))
               .then(() => {
