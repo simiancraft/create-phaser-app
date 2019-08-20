@@ -84,7 +84,7 @@
         "copy-webpack-plugin": "5.0.4",
         "css-loader": "3.2.0",
         "es6-plato": "1.2.2",
-        "eslint": "6.1.0",
+        "eslint": "6.2.1",
         "eslint-plugin-import": "2.18.2",
         "eslint-plugin-prettier": "3.1.0",
         "eslint-plugin-react": "7.14.3",
@@ -94,7 +94,7 @@
         "gh-pages": "2.1.1",
         "globby": "^10.0.1",
         "html-webpack-plugin": "3.2.0",
-        "husky": "^3.0.3",
+        "husky": "^3.0.4",
         "imagemin": "^7.0.0",
         "imagemin-jpegtran": "^6.0.0",
         "imagemin-pngquant": "^8.0.0",
@@ -117,7 +117,7 @@
         "url-loader": "2.1.0",
         "webpack": "4.39.2",
         "webpack-bundle-analyzer": "3.4.1",
-        "webpack-cli": "3.3.6",
+        "webpack-cli": "3.3.7",
         "webpack-dev-server": "3.8.0",
         "yarn": "1.17.3"
     }
