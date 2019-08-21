@@ -10,16 +10,7 @@ export default class PreBoot extends Phaser.Scene {
   }
 
   preload() {
-    var loadingText = this.make.text({
-      x: WIDTH / 2,
-      y: HEIGHT / 2,
-      text: 'Loading...',
-      style: {
-        font: '20px monospace',
-        fill: '#ffffff'
-      }
-    });
-    loadingText.setOrigin(0.5, 0.5);
+    this.loadingText = this.message('loading...');
 
     this.load.on('complete', function() {
       console.log('LOADED');
@@ -27,10 +18,32 @@ export default class PreBoot extends Phaser.Scene {
   }
 
   create() {
+    //load stuff
     setTimeout(() => {
-      this.scene.start('Start');
-    }, 250);
+      this.loadingText.text = 'Click to Start';
+      this.input.on(
+        'pointerdown',
+        () => {
+          this.scene.start('Start');
+        },
+        this
+      );
+    }, 500);
   }
+
+  message = text => {
+    return this.make
+      .text({
+        x: WIDTH / 2,
+        y: HEIGHT / 2,
+        text: text,
+        style: {
+          font: '20px monospace',
+          fill: '#ffffff'
+        }
+      })
+      .setOrigin(0.5, 0.5);
+  };
 
   update(time, delta) {
     //console.log(time, delta);
