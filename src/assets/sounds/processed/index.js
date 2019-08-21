@@ -1,6 +1,7 @@
-import sounds_webm from './sounds.webm';
-import sounds_mp3 from './sounds.mp3';
 import { Howl, Howler } from 'howler';
+
+import sounds_mp3 from './sounds.mp3';
+import sounds_webm from './sounds.webm';
 const config = {
   src: [sounds_webm, sounds_mp3],
   sprite: {
@@ -19,7 +20,8 @@ const config = {
     SmallJump_1: [29000, 292.8571428571445],
     Step: [31000, 119.0476190476204],
     Stomp_Short: [33000, 2188.027210884357],
-    Stomp_Short_1: [37000, 1578.6167800453513]
+    Stomp_Short_1: [37000, 1578.6167800453513],
+    Title_Track: [40000, 112318.39002267574]
   }
 };
 const sounds = new Howl(config);

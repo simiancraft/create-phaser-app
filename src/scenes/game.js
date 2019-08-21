@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 
 import levelImages from '../assets/levels/processed/level-0/images.js';
 import level from '../assets/levels/processed/level-0/level-0.json';
+import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
 import Player from '../sprites/player';
 

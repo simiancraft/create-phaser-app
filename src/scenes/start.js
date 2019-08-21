@@ -7,6 +7,7 @@ import ground from '../assets/backgrounds/start/ground.png';
 import moonTitle from '../assets/backgrounds/start/moon.png';
 import seaTitle from '../assets/backgrounds/start/sea.png';
 import playerStill from '../assets/player-image.png';
+import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
 import { linearScale } from '../utils';
 
@@ -63,11 +64,19 @@ export default class Start extends Phaser.Scene {
     this.makeText();
 
     this.input.on('pointerdown', this.startGame, this);
+    this.playMusic();
   }
   update() {
     this.moveClouds();
   }
   render() {}
+
+  playMusic = () => {
+    console.log('play Title_Track');
+    let _id = sounds.play('Title_Track');
+    sounds.loop(true, _id);
+    sounds.volume(0.7, _id);
+  };
 
   startGame() {
     this.scene.stop('Game');
