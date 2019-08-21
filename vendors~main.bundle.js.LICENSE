@@ -38,6 +38,28 @@
  */
 
 /*!
+ *  howler.js v2.1.2
+ *  howlerjs.com
+ *
+ *  (c) 2013-2019, James Simpson of GoldFire Studios
+ *  goldfirestudios.com
+ *
+ *  MIT License
+ */
+
+/*!
+ *  Spatial Plugin - Adds support for stereo and 3D audio where Web Audio is supported.
+ *  
+ *  howler.js v2.1.2
+ *  howlerjs.com
+ *
+ *  (c) 2013-2019, James Simpson of GoldFire Studios
+ *  goldfirestudios.com
+ *
+ *  MIT License
+ */
+
+/*!
  *  * machina - A library for creating powerful and flexible finite state machines. Loosely inspired by Erlang/OTP's gen_fsm behavior.
  *  * Author: Jim Cowart (http://ifandelse.com)
  *  * Version: v4.0.2
@@ -94,28 +116,6 @@
  * @copyright 2016 Sean Connelly (@voidqk), http://syntheti.cc
  * @license MIT
  * @preserve Project Home: https://github.com/voidqk/polybooljs
- */
-
-/*!
- *  howler.js v2.1.2
- *  howlerjs.com
- *
- *  (c) 2013-2019, James Simpson of GoldFire Studios
- *  goldfirestudios.com
- *
- *  MIT License
- */
-
-/*!
- *  Spatial Plugin - Adds support for stereo and 3D audio where Web Audio is supported.
- *  
- *  howler.js v2.1.2
- *  howlerjs.com
- *
- *  (c) 2013-2019, James Simpson of GoldFire Studios
- *  goldfirestudios.com
- *
- *  MIT License
  */
 
 /**
