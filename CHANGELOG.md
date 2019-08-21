@@ -1,5 +1,8 @@
 # Change Log
-
+0.0.20
+  - added a click event to get around chrome problem of not playing audio
+  - changes to preboot state and the teplated howler file, exploses global howler obj if needed;
+  
 0.0.19
   - switch to Terser from Uglify Js for better production builds
   - Add Howler!
