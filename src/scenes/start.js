@@ -73,12 +73,13 @@ export default class Start extends Phaser.Scene {
 
   playMusic = () => {
     console.log('play Title_Track');
-    let _id = sounds.play('Title_Track');
-    sounds.loop(true, _id);
-    sounds.volume(0.7, _id);
+    this.title_track = sounds.play('Title_Track');
+    sounds.loop(true, this.title_track);
+    sounds.volume(0.6, this.title_track);
   };
 
   startGame() {
+    sounds.stop(this.title_track);
     this.scene.stop('Game');
     this.scene.start('Game');
   }
@@ -96,14 +97,14 @@ export default class Start extends Phaser.Scene {
       targets: this.titleText,
       alpha: {
         value: 1,
-        delay: 1000,
-        duration: 4000
+        delay: 2000,
+        duration: 5000
       }
     });
 
     let dropshadow = 2;
 
-    var backPlateText = this.make.text({
+    this.backPlateText = this.make.text({
       x: WIDTH / 2 - dropshadow,
       y: HEIGHT * 0.9 + dropshadow,
       text: 'Click to start',
@@ -112,9 +113,9 @@ export default class Start extends Phaser.Scene {
         fill: '#000000'
       }
     });
-    backPlateText.setOrigin(0.5, 0.5);
+    this.backPlateText.setOrigin(0.5, 0.5).setAlpha(0);
 
-    var startText = this.make.text({
+    this.startText = this.make.text({
       x: WIDTH / 2,
       y: HEIGHT * 0.9,
       text: 'Click to start',
@@ -123,7 +124,16 @@ export default class Start extends Phaser.Scene {
         fill: '#ffffff'
       }
     });
-    startText.setOrigin(0.5, 0.5);
+    this.startText.setOrigin(0.5, 0.5).setAlpha(0);
+
+    this.textTween = this.tweens.add({
+      targets: [this.startText, this.backPlateText],
+      alpha: {
+        value: 1,
+        delay: 7000,
+        duration: 5000
+      }
+    });
   }
 
   addClouds() {
