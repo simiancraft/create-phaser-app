@@ -60,6 +60,13 @@
  */
 
 /**
+ * @author       Richard Davey <rich@photonstorm.com>
+ * @author       Igor Ognichenko <ognichenko.igor@gmail.com>
+ * @copyright    2019 Photon Storm Ltd.
+ * @license      {@link https://opensource.org/licenses/MIT|MIT License}
+ */
+
+/**
  * @author       Vladimir Agafonkin
  * @author       Richard Davey <rich@photonstorm.com>
  * @copyright    2019 Photon Storm Ltd.
@@ -87,6 +94,28 @@
  * @copyright 2016 Sean Connelly (@voidqk), http://syntheti.cc
  * @license MIT
  * @preserve Project Home: https://github.com/voidqk/polybooljs
+ */
+
+/*!
+ *  howler.js v2.1.2
+ *  howlerjs.com
+ *
+ *  (c) 2013-2019, James Simpson of GoldFire Studios
+ *  goldfirestudios.com
+ *
+ *  MIT License
+ */
+
+/*!
+ *  Spatial Plugin - Adds support for stereo and 3D audio where Web Audio is supported.
+ *  
+ *  howler.js v2.1.2
+ *  howlerjs.com
+ *
+ *  (c) 2013-2019, James Simpson of GoldFire Studios
+ *  goldfirestudios.com
+ *
+ *  MIT License
  */
 
 /**
