@@ -72,7 +72,6 @@ export default class Start extends Phaser.Scene {
   render() {}
 
   playMusic = () => {
-    console.log('play Title_Track');
     this.title_track = sounds.play('Title_Track');
     sounds.loop(true, this.title_track);
     sounds.volume(0.6, this.title_track);
