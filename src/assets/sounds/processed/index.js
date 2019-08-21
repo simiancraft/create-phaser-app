@@ -1,6 +1,7 @@
-import sounds_webm from './sounds.webm';
-import sounds_mp3 from './sounds.mp3';
 import { Howl, Howler } from 'howler';
+
+import sounds_mp3 from './sounds.mp3';
+import sounds_webm from './sounds.webm';
 const config = {
   src: [sounds_webm, sounds_mp3],
   sprite: {
@@ -26,3 +27,4 @@ const config = {
 };
 const sounds = new Howl(config);
 export default sounds;
+export { Howl, Howler, sounds };

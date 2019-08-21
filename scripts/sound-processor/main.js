@@ -77,6 +77,7 @@ import {Howl, Howler} from 'howler';
 const config = ${_json};
 const sounds = new Howl(config)
 export default sounds;
+export { Howl, Howler, sounds };
 `;
 
     _.each(_srcNames, (srcName, index) => {
