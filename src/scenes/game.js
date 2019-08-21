@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 
 import levelImages from '../assets/levels/processed/level-0/images.js';
 import level from '../assets/levels/processed/level-0/level-0.json';
+import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
 import Player from '../sprites/player';
 
@@ -99,6 +100,7 @@ export default class Game extends Phaser.Scene {
     this.handleDebugging();
     this.player.create();
     this.lightrays.drawBakedLights();
+    this.playMusic();
   }
 
   update() {
@@ -109,6 +111,12 @@ export default class Game extends Phaser.Scene {
       0
     );
   }
+
+  playMusic = () => {
+    this.title_track = sounds.play('Level_Track');
+    sounds.loop(true, this.title_track);
+    sounds.volume(0.6, this.title_track);
+  };
 
   preloadBackground() {
     const { layers } = level;

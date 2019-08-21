@@ -26,9 +26,12 @@ This project can be used right now as a boilerplate, even without the eventual s
 -   Prettier Style
 -   Easy deployment to gh-pages
 -   Webpack bundle analyzer
+-   Howler 2 for Audio
 -   Browsersync
 -   Project Complexity analysis `yarn complexity-report`
--   Tilemap processing (extrusion and minification)
+-   Tilemap processing (extrusion and minification and more)
+-   Image processing (moving and compression with pngquant)
+-   Audio processing (Audiosprite Creation)
 
 # Quickly Start
 

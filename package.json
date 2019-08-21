@@ -1,6 +1,6 @@
 {
     "name": "create-phaser-app",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "description": "A boiler plate to start your phaser app with webpack4, babel7+ and Phaser 3",
     "author": "Jesse Harlin",
     "homepage": "https://github.com/simiancraft/create-phaser-app",
@@ -18,7 +18,9 @@
         "pretty": "npx eslint --fix \"src/**/*.js\"",
         "precommit": "yarn pretty",
         "process-levels": "node ./scripts/level-processor/index.js",
-        "animation-list-from-atlas": "node ./scripts/animation-processor/sprite-atlas-to-animation-list.js"
+        "animation-list-from-atlas": "node ./scripts/animation-processor/sprite-atlas-to-animation-list.js",
+        "behaviors-template-from-atlas": "node ./scripts/animation-processor/sprite-atlas-to-behaviors-template.js",
+        "process-sounds": "node ./scripts/sound-processor/index.js"
     },
     "keywords": [
         "Phaser",
@@ -29,7 +31,8 @@
         "boilerplate",
         "scaffold",
         "prettier",
-        "game jam"
+        "game jam",
+        "Howler 2"
     ],
     "license": "MIT",
     "babel": {
@@ -58,6 +61,7 @@
         }
     },
     "dependencies": {
+        "howler": "^2.1.2",
         "lodash": "^4.17.15",
         "machina": "^4.0.2",
         "phaser": "3.19.0",
@@ -71,6 +75,7 @@
         "@babel/preset-react": "7.0.0",
         "@babel/runtime": "7.5.5",
         "add": "2.0.6",
+        "audiosprite": "^0.7.1",
         "babel-eslint": "10.0.2",
         "babel-jest": "^24.9.0",
         "babel-loader": "8.0.6",
@@ -84,21 +89,23 @@
         "copy-webpack-plugin": "5.0.4",
         "css-loader": "3.2.0",
         "es6-plato": "1.2.2",
-        "eslint": "6.1.0",
+        "eslint": "6.2.1",
         "eslint-plugin-import": "2.18.2",
         "eslint-plugin-prettier": "3.1.0",
         "eslint-plugin-react": "7.14.3",
         "esm": "^3.2.25",
         "expose-loader": "0.7.5",
+        "ffmpeg": "^0.0.4",
         "file-loader": "4.2.0",
         "gh-pages": "2.1.1",
         "globby": "^10.0.1",
         "html-webpack-plugin": "3.2.0",
-        "husky": "^3.0.3",
+        "husky": "^3.0.4",
         "imagemin": "^7.0.0",
         "imagemin-jpegtran": "^6.0.0",
         "imagemin-pngquant": "^8.0.0",
         "import-sort-style-module": "6.0.0",
+        "inquirer": "^6.5.1",
         "jest": "^24.9.0",
         "json-loader": "0.5.7",
         "lodash-webpack-plugin": "^0.11.5",
@@ -111,14 +118,16 @@
         "prettier-eslint": "9.0.0",
         "raw-loader": "3.1.0",
         "regenerator-runtime": "^0.13.3",
+        "sox": "^0.1.0",
         "style-loader": "1.0.0",
+        "terser-webpack-plugin": "^1.4.1",
         "tile-extruder": "^2.0.1",
-        "uglifyjs-webpack-plugin": "^2.2.0",
         "url-loader": "2.1.0",
         "webpack": "4.39.2",
         "webpack-bundle-analyzer": "3.4.1",
-        "webpack-cli": "3.3.6",
+        "webpack-cli": "3.3.7",
         "webpack-dev-server": "3.8.0",
+        "yargs": "^14.0.0",
         "yarn": "1.17.3"
     }
 }

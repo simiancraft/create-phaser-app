@@ -7,6 +7,7 @@ import LightraysPlugin from '../src/plugins/lightrays/index.js';
 import constants from './config/constants';
 import CustomPipeline from './rendering-pipelines/CustomPipeline';
 import GameScene from './scenes/game';
+import PreBoot from './scenes/preboot';
 import StartScene from './scenes/start';
 
 window.Phaser = Phaser;
@@ -31,10 +32,7 @@ const config = {
       debug: false
     }
   },
-  scene: [
-    //StartScene,
-    GameScene
-  ],
+  scene: [PreBoot, StartScene, GameScene],
   pixelArt: true,
   antialias: false,
   callbacks: {

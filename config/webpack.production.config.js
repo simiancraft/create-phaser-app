@@ -8,7 +8,7 @@ const {
   ghpages,
   ghPagesAppName
 } = require('./paths');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const definePlugin = new webpack.DefinePlugin({
   WEBGL_RENDERER: true,
@@ -24,9 +24,18 @@ const htmlPlugin = new HtmlWebpackPlugin({
   filename: './index.html'
 });
 
-const minimizePlugin = new UglifyJsPlugin({
+const minimizePlugin = new TerserPlugin({
+  extractComments: true,
+  cache: true,
   parallel: true,
-  extractComments: true
+  sourceMap: true, // Must be set to true if using source-maps in production
+  terserOptions: {
+    // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+    extractComments: 'all',
+    compress: {
+      drop_console: true
+    }
+  }
 });
 
 module.exports = (env, options) => {
@@ -54,7 +63,7 @@ module.exports = (env, options) => {
           }
         },
         {
-          test: /\.(png|jpg|gif|ico|svg|pvr|pkm|static|ogg|mp3|wav)$/,
+          test: /\.(png|jpg|gif|ico|svg|pvr|pkm|static|mp3|webm)$/,
           exclude: [nodeModules],
           use: ['file-loader']
         },

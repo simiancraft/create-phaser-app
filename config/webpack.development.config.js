@@ -59,7 +59,7 @@ module.exports = (env, options) => {
           }
         },
         {
-          test: /\.(png|jpg|gif|ico|svg|pvr|pkm|static|ogg|mp3|wav)$/,
+          test: /\.(png|jpg|gif|ico|svg|pvr|pkm|static|mp3|webm)$/,
           exclude: [nodeModules],
           use: ['file-loader']
         },

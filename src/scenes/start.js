@@ -7,7 +7,7 @@ import ground from '../assets/backgrounds/start/ground.png';
 import moonTitle from '../assets/backgrounds/start/moon.png';
 import seaTitle from '../assets/backgrounds/start/sea.png';
 import playerStill from '../assets/player-image.png';
-import exampleSoundOgg from '../assets/sounds/example_sound.ogg';
+import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
 import { linearScale } from '../utils';
 
@@ -51,35 +51,34 @@ export default class Start extends Phaser.Scene {
     this.load.image('cloud-2', cloud2);
     this.load.image('ground', ground);
     this.load.image('player-still', playerStill);
-    this.load.image(
-      'knighthawks',
-      'http://labs.phaser.io/assets/fonts/retro/knight3.png'
-    );
-
-    this.load.audio('example_sound', [exampleSoundOgg]);
   }
   create() {
     this.createBackground(assetScale);
     this.addClouds();
-    this.add.image(center.width, center.height, 'ground').setScale(assetScale);
+    this.add
+      .image(center.width, center.height, 'ground')
+      .setScale(assetScale * 0.7);
     this.add
       .image(center.width, center.height * 1.3, 'player-still')
-      .setScale(assetScale);
+      .setScale(assetScale * 0.8);
     this.makeText();
 
-    this.exampleSound = this.sound.add('example_sound');
-    this.time.delayedCall(2000, () => {
-      this.exampleSound.play();
-    });
-
     this.input.on('pointerdown', this.startGame, this);
+    this.playMusic();
   }
   update() {
     this.moveClouds();
   }
   render() {}
 
+  playMusic = () => {
+    this.title_track = sounds.play('Title_Track');
+    sounds.loop(true, this.title_track);
+    sounds.volume(0.6, this.title_track);
+  };
+
   startGame() {
+    sounds.stop(this.title_track);
     this.scene.stop('Game');
     this.scene.start('Game');
   }
@@ -97,8 +96,41 @@ export default class Start extends Phaser.Scene {
       targets: this.titleText,
       alpha: {
         value: 1,
-        delay: 1000,
-        duration: 4000
+        delay: 2000,
+        duration: 5000
+      }
+    });
+
+    let dropshadow = 2;
+
+    this.backPlateText = this.make.text({
+      x: WIDTH / 2 - dropshadow,
+      y: HEIGHT * 0.9 + dropshadow,
+      text: 'Click to start',
+      style: {
+        font: `${23 * SCALE}px Rajdhani`,
+        fill: '#000000'
+      }
+    });
+    this.backPlateText.setOrigin(0.5, 0.5).setAlpha(0);
+
+    this.startText = this.make.text({
+      x: WIDTH / 2,
+      y: HEIGHT * 0.9,
+      text: 'Click to start',
+      style: {
+        font: `${23 * SCALE}px Rajdhani`,
+        fill: '#ffffff'
+      }
+    });
+    this.startText.setOrigin(0.5, 0.5).setAlpha(0);
+
+    this.textTween = this.tweens.add({
+      targets: [this.startText, this.backPlateText],
+      alpha: {
+        value: 1,
+        delay: 7000,
+        duration: 5000
       }
     });
   }

@@ -2,7 +2,7 @@ console.log('Processing Levels');
 
 //TODO:
 /*
-- Squish images (50% there)
+- Squish images
 
 - update the processor to ignore layerr that are 'raw input'
 by allowing the user to mark them as irrelevant in Tiled
