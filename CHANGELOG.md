@@ -2,6 +2,7 @@
 
 0.0.21
   - updated minor dependencies, eslint, es6-plato, inquirer
+  - removes unsightly scrollbars in the app
 
 0.0.20
   - added a click event to get around chrome problem of not playing audio
