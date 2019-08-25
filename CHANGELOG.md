@@ -1,4 +1,8 @@
 # Change Log
+
+0.0.21
+  - updated minor dependencies, eslint, es6-plato, inquirer
+
 0.0.20
   - added a click event to get around chrome problem of not playing audio
   - changes to preboot state and the teplated howler file, exploses global howler obj if needed;
